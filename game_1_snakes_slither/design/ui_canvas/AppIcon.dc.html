@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>App icon</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 1240px; height: 760px; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F3EA; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F; padding: 40px; display: flex; gap: 48px;">
+  <img src="/_blob/68cb882f144dad6f89af376d94039736" alt="Snake Slither app icon: a glossy green 3D snake coiled on a small grass island, deep forest-green background" width="680" height="680" style="flex-shrink: 0; border-radius: 28px; box-shadow: 0 24px 48px rgba(20,50,20,0.25);">
+  <div style="display: flex; flex-direction: column; gap: 22px; padding-top: 6px;">
+    <div>
+      <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 32px;">App icon · 1024 × 1024</h1>
+      <span style="font-size: 15px; font-weight: 700; color: #5B6B5F;">Real-time 3D render (three.js), full-bleed artwork — the stores apply their own masks.</span>
+    </div>
+    <div style="display: flex; align-items: flex-end; gap: 22px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><img src="/_blob/68cb882f144dad6f89af376d94039736" alt="" width="180" height="180" style="border-radius: 40px; box-shadow: 0 10px 22px rgba(20,50,20,0.22);"><span style="font-size: 12px; font-weight: 800; color: #6B7A6E;">iOS mask</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><img src="/_blob/68cb882f144dad6f89af376d94039736" alt="" width="120" height="120" style="border-radius: 60px; box-shadow: 0 8px 18px rgba(20,50,20,0.22);"><span style="font-size: 12px; font-weight: 800; color: #6B7A6E;">Android circle</span></div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><img src="/_blob/68cb882f144dad6f89af376d94039736" alt="" width="48" height="48" style="border-radius: 11px;"><span style="font-size: 12px; font-weight: 800; color: #6B7A6E;">48 px</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: #6B7A6E;">BRAND PALETTE</span>
+      <div style="display: flex; gap: 10px;">
+        <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="6">
+          <div style="display: flex; flex-direction: column; gap: 4px; width: 70px;">
+            <span style="height: 46px; border-radius: 12px; background: {{ s.hex }}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);"></span>
+            <span style="font-size: 11px; font-weight: 800;">{{ s.name }}</span>
+            <span style="font-size: 11px; font-weight: 700; color: #6B7A6E;">{{ s.hex }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <span style="max-width: 440px; font-size: 13px; font-weight: 700; line-height: 1.5; color: #5B6B5F;">Same snake as in-game Pip: emerald glossy body, amber slit-pupil eyes, lime belly, soft grass. Source: <code>design/app_icon/snake.html</code>.</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1240,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { swatches: [
+      { name: 'Forest', hex: '#0E2E1B' }, { name: 'Primary', hex: '#2E7D32' }, { name: 'Emerald', hex: '#2F8A34' },
+      { name: 'Lime', hex: '#8ACF5A' }, { name: 'Gold', hex: '#F4D35E' }, { name: 'Cream', hex: '#F6F3EA' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

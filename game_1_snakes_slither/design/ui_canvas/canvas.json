@@ -316,10 +316,18 @@
    "h": 2568,
    "title": "Screen flow · real screens in game order",
    "is_interactive": true
+  },
+  "AppIcon.dc.html": {
+   "x": 1560,
+   "y": 0,
+   "w": 1240,
+   "h": 760,
+   "title": "App icon · Snake Slither"
   }
  },
  "order": [
   "Flow.dc.html",
+  "AppIcon.dc.html",
   "ScreenFlow.dc.html",
   "Main.dc.html",
   "Home.dc.html",
