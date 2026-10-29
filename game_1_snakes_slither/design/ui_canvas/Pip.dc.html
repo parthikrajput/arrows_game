@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&amp;display=swap">
 <style>body{margin:0}</style>
 </helmet>
+<sc-if value="{{ use3d }}" hint-placeholder-val="{{ true }}">
+  <img src="{{ src }}" alt="{{ label }}" width="{{ size }}" height="{{ size }}" style="display: block; object-fit: contain; filter: drop-shadow(0 10px 14px rgba(20,50,20,0.22));">
+</sc-if>
+<sc-if value="{{ useSvg }}" hint-placeholder-val="{{ false }}">
 <svg role="img" aria-label="{{ label }}" width="{{ size }}" height="{{ size }}" viewBox="{{ vb }}" style="display: block; overflow: visible;">
   <defs>
     <pattern id="ppScale" width="7" height="6" patternUnits="userSpaceOnUse">
@@ -95,6 +99,7 @@
     </g>
   </sc-if>
 </svg>
+</sc-if>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"pose":{"type":"enum","options":["stand","wave","sleep","coil","face"],"default":"stand"},"size":{"type":"number","default":200},"$preview":{"width":200,"height":200}}'>
 class Component extends DCLogic {
@@ -152,7 +157,9 @@ class Component extends DCLogic {
       headT: resting ? 'translate(98 116) scale(0.86) rotate(-7) translate(-100 -52)' : '',
       awake: pose !== 'sleep',
       asleep: pose === 'sleep',
-      label: labels[pose] || 'Pip'
+      label: labels[pose] || 'Pip',
+      use3d: pose !== 'face', useSvg: pose === 'face',
+      src: pose === 'sleep' ? '/_blob/778fb98dd80e9b051ddbde8b769a73ea' : '/_blob/6e9c0c8fc6318e3ff4f24db2303732d9'
     };
   }
 }
