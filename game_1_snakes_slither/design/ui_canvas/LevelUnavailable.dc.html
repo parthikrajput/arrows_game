@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Level unavailable</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="LevelMap" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(8,18,10,0.55); backdrop-filter: blur(4px);"></div>
+
+  <div role="alertdialog" aria-labelledby="luTitle" aria-describedby="luBody" style="position: absolute; left: 28px; right: 28px; top: 210px; border-radius: 28px; background: #FFFBF2; box-shadow: 0 30px 60px rgba(0,0,0,0.38); padding: 24px 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+    <div style="width: 96px; height: 96px; border-radius: 48px; background: radial-gradient(circle at 50% 60%, #EEF6EA, #D6E8CF); display: flex; align-items: center; justify-content: center;">
+      <dc-import name="Tortoise" size="{{ 72 }}" hint-size="72px,72px"></dc-import>
+    </div>
+    <h2 id="luTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 26px;">Level unavailable</h2>
+    <p id="luBody" style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.45; color: #3B5240;">Level 42 couldn't load right now. Your progress and coins are safe.</p>
+    <a href="Play.dc.html" style="align-self: stretch; height: 56px; border-radius: 28px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5"></path></svg>
+      Retry</a>
+    <a href="Home.dc.html" style="align-self: stretch; height: 48px; border-radius: 24px; background: #FFFFFF; border: 2px solid #D5E3D3; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #1B2B1F; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">Home</a>
+    <span style="font-size: 11px; font-weight: 700; color: #9AA59D;">Error E-LVL-001 · this level is not skipped or marked cleared</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

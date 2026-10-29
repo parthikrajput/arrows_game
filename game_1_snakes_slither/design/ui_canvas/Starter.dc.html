@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Starter Pack offer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Home" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(8,18,10,0.55); backdrop-filter: blur(4px);"></div>
+
+  <div role="dialog" aria-labelledby="spTitle" style="position: absolute; left: 22px; right: 22px; top: 118px; border-radius: 28px; background: #FFFBF2; box-shadow: 0 30px 60px rgba(0,0,0,0.38); overflow: hidden; display: flex; flex-direction: column;">
+    <div style="position: relative; padding: 22px 20px 18px; background: linear-gradient(160deg, #66BB6A 0%, #2E7D32 70%, #1B5E20 100%); color: #FFFFFF; text-align: center;">
+      <a href="Home.dc.html" aria-label="Close" style="position: absolute; right: 12px; top: 12px; width: 36px; height: 36px; border-radius: 18px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: #FFFFFF;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18"></path></svg>
+      </a>
+      <span style="display: inline-flex; height: 26px; padding: 0 12px; border-radius: 13px; background: rgba(0,0,0,0.25); align-items: center; gap: 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9 V13 L15 15"></path></svg>
+        47:58:12 left · one time only</span>
+      <h2 id="spTitle" style="margin: 10px 0 2px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 30px;">Starter Pack</h2>
+      <span style="font-size: 14px; font-weight: 700; opacity: 0.9;">A head start for your jungle adventure</span>
+    </div>
+
+    <div style="padding: 16px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: linear-gradient(180deg, #FFF8DC, #FFEDB0);">
+        <svg width="52" height="52" viewBox="0 0 44 44" aria-hidden="true"><defs><radialGradient id="spCoin" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF6C4"></stop><stop offset="0.45" stop-color="#FFC928"></stop><stop offset="1" stop-color="#B57E00"></stop></radialGradient></defs><circle cx="17" cy="26" r="12" fill="url(#spCoin)" stroke="#8D6200" stroke-width="1"></circle><circle cx="27" cy="18" r="12" fill="url(#spCoin)" stroke="#8D6200" stroke-width="1"></circle></svg>
+        <span style="display: flex; flex-direction: column; text-align: left;"><b style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 26px; line-height: 1;">800</b><span style="font-size: 13px; font-weight: 800; color: #7A5A00;">coins</span></span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+        <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+          <div style="border-radius: 16px; background: #F1F6EF; padding: 8px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+            <dc-import name="Booster" kind="{{ it.kind }}" size="{{ 46 }}" hint-size="46px,46px"></dc-import>
+            <b style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;">×{{ it.qty }}</b>
+            <span style="font-size: 11px; font-weight: 800; color: #6B7A6E;">{{ it.name }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <button style="height: 60px; border: 0; border-radius: 30px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 22px; cursor: pointer;">₹79</button>
+      <a href="Home.dc.html" style="align-self: center; min-height: 40px; display: flex; align-items: center; text-decoration: none; color: #6B7A6E; font-weight: 800; font-size: 14px;">No thanks</a>
+      <span style="font-size: 11px; font-weight: 700; color: #9AA59D; text-align: center;">Shown once after Level 15. Also in Shop → Offers until the timer ends.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { items: [
+      { kind: 'hint', qty: 3, name: 'Hints' },
+      { kind: 'hammer', qty: 2, name: 'Hammers' },
+      { kind: 'shield', qty: 2, name: 'Shields' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

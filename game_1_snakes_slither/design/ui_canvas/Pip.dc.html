@@ -105,7 +105,7 @@
   </sc-if>
 </svg>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"pose":{"type":"enum","options":["stand","wave","sleep","face"],"default":"stand"},"size":{"type":"number","default":200},"$preview":{"width":200,"height":200}}'>
+<script type="text/x-dc" data-dc-script data-props='{"pose":{"type":"enum","options":["stand","wave","sleep","coil","face"],"default":"stand"},"size":{"type":"number","default":200},"$preview":{"width":200,"height":200}}'>
 class Component extends DCLogic {
   renderVals() {
     const pose = this.props.pose || 'stand';
@@ -117,7 +117,7 @@ class Component extends DCLogic {
     const tailTuck = [seg('M58 172 C 48 182, 30 186, 22 180', 15), seg('M22 180 C 15 175, 18 168, 25 169', 8, { spots: false })];
     const tailWave = [seg('M52 168 C 28 166, 18 146, 26 128', 16), seg('M26 128 C 30 118, 38 114, 42 107', 9, { spots: false })];
     let segs;
-    if (pose === 'sleep') {
+    if (pose === 'sleep' || pose === 'coil') {
       const bBack = seg('M38 164 A62 18 0 0 1 162 164', 26), bFront = seg('M162 164 A62 18 0 0 1 38 164', 26);
       const tBack = seg('M58 140 A42 13 0 0 1 142 140', 23), tFront = seg('M142 140 A42 13 0 0 1 58 140', 23);
       const sNeck = seg('M140 136 C 146 126, 132 122, 118 128', 21, { belly: true, spots: false });
@@ -130,7 +130,7 @@ class Component extends DCLogic {
     return {
       segs, size,
       vb: pose === 'face' ? '60 2 86 86' : '0 0 200 200',
-      headT: pose === 'sleep' ? 'translate(96 104) scale(0.86) rotate(-7) translate(-100 -52)' : '',
+      headT: (pose === 'sleep' || pose === 'coil') ? 'translate(96 104) scale(0.86) rotate(-7) translate(-100 -52)' : '',
       wave: pose === 'wave',
       awake: pose !== 'sleep',
       asleep: pose === 'sleep',

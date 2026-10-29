@@ -56,7 +56,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
   <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="9">
     <div style="{{ n.pos }}">
       <sc-if value="{{ n.isCurrent }}" hint-placeholder-val="{{ false }}">
-        <a href="Play.dc.html" aria-label="Level {{ n.n }}, play now" style="position: relative; width: 64px; height: 64px; border-radius: 32px; background: radial-gradient(circle at 35% 28%, #C5F29E 0%, #5CB848 50%, #2E7D32 100%); border: 3px solid #FFFFFF; box-sizing: border-box; box-shadow: 0 0 0 6px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,160,0.9), 0 5px 0 #1B5E20, 0 10px 14px rgba(0,0,0,0.3); text-shadow: 0 2px 0 rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;">{{ n.n }}
+        <a href="LevelStart.dc.html" aria-label="Level {{ n.n }}, play now" style="position: relative; width: 64px; height: 64px; border-radius: 32px; background: radial-gradient(circle at 35% 28%, #C5F29E 0%, #5CB848 50%, #2E7D32 100%); border: 3px solid #FFFFFF; box-sizing: border-box; box-shadow: 0 0 0 6px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,160,0.9), 0 5px 0 #1B5E20, 0 10px 14px rgba(0,0,0,0.3); text-shadow: 0 2px 0 rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;">{{ n.n }}
           <span style="position: absolute; top: -26px; height: 22px; padding: 0 8px; border-radius: 11px; background: #1B2B1F; color: #FFFFFF; display: flex; align-items: center; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800;">YOU</span>
         </a>
       </sc-if>

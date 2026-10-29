@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Golden Slither Rush results</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FFE082}a:hover{color:#FFF8E1}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: radial-gradient(ellipse 120% 80% at 50% 40%, #2F7A32 0%, #17501C 55%, #0B2E10 100%); color: #FFFFFF; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 96px 24px 36px; gap: 18px; text-align: center;">
+  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
+    <defs>
+      <radialGradient id="rrGlow"><stop offset="0" stop-color="#FFD54F" stop-opacity="0.6"></stop><stop offset="1" stop-color="#FFD54F" stop-opacity="0"></stop></radialGradient>
+      <radialGradient id="rrCoin" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF6C4"></stop><stop offset="0.45" stop-color="#FFC928"></stop><stop offset="1" stop-color="#B57E00"></stop></radialGradient>
+    </defs>
+    <circle cx="195" cy="290" r="220" fill="url(#rrGlow)"></circle>
+    <sc-for list="{{ coins }}" as="c" hint-placeholder-count="9">
+      <g transform="{{ c.t }}"><ellipse rx="12" ry="{{ c.ry }}" fill="url(#rrCoin)" stroke="#8D6200" stroke-width="1"></ellipse></g>
+    </sc-for>
+  </svg>
+
+  <span style="position: relative; font-size: 13px; font-weight: 800; letter-spacing: 1px; color: #FFE082;">GOLDEN SLITHER RUSH</span>
+  <h1 style="position: relative; margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 34px;">Rush complete!</h1>
+
+  <div style="position: relative; display: flex; align-items: center; gap: 12px; margin: 18px 0 6px;">
+    <svg width="64" height="64" viewBox="0 0 24 24" aria-hidden="true" style="filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4));"><defs><radialGradient id="rrBig" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF6C4"></stop><stop offset="0.45" stop-color="#FFC928"></stop><stop offset="1" stop-color="#B57E00"></stop></radialGradient></defs><circle cx="12" cy="12" r="10.2" fill="url(#rrBig)" stroke="#8D6200" stroke-width="0.8"></circle><path d="M8.6 14.6 C 9 9.6, 13.4 7.6, 15.9 8.1 C 15.4 12.6, 12 15.1, 8.6 14.6 Z" fill="#FFE38A" stroke="#9A6B00" stroke-width="0.7"></path></svg>
+    <span style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 64px; line-height: 1; color: #FFE082; text-shadow: 0 3px 0 #9A6B00, 0 0 24px rgba(255,213,79,0.6); font-variant-numeric: tabular-nums;">+300</span>
+  </div>
+
+  <div style="position: relative; align-self: stretch; border-radius: 22px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,224,130,0.3); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; text-align: left;">
+    <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800;"><span>Golden snakes out</span><span style="font-variant-numeric: tabular-nums;">20 / 20 · +200</span></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800;"><span>Full clear bonus</span><span style="height: 28px; padding: 0 12px; border-radius: 14px; background: linear-gradient(180deg, #FFE082, #FFB300); color: #4A2E00; display: flex; align-items: center;">+100</span></div>
+    <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #C8E6C9;"><span>Time left</span><span>0:04</span></div>
+  </div>
+
+  <a href="Play.dc.html" style="position: relative; margin-top: auto; align-self: stretch; height: 62px; border-radius: 31px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), 0 5px 0 #1B5E20, 0 14px 24px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 21px;">Continue to Level 26
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF"></path></svg></a>
+  <a href="LevelMap.dc.html" style="position: relative; min-height: 40px; display: flex; align-items: center; text-decoration: none; font-weight: 800; font-size: 15px;">Map</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const raw = [[60, 140, -20, 12], [330, 120, 30, 6], [300, 230, 10, 12], [80, 300, -40, 5], [350, 380, 0, 12], [40, 460, 20, 9], [320, 520, -10, 6], [110, 90, 0, 7], [250, 70, 40, 12]];
+    return { coins: raw.map((c) => ({ t: 'translate(' + c[0] + ' ' + c[1] + ') rotate(' + c[2] + ')', ry: c[3] })) };
+  }
+}
+</script>
+</body>
+</html>

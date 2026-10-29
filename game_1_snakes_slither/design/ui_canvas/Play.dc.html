@@ -80,7 +80,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
 
   <p style="position: relative; margin: 0 0 8px; min-height: 20px; text-align: center; font-size: 14px; font-weight: 800; color: {{ tipColor }}; text-shadow: 0 1px 0 rgba(255,255,255,0.6);">{{ tip }}</p>
 
-  <nav aria-label="Boosters" style="position: relative; height: 96px; box-sizing: border-box; padding: 10px 8px 6px; border-radius: 24px; background: linear-gradient(180deg, #B07A4C 0%, #8C5A35 60%, #6E4325 100%); border: 2px solid #5A3820; box-shadow: inset 0 2px 0 rgba(255,255,255,0.28), inset 0 -3px 0 rgba(0,0,0,0.22), 0 8px 18px rgba(40,30,10,0.28); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; align-items: start;">
+  <nav aria-label="Boosters" style="position: relative; height: 96px; box-sizing: border-box; padding: 10px 8px 6px; border-radius: 24px; background: linear-gradient(180deg, #B07A4C 0%, #8C5A35 60%, #6E4325 100%); border: 2px solid #5A3820; box-shadow: inset 0 2px 0 rgba(255,255,255,0.28), inset 0 -3px 0 rgba(0,0,0,0.22), 0 8px 18px rgba(40,30,10,0.28); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; align-items: start;">
     <sc-for list="{{ boosters }}" as="b" hint-placeholder-count="4">
       <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
         <button aria-label="{{ b.aria }}" style="{{ b.btnStyle }}">
@@ -112,10 +112,10 @@ class Component extends DCLogic {
       const on = i < hearts;
       return { fill: on ? 'url(#pBerry)' : '#F3E9E6', stroke: on ? '#8E1515' : '#D7A8A3', leaf: on ? '#66BB6A' : '#D5E6D3', leafDark: on ? '#2E7D32' : '#AFC7AD', shine: on ? 0.75 : 0.3 };
     });
-    const unlock = { hint: 3, undo: 8, shield: 15, hammer: 25 };
-    const counts = { hint: mode === 'hint' ? 1 : 2, undo: 2, shield: shield ? 0 : 1, hammer: 1 };
-    const names = { hint: 'Firefly Hint', undo: 'Coil-Back', shield: 'Shell Shield', hammer: 'Stone Hammer' };
-    const keys = ['hint', 'undo', 'shield', 'hammer'];
+    const unlock = { hint: 3, shield: 15, hammer: 25 };
+    const counts = { hint: mode === 'hint' ? 1 : 2, shield: shield ? 0 : 1, hammer: 1 };
+    const names = { hint: 'Firefly Hint', shield: 'Shell Shield', hammer: 'Stone Hammer' };
+    const keys = ['hint', 'shield', 'hammer'];
     const boosters = keys.map((k) => {
       const locked = level < unlock[k];
       const active = (mode === 'hammer' && k === 'hammer') || (mode === 'hint' && k === 'hint') || (shield && k === 'shield');

@@ -35,7 +35,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
     </div>
     <div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 800;">
       <span>Reward</span>
-      <span style="color: #2E7D32;">+100 coins · Day 4: 125 + 2 Coil-Back</span>
+      <span style="color: #2E7D32;">+100 coins · Day 4: +150 coins</span>
     </div>
     <a href="Play.dc.html" style="height: 56px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF"></path></svg>Play today</a>
@@ -60,6 +60,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
             <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFCA28" stroke="#B8860B" stroke-width="1.6"></circle><path d="M8.5 14.5 C 9 9.5, 13.5 7.5, 16 8 C 15.5 12.5, 12 15, 8.5 14.5 Z" fill="#FFE082" stroke="#B8860B" stroke-width="1.1"></path></svg>
           </sc-if>
           <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums;">{{ d.coins }}</span>
+          <span style="min-height: 12px; font-size: 9px; font-weight: 800; line-height: 1; color: #2E7D32;">{{ d.tag }}</span>
         </div>
       </sc-for>
     </div>
@@ -97,15 +98,16 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   renderVals() {
-    const coins = [50, 75, 100, 125, 150, 200, 450];
-    const extras = ['', '', '+1 Hint', '+2 Undo', '+1 Shield', '+1 Hammer', '+ trophy'];
+    const coins = [50, 75, 100, 150, 150, 200, 450];
+    const extras = ['', '', '+1 Hint', '', '+1 Shield', '+1 Hammer', '+1 Hint, 1 Shield, 1 Hammer and the Golden Coil Trophy'];
+    const tags = ['', '', '+Hint', '', '+Shield', '+Hammer', '+All 3'];
     const ladder = coins.map((cv, i) => {
       const n = i + 1, done = n <= 3, today = n === 4, last = n === 7;
-      let style = 'height: 82px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-sizing: border-box; ';
+      let style = 'height: 92px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-sizing: border-box; ';
       if (done) style += 'background: #C8E6C9; color: #1B5E20;';
       else if (today) style += 'background: #FFFBF2; border: 3px solid #2E7D32; color: #1B2B1F;';
       else style += 'background: #FFFBF2; color: #5B6B5F;';
-      return { n, coins: cv, done, trophy: last && !done, open: !done && !last, style,
+      return { n, coins: cv, tag: tags[i], done, trophy: last && !done, open: !done && !last, style,
         aria: 'Day ' + n + ', ' + cv + ' coins' + (extras[i] ? ' ' + extras[i] : '') + (done ? ', claimed' : today ? ', today' : '') };
     });
     const cleared = [12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 25, 26];

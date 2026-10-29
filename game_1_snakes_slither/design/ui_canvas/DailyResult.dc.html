@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daily result</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 56px 20px 28px; gap: 14px; text-align: center;">
+  <svg aria-hidden="true" width="390" height="360" viewBox="0 0 390 360" style="position: absolute; left: 0; top: 0;">
+    <defs><radialGradient id="drGlow"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.9"></stop><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="195" cy="190" r="170" fill="url(#drGlow)"></circle>
+    <g fill="#81C784" opacity="0.8"><path d="M40 70 C 46 56, 62 54, 66 62 C 58 72, 48 74, 40 70 Z"></path><path d="M318 52 C 328 42, 344 44, 346 54 C 336 60, 326 60, 318 52 Z"></path><path d="M330 250 C 338 240, 352 240, 356 248 C 348 256, 336 256, 330 250 Z"></path></g>
+  </svg>
+
+  <span style="position: relative; font-size: 13px; font-weight: 800; letter-spacing: 0.8px; color: #5B6B5F;">TUESDAY · PAR MOVES</span>
+  <h1 style="position: relative; margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.1;">Daily Jungle Puzzle<br>cleared!</h1>
+
+  <div style="position: relative; width: 140px; height: 140px; border-radius: 36px; background: linear-gradient(160deg, #EEF8E9, #CFE6C4); box-shadow: inset 0 2px 0 #FFFFFF, 0 14px 30px rgba(30,60,30,0.2); display: flex; align-items: center; justify-content: center;">
+    <svg role="img" aria-label="Leaf silhouette stamp" width="96" height="96" viewBox="0 0 24 24"><defs><linearGradient id="drLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A5D86E"></stop><stop offset="1" stop-color="#3F8A2E"></stop></linearGradient></defs><path d="M4 20 C 4 10, 10 4, 20 4 C 20 14, 14 20, 4 20 Z" fill="url(#drLeaf)" stroke="#2E6B22" stroke-width="0.8" stroke-linejoin="round"></path><path d="M4 20 L 15 9 M9 15 H13 M11.5 12.5 V9" stroke="#E6F5D6" stroke-width="0.8" stroke-linecap="round" opacity="0.9"></path></svg>
+    <span style="position: absolute; right: -10px; bottom: -10px; height: 30px; padding: 0 10px; border-radius: 15px; background: #2E7D32; border: 2px solid #FFFFFF; color: #FFFFFF; display: flex; align-items: center; font-size: 12px; font-weight: 800;">Stamped 27 Oct</span>
+  </div>
+
+  <div role="img" aria-label="3 of 3 stars, 9 moves, par 9" style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+    <div style="display: flex; gap: 6px;">
+      <sc-for list="{{ stars }}" as="s" hint-placeholder-count="3">
+        <svg width="38" height="38" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z" fill="#FFCA28" stroke="#B8860B" stroke-width="1.1" stroke-linejoin="round"></path></svg>
+      </sc-for>
+    </div>
+    <span style="font-size: 14px; font-weight: 800; color: #5B6B5F;">9 moves · par 9</span>
+  </div>
+
+  <div style="position: relative; align-self: stretch; border-radius: 22px; background: rgba(255,255,255,0.92); box-shadow: 0 10px 26px rgba(30,60,30,0.14); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; text-align: left;">
+    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800;"><span>Daily clear</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">+100 coins</span></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800;">
+      <span style="display: flex; align-items: center; gap: 6px;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c1.2 4.6 6 5.6 6 11.2a6 6 0 0 1-12 0c0-3.4 2.3-4.6 2.3-8 2.4 1.2 3.6 2.4 3.6 4.7" fill="#FF8F00"></path></svg>Jungle Streak · Day 4</span>
+      <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px;">+150 coins</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">
+      <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+        <span aria-label="{{ d.aria }}" style="{{ d.style }}">{{ d.label }}</span>
+      </sc-for>
+    </div>
+    <span style="font-size: 12px; font-weight: 700; color: #6B7A6E;">Tomorrow: Day 5 · 150 coins + 1 Safety Shell Shield</span>
+  </div>
+
+  <a href="Daily.dc.html" style="position: relative; margin-top: auto; align-self: stretch; height: 60px; border-radius: 30px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px;">Collect</a>
+  <span style="position: relative; font-size: 12px; font-weight: 700; color: #6B7A6E;">Next Daily in 9 h 41 m</span>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const base = 'height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: Fredoka, sans-serif; font-weight: 600; font-size: 13px; box-sizing: border-box; ';
+    const days = [1, 2, 3, 4, 5, 6, 7].map((n) => {
+      const done = n <= 4, today = n === 4;
+      return {
+        label: 'D' + n,
+        aria: 'Day ' + n + (done ? ', claimed' : ''),
+        style: base + (today ? 'background: #FF8F00; color: #FFFFFF; box-shadow: 0 0 0 3px #FFE0B2;' : done ? 'background: #2E7D32; color: #FFFFFF;' : 'background: #F1F5F0; color: #9AA59D;')
+      };
+    });
+    return { stars: [0, 1, 2].map(() => ({})), days };
+  }
+}
+</script>
+</body>
+</html>

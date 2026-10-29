@@ -33,7 +33,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
   <div style="flex-grow: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
     <sc-if value="{{ isBoosters }}" hint-placeholder-val="{{ true }}">
       <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
-        <sc-for list="{{ items }}" as="it" hint-placeholder-count="8">
+        <sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
           <button aria-label="{{ it.aria }}" style="min-height: 150px; border-radius: 22px; border: 1px solid #FFFFFF; background: linear-gradient(180deg, #FFFFFF, #FBF7EE); box-shadow: 0 10px 24px rgba(30,60,30,0.12); padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; color: #1B2B1F;">
             <span style="position: relative; width: 76px; height: 70px; border-radius: 20px; background: radial-gradient(circle at 50% 55%, #F3FAEE 0%, #E0F0DA 70%, rgba(224,240,218,0) 100%); display: flex; align-items: center; justify-content: center;">
               <dc-import name="Booster" kind="{{ it.kind }}" size="{{ 60 }}" hint-size="60px,60px"></dc-import>
@@ -106,13 +106,13 @@ class Component extends DCLogic {
           (on ? 'background: #2E7D32; color: #FFFFFF;' : 'background: transparent; color: #1B2B1F;') };
     });
     const defs = [
-      ['hint', 'Glow Firefly Hint', 60, 150], ['undo', 'Coil-Back Undo', 40, 100],
+      ['hint', 'Glow Firefly Hint', 60, 150],
       ['shield', 'Safety Shell Shield', 80, 200], ['hammer', 'Magic Stone Hammer', 100, 250]
     ];
     const items = [];
     defs.forEach((d) => {
       [[1, d[2]], [3, d[3]]].forEach(([qty, price]) => {
-        items.push({ kind: d[0], hint: d[0] === 'hint', undo: d[0] === 'undo', shield: d[0] === 'shield', hammer: d[0] === 'hammer',
+        items.push({ kind: d[0], hint: d[0] === 'hint', shield: d[0] === 'shield', hammer: d[0] === 'hammer',
           name: d[1], qty, price, priceBg: qty === 3 ? '#2E7D32' : '#E8F5E9', priceFg: qty === 3 ? '#FFFFFF' : '#1B2B1F',
           aria: qty + ' ' + d[1] + ' for ' + price + ' coins' });
       });
