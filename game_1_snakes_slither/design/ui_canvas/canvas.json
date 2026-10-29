@@ -1,0 +1,53 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-27T17:05:00Z"},
+  "title": "Snakes Slither Game UI",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 390, "h": 844, "title": "5.1 · Splash", "is_interactive": true},
+    "Home.dc.html": {"x": 470, "y": 0, "w": 390, "h": 844, "title": "5.3 · Home", "is_interactive": true},
+    "LevelMap.dc.html": {"x": 940, "y": 0, "w": 390, "h": 844, "title": "5.4 · Level map", "is_interactive": true},
+    "Daily.dc.html": {"x": 1410, "y": 0, "w": 390, "h": 844, "title": "5.13 · Daily puzzle & streak", "is_interactive": true},
+    "Saver.dc.html": {"x": 1880, "y": 0, "w": 390, "h": 844, "title": "Streak Saver popup", "is_interactive": true},
+    "Wheel.dc.html": {"x": 2350, "y": 0, "w": 390, "h": 844, "title": "5.14 · Lucky Lily Wheel", "is_interactive": true},
+
+    "Tutorial.dc.html": {"x": 0, "y": 1264, "w": 390, "h": 844, "title": "5.7 · FTUE L1 tutorial", "is_interactive": true},
+    "Intro.dc.html": {"x": 470, "y": 1264, "w": 390, "h": 844, "title": "5.7 · Mechanic intro card (L11)", "is_interactive": true},
+    "Play.dc.html": {"x": 940, "y": 1264, "w": 390, "h": 844, "title": "5.5 · Gameplay HUD", "is_interactive": true},
+    "Preview.dc.html": {"x": 1410, "y": 1264, "w": 390, "h": 844, "title": "Tongue-Flick Preview (blocked)", "is_interactive": true},
+    "Hint.dc.html": {"x": 1880, "y": 1264, "w": 390, "h": 844, "title": "Glow Firefly Hint + Shield", "is_interactive": true},
+    "Hammer.dc.html": {"x": 2350, "y": 1264, "w": 390, "h": 844, "title": "Hammer target mode", "is_interactive": true},
+    "Pause.dc.html": {"x": 2820, "y": 1264, "w": 390, "h": 844, "title": "5.6 · Pause & settings", "is_interactive": true},
+
+    "SecondChance.dc.html": {"x": 0, "y": 2528, "w": 390, "h": 844, "title": "5.8 · Second Chance", "is_interactive": true},
+    "Failed.dc.html": {"x": 470, "y": 2528, "w": 390, "h": 844, "title": "5.9 · Level failed", "is_interactive": true},
+    "Stuck.dc.html": {"x": 940, "y": 2528, "w": 390, "h": 844, "title": "Stuck sheet (07 §12)", "is_interactive": true},
+    "Complete.dc.html": {"x": 1410, "y": 2528, "w": 390, "h": 844, "title": "5.10 · Level complete", "is_interactive": true},
+    "Gift.dc.html": {"x": 1880, "y": 2528, "w": 390, "h": 844, "title": "5.11 · Jungle Gift Basket (L40)", "is_interactive": true},
+    "Rush.dc.html": {"x": 2350, "y": 2528, "w": 390, "h": 844, "title": "5.12 · Golden Slither Rush", "is_interactive": true},
+    "PhaseComplete.dc.html": {"x": 2820, "y": 2528, "w": 390, "h": 844, "title": "5.18 · Phase complete", "is_interactive": true},
+
+    "Shop.dc.html": {"x": 0, "y": 3792, "w": 390, "h": 844, "title": "5.15 · Shop", "is_interactive": true},
+    "MiniShop.dc.html": {"x": 470, "y": 3792, "w": 390, "h": 844, "title": "Mini shop sheet (04 §3)", "is_interactive": true},
+    "Vip.dc.html": {"x": 940, "y": 3792, "w": 390, "h": 844, "title": "5.16 · VIP paywall", "is_interactive": true},
+    "Leaderboards.dc.html": {"x": 1410, "y": 3792, "w": 390, "h": 844, "title": "5.17 · Leaderboards", "is_interactive": true},
+    "Board.dc.html": {"x": 1880, "y": 3792, "w": 358, "h": 358, "title": "Component · Garden board"},
+    "Pip.dc.html": {"x": 2350, "y": 3792, "w": 200, "h": 200, "title": "Component · Pip mascot"},
+    "Booster.dc.html": {"x": 2630, "y": 3792, "w": 64, "h": 64, "title": "Component · Booster icon"}
+  },
+  "order": [
+    "Main.dc.html", "Home.dc.html", "LevelMap.dc.html", "Daily.dc.html", "Saver.dc.html", "Wheel.dc.html",
+    "Pip.dc.html", "Booster.dc.html", "Board.dc.html", "Play.dc.html",
+    "Tutorial.dc.html", "Intro.dc.html", "Preview.dc.html", "Hint.dc.html", "Hammer.dc.html", "Pause.dc.html",
+    "SecondChance.dc.html", "Failed.dc.html", "Stuck.dc.html", "Complete.dc.html", "Gift.dc.html", "Rush.dc.html", "PhaseComplete.dc.html",
+    "Shop.dc.html", "MiniShop.dc.html", "Vip.dc.html", "Leaderboards.dc.html"
+  ],
+  "notes": {
+    "row1": {"x": 0, "y": -300, "text": "1 · Launch & hub", "kind": "title1", "maxW": 3210},
+    "row2": {"x": 0, "y": 964, "text": "2 · Gameplay & its states", "kind": "title1", "maxW": 3210},
+    "row3": {"x": 0, "y": 2228, "text": "3 · Results & rewards", "kind": "title1", "maxW": 3210},
+    "row4": {"x": 0, "y": 3492, "text": "4 · Shop, VIP & ranks", "kind": "title1", "maxW": 3210}
+  },
+  "designSystems": []
+}

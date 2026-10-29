@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stuck sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Play" mode="play" level="{{ 214 }}" hearts="{{ 2 }}" moves="{{ 15 }}" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(16,32,20,0.35), rgba(8,18,10,0.65)); backdrop-filter: blur(3px);"></div>
+
+  <div role="dialog" aria-labelledby="stuckTitle" style="position: absolute; left: 0; right: 0; bottom: 0; border-radius: 24px 24px 0 0; background: #FFFBF2; box-shadow: 0 -8px 24px rgba(0,0,0,0.12); padding: 10px 20px 28px; display: flex; flex-direction: column; gap: 12px;">
+    <span aria-hidden="true" style="align-self: center; width: 44px; height: 5px; border-radius: 3px; background: #C8E6C9;"></span>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="width: 64px; height: 64px; flex-shrink: 0; border-radius: 18px; background: linear-gradient(160deg, #EEF8E9, #D5EBCB); display: flex; align-items: center; justify-content: center;">
+        <svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true">
+          <defs><filter id="stB" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="0.6"></feGaussianBlur></filter></defs>
+          <ellipse cx="24" cy="43" rx="16" ry="2.4" fill="#1F4A14" opacity="0.18" filter="url(#stB)"></ellipse>
+          <g fill="none" stroke-linecap="round">
+            <path d="M7 39 C 5 27, 20 30, 24 23 C 28 16, 35 13, 39 17" stroke="#22451A" stroke-width="7.4"></path>
+            <path d="M7 39 C 5 27, 20 30, 24 23 C 28 16, 35 13, 39 17" stroke="#5E9B2E" stroke-width="5.6"></path>
+            <path d="M7 39 C 5 27, 20 30, 24 23 C 28 16, 35 13, 39 17" stroke="#A9DA6E" stroke-width="2" opacity="0.8" filter="url(#stB)"></path>
+            <path d="M7 39 C 5 27, 20 30, 24 23 C 28 16, 35 13, 39 17" stroke="#2C5616" stroke-width="2" stroke-dasharray="1.6 4" opacity="0.7"></path>
+            <path d="M9 9 C 19 10, 21 31, 31 33 C 36 34, 40 31, 41 36" stroke="#7A1035" stroke-width="7.4"></path>
+            <path d="M9 9 C 19 10, 21 31, 31 33 C 36 34, 40 31, 41 36" stroke="#E0457B" stroke-width="5.6"></path>
+            <path d="M9 9 C 19 10, 21 31, 31 33 C 36 34, 40 31, 41 36" stroke="#FFB3CD" stroke-width="2" opacity="0.8" filter="url(#stB)"></path>
+            <path d="M9 9 C 19 10, 21 31, 31 33 C 36 34, 40 31, 41 36" stroke="#8E1847" stroke-width="2" stroke-dasharray="1.6 4" opacity="0.6"></path>
+            <path d="M20 27.5 C 22 26.2, 23.2 24.8, 24 23" stroke="#22451A" stroke-width="7.4"></path>
+            <path d="M20 27.5 C 22 26.2, 23.2 24.8, 24 23" stroke="#5E9B2E" stroke-width="5.6"></path>
+            <path d="M20 27.5 C 22 26.2, 23.2 24.8, 24 23" stroke="#A9DA6E" stroke-width="2" opacity="0.8"></path>
+          </g>
+          <g>
+            <ellipse cx="40.5" cy="16" rx="5" ry="4" transform="rotate(30 40.5 16)" fill="#6FAE38" stroke="#22451A" stroke-width="1"></ellipse>
+            <circle cx="39.6" cy="14.4" r="1.6" fill="#FFF3B0" stroke="#22451A" stroke-width="0.5"></circle><circle cx="42.6" cy="16.2" r="1.6" fill="#FFF3B0" stroke="#22451A" stroke-width="0.5"></circle>
+            <circle cx="39.8" cy="14.6" r="0.7" fill="#111"></circle><circle cx="42.8" cy="16.4" r="0.7" fill="#111"></circle>
+            <ellipse cx="7.5" cy="9" rx="5" ry="4" transform="rotate(-15 7.5 9)" fill="#E8538A" stroke="#7A1035" stroke-width="1"></ellipse>
+            <circle cx="5.8" cy="8.2" r="1.6" fill="#FFF3B0" stroke="#7A1035" stroke-width="0.5"></circle><circle cx="9" cy="7.6" r="1.6" fill="#FFF3B0" stroke="#7A1035" stroke-width="0.5"></circle>
+            <circle cx="6" cy="8.4" r="0.7" fill="#111"></circle><circle cx="9.2" cy="7.8" r="0.7" fill="#111"></circle>
+          </g>
+          <path d="M31 6 q2 -3 4 0 q1.4 2 -1 3 v1.4 M34 12.6 v0.2" fill="none" stroke="#5B6B5F" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <h2 id="stuckTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 24px;">The snakes are stuck</h2>
+        <span style="font-size: 14px; font-weight: 700; color: #5B6B5F;">No heart lost · this isn't a fail</span>
+      </div>
+    </div>
+    <p style="margin: 0; font-size: 16px; font-weight: 700; line-height: 1.45; color: #3B5240;">From here, no order of moves can clear the garden. Step back a move or start this level again.</p>
+    <button style="height: 56px; border: 0; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px; cursor: pointer;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19 a6.5 6.5 0 1 0 -6.2 -8.6 M2.6 8 L5.8 11.2 L9.2 8.2"></path></svg>
+      Coil-Back Undo
+      <span style="height: 24px; padding: 0 8px; border-radius: 12px; background: rgba(255,255,255,0.25); display: flex; align-items: center; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;">2 left</span>
+    </button>
+    <a href="Play.dc.html" style="height: 52px; border-radius: 16px; background: #FFFFFF; border: 2px solid #C8E6C9; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; color: #1B2B1F; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B2B1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5"></path></svg>
+      Restart level</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

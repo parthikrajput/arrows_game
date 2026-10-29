@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Booster icon</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0}</style></helmet>
+<svg role="img" aria-label="{{ label }}" width="{{ size }}" height="{{ size }}" viewBox="0 0 64 64" style="display: block; overflow: visible; opacity: {{ op }};">
+  <defs>
+    <filter id="bxShadow" x="-40%" y="-200%" width="180%" height="500%"><feGaussianBlur stdDeviation="2"></feGaussianBlur></filter>
+    <filter id="bxSoft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter>
+    <filter id="bxGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
+    <filter id="bxStone" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="4" result="n"></feTurbulence><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.15  0 0 0 0 0.15  0 0 0 0 0.15  0 0 0 1.1 -0.45"></feColorMatrix><feComposite in2="SourceGraphic" operator="in"></feComposite></filter>
+    <radialGradient id="bxFlyBody" cx="0.4" cy="0.35" r="0.75"><stop offset="0" stop-color="#FFFDE7"></stop><stop offset="0.35" stop-color="#FFEE58"></stop><stop offset="1" stop-color="#F9A825"></stop></radialGradient>
+    <radialGradient id="bxFlyHalo"><stop offset="0" stop-color="#FFF59D" stop-opacity="0.9"></stop><stop offset="1" stop-color="#FFF59D" stop-opacity="0"></stop></radialGradient>
+    <linearGradient id="bxWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"></stop><stop offset="1" stop-color="#B3E5FC" stop-opacity="0.55"></stop></linearGradient>
+    <radialGradient id="bxHead" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#8D6E63"></stop><stop offset="1" stop-color="#2E1B12"></stop></radialGradient>
+    <linearGradient id="bxCoil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C5EE8A"></stop><stop offset="0.5" stop-color="#6FAE38"></stop><stop offset="1" stop-color="#2F6A16"></stop></linearGradient>
+    <radialGradient id="bxShell" cx="0.5" cy="0.95" r="1"><stop offset="0" stop-color="#FFF3E0"></stop><stop offset="0.45" stop-color="#FFB98A"></stop><stop offset="1" stop-color="#E8663D"></stop></radialGradient>
+    <linearGradient id="bxWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5D3A1E"></stop><stop offset="0.4" stop-color="#B07A45"></stop><stop offset="0.6" stop-color="#C9935A"></stop><stop offset="1" stop-color="#6B4322"></stop></linearGradient>
+    <linearGradient id="bxRock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9CFCB"></stop><stop offset="0.5" stop-color="#8E9892"></stop><stop offset="1" stop-color="#555F59"></stop></linearGradient>
+  </defs>
+
+  <ellipse cx="32" cy="58" rx="18" ry="3" fill="#1B2B1F" opacity="0.35" filter="url(#bxShadow)"></ellipse>
+
+  <sc-if value="{{ isHint }}" hint-placeholder-val="{{ true }}">
+    <g>
+      <circle cx="32" cy="38" r="22" fill="url(#bxFlyHalo)"></circle>
+      <path d="M28 18 C 24 10, 18 9, 15 11 M36 18 C 40 10, 46 9, 49 11" fill="none" stroke="#3E2723" stroke-width="1.6" stroke-linecap="round"></path>
+      <circle cx="15" cy="11" r="1.6" fill="#3E2723"></circle><circle cx="49" cy="11" r="1.6" fill="#3E2723"></circle>
+      <path d="M30 26 C 18 14, 4 18, 8 28 C 11 35, 22 34, 30 30 Z" fill="url(#bxWing)" stroke="#90A4AE" stroke-width="0.8"></path>
+      <path d="M34 26 C 46 14, 60 18, 56 28 C 53 35, 42 34, 34 30 Z" fill="url(#bxWing)" stroke="#90A4AE" stroke-width="0.8"></path>
+      <path d="M29 28 C 22 24, 15 23, 11 26 M29 29 C 22 29, 16 31, 13 31 M35 28 C 42 24, 49 23, 53 26 M35 29 C 42 29, 48 31, 51 31" fill="none" stroke="#90A4AE" stroke-width="0.6" opacity="0.8"></path>
+      <ellipse cx="32" cy="41" rx="9" ry="13" fill="url(#bxFlyBody)" stroke="#C17900" stroke-width="1"></ellipse>
+      <path d="M24 38 Q32 41 40 38 M24.5 44 Q32 47 39.5 44 M26.5 49.5 Q32 52 37.5 49.5" fill="none" stroke="#E0A000" stroke-width="1" opacity="0.7"></path>
+      <ellipse cx="29" cy="36" rx="3" ry="5" fill="#FFFFFF" opacity="0.7" filter="url(#bxSoft)"></ellipse>
+      <ellipse cx="32" cy="27" rx="7" ry="4.5" fill="#4E342E"></ellipse>
+      <circle cx="32" cy="21" r="6" fill="url(#bxHead)"></circle>
+      <circle cx="29.3" cy="20.6" r="1.8" fill="#FFFFFF"></circle><circle cx="34.7" cy="20.6" r="1.8" fill="#FFFFFF"></circle>
+      <circle cx="29.6" cy="20.9" r="0.9" fill="#111"></circle><circle cx="35" cy="20.9" r="0.9" fill="#111"></circle>
+      <g fill="#FFF59D"><circle cx="10" cy="44" r="1.4"></circle><circle cx="55" cy="40" r="1.2"></circle><circle cx="50" cy="52" r="1"></circle></g>
+    </g>
+  </sc-if>
+
+  <sc-if value="{{ isUndo }}" hint-placeholder-val="{{ false }}">
+    <g>
+      <path d="M42 50 A19 19 0 1 0 14.5 36" fill="none" stroke="#1E4A10" stroke-width="12" stroke-linecap="round"></path>
+      <path d="M42 50 A19 19 0 1 0 14.5 36" fill="none" stroke="url(#bxCoil)" stroke-width="9.5" stroke-linecap="round"></path>
+      <path d="M42 50 A19 19 0 1 0 14.5 36" fill="none" stroke="#2C5616" stroke-width="3.6" stroke-dasharray="3 6" opacity="0.65"></path>
+      <path d="M44 46 A17 17 0 1 0 17 30" fill="none" stroke="#E8F8D0" stroke-width="1.8" stroke-linecap="round" opacity="0.7" filter="url(#bxSoft)"></path>
+      <path d="M4 32 L14.5 46 L24.5 31 Z" fill="#1E4A10"></path>
+      <path d="M6.6 33 L14.5 43.4 L22 32 Z" fill="url(#bxCoil)"></path>
+      <path d="M8.5 33.6 L14.2 41 L13 34 Z" fill="#E8F8D0" opacity="0.55"></path>
+      <ellipse cx="44" cy="49" rx="7.5" ry="6" transform="rotate(-30 44 49)" fill="#6FAE38" stroke="#1E4A10" stroke-width="1.4"></ellipse>
+      <circle cx="42.6" cy="47" r="2.2" fill="#FFF3B0" stroke="#1E4A10" stroke-width="0.6"></circle><circle cx="47" cy="49.4" r="2.2" fill="#FFF3B0" stroke="#1E4A10" stroke-width="0.6"></circle>
+      <ellipse cx="42.8" cy="47.2" rx="0.8" ry="1.5" fill="#111"></ellipse><ellipse cx="47.2" cy="49.6" rx="0.8" ry="1.5" fill="#111"></ellipse>
+    </g>
+  </sc-if>
+
+  <sc-if value="{{ isShield }}" hint-placeholder-val="{{ false }}">
+    <g>
+      <path d="M32 54 L10 26 C 10 12, 54 12, 54 26 Z" fill="url(#bxShell)" stroke="#B4441E" stroke-width="1.4" stroke-linejoin="round"></path>
+      <g fill="none" stroke="#C8532A" stroke-width="1.6" stroke-linecap="round" opacity="0.75">
+        <path d="M32 54 L32 13"></path><path d="M32 54 L24.5 14"></path><path d="M32 54 L39.5 14"></path><path d="M32 54 L17.5 17"></path><path d="M32 54 L46.5 17"></path><path d="M32 54 L12.2 22"></path><path d="M32 54 L51.8 22"></path>
+      </g>
+      <g fill="none" stroke="#FFF3E0" stroke-width="1.2" stroke-linecap="round" opacity="0.6">
+        <path d="M33.5 50 L36 15"></path><path d="M31 50 L28 15"></path><path d="M30 50 L21 16"></path><path d="M34 50 L43 16"></path>
+      </g>
+      <path d="M10 26 C 10 12, 54 12, 54 26 C 50 23, 46 22, 42.5 24 C 39 21, 35 21, 32 23 C 29 21, 25 21, 21.5 24 C 18 22, 14 23, 10 26 Z" fill="#FFD8BE" opacity="0.55"></path>
+      <path d="M24 54 H40 L37 59 H27 Z" fill="#E8663D" stroke="#B4441E" stroke-width="1.2" stroke-linejoin="round"></path>
+      <path d="M22 52 L27 54 M42 52 L37 54" stroke="#B4441E" stroke-width="1.2" stroke-linecap="round"></path>
+      <ellipse cx="22" cy="22" rx="6" ry="3" transform="rotate(-25 22 22)" fill="#FFFFFF" opacity="0.6" filter="url(#bxSoft)"></ellipse>
+    </g>
+  </sc-if>
+
+  <sc-if value="{{ isHammer }}" hint-placeholder-val="{{ false }}">
+    <g>
+      <path d="M33 30 L15 55" stroke="#3E2511" stroke-width="7.5" stroke-linecap="round"></path>
+      <path d="M33 30 L15 55" stroke="url(#bxWood)" stroke-width="5.5" stroke-linecap="round"></path>
+      <path d="M30 35 L19 50" stroke="#E2B47A" stroke-width="0.9" stroke-linecap="round" opacity="0.7"></path>
+      <g transform="rotate(36 38 20)">
+        <rect x="20" y="10" width="36" height="20" rx="8" fill="url(#bxRock)" stroke="#3B4540" stroke-width="1.4"></rect>
+        <rect x="20" y="10" width="36" height="20" rx="8" fill="#000" filter="url(#bxStone)"></rect>
+        <path d="M27 14 Q38 11 50 14" fill="none" stroke="#F1F4F2" stroke-width="2" stroke-linecap="round" opacity="0.6" filter="url(#bxSoft)"></path>
+        <path d="M30 22 L34 25 L33 28 M44 16 L46 20" fill="none" stroke="#3B4540" stroke-width="0.9" stroke-linecap="round" opacity="0.6"></path>
+        <rect x="34" y="8.5" width="8" height="23" rx="2" fill="#A1764A" stroke="#5D3A1E" stroke-width="1"></rect>
+        <path d="M34 13 H42 M34 17 H42 M34 21 H42 M34 25 H42 M34 29 H42" stroke="#5D3A1E" stroke-width="0.9" opacity="0.8"></path>
+      </g>
+      <g fill="#CE93D8"><path d="M54 8 l1.4 3.6 3.6 1.4 -3.6 1.4 -1.4 3.6 -1.4 -3.6 -3.6 -1.4 3.6 -1.4 z"></path><circle cx="58" cy="24" r="1.4"></circle><circle cx="47" cy="4" r="1"></circle></g>
+    </g>
+  </sc-if>
+</svg>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"kind":{"type":"enum","options":["hint","undo","shield","hammer"],"default":"hint"},"size":{"type":"number","default":64},"dim":{"type":"boolean","default":false},"$preview":{"width":64,"height":64}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const k = this.props.kind || 'hint';
+    const labels = { hint: 'Glow Firefly Hint', undo: 'Coil-Back Undo', shield: 'Safety Shell Shield', hammer: 'Magic Stone Hammer' };
+    return {
+      size: this.props.size || 64, op: this.props.dim ? 0.45 : 1, label: labels[k],
+      isHint: k === 'hint', isUndo: k === 'undo', isShield: k === 'shield', isHammer: k === 'hammer'
+    };
+  }
+}
+</script>
+</body>
+</html>

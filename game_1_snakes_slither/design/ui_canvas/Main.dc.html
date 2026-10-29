@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Snakes Slither splash</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1B5E20}a:hover{color:#0F3D12}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #AEDDF2 0%, #DDF2E8 40%, #9ED486 68%, #5FA548 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center;">
+  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
+    <defs>
+      <radialGradient id="mSun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFFBE6"></stop><stop offset="0.4" stop-color="#FFF3C4" stop-opacity="0.8"></stop><stop offset="1" stop-color="#FFF3C4" stop-opacity="0"></stop></radialGradient>
+      <linearGradient id="mHill1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3D69A"></stop><stop offset="1" stop-color="#7DBE70"></stop></linearGradient>
+      <linearGradient id="mHill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86C866"></stop><stop offset="1" stop-color="#4E9A3C"></stop></linearGradient>
+      <radialGradient id="mBush" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="#7CC45E"></stop><stop offset="1" stop-color="#2A6F27"></stop></radialGradient>
+      <filter id="mBlur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2.4"></feGaussianBlur></filter>
+    </defs>
+    <circle cx="300" cy="120" r="120" fill="url(#mSun)"></circle>
+    <g fill="#FFFFFF" opacity="0.85" filter="url(#mBlur)">
+      <ellipse cx="70" cy="130" rx="52" ry="15"></ellipse><ellipse cx="104" cy="118" rx="32" ry="15"></ellipse>
+      <ellipse cx="290" cy="210" rx="44" ry="12"></ellipse>
+    </g>
+    <path d="M-20 560 Q 100 470 210 530 T 420 500 V 844 H -20 Z" fill="url(#mHill1)"></path>
+    <path d="M-20 640 Q 130 560 250 620 T 420 600 V 844 H -20 Z" fill="url(#mHill2)"></path>
+    <ellipse cx="30" cy="720" rx="90" ry="60" fill="url(#mBush)"></ellipse>
+    <ellipse cx="370" cy="730" rx="96" ry="64" fill="url(#mBush)"></ellipse>
+    <g><circle cx="60" cy="690" r="6" fill="#F48FB1"></circle><circle cx="60" cy="690" r="2.4" fill="#FFD54F"></circle><circle cx="330" cy="684" r="6" fill="#FFFFFF"></circle><circle cx="330" cy="684" r="2.4" fill="#FFD54F"></circle><circle cx="356" cy="704" r="5" fill="#F48FB1"></circle></g>
+  </svg>
+
+  <div style="margin-top: 150px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative;">
+    <dc-import name="Pip" pose="stand" size="{{ 200 }}" hint-size="200px,200px"></dc-import>
+    <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; letter-spacing: 2px; color: #FFFFFF; text-align: center; text-shadow: 0 2px 0 #2E7D32, 0 4px 0 #2E7D32, 0 6px 0 #1B5E20, 2px 0 0 #2E7D32, -2px 0 0 #2E7D32, 0 -2px 0 #2E7D32, 0 12px 18px rgba(0,0,0,0.3);">SNAKES<br>SLITHER</h1>
+    <p style="margin: 6px 0 0; padding: 6px 14px; border-radius: 14px; background: rgba(255,255,255,0.72); font-family: 'Fredoka', sans-serif; font-weight: 500; font-size: 17px; color: #1B5E20;">Tap the snakes out of the garden</p>
+  </div>
+
+  <div style="position: absolute; left: 56px; right: 56px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+    <div style="align-self: stretch; display: flex; align-items: center; gap: 10px;">
+      <div role="progressbar" aria-label="Loading" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="flex-grow: 1; height: 18px; border-radius: 999px; background: linear-gradient(180deg, #5A3820, #7A4B2A); border: 2px solid #FFF3DC; box-shadow: 0 4px 10px rgba(0,0,0,0.25); padding: 2px; box-sizing: border-box;">
+        <div style="width: 62%; height: 10px; border-radius: 999px; background: linear-gradient(180deg, #C5F29E 0%, #6CC24A 55%, #3E8E2A 100%);"></div>
+      </div>
+      <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px; color: #FFFFFF; text-shadow: 0 1px 2px rgba(0,0,0,0.4); font-variant-numeric: tabular-nums;">62%</span>
+    </div>
+    <span style="font-size: 15px; font-weight: 800; color: #FFFFFF; text-shadow: 0 1px 2px rgba(0,0,0,0.45);">Waking up the garden…</span>
+    <a href="Home.dc.html" style="min-height: 44px; padding: 0 18px; border-radius: 22px; background: rgba(255,255,255,0.85); display: flex; align-items: center; text-decoration: none; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px;">Continue</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

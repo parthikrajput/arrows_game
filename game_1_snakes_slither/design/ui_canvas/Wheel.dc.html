@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lucky Lily Wheel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: radial-gradient(ellipse 90% 60% at 50% 45%, #F3FBEF 0%, #DCEFDC 55%, #C2E2C2 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 12px 16px 18px;">
+  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
+    <defs><radialGradient id="wHalo"><stop offset="0" stop-color="#FFF6C8" stop-opacity="0.9"></stop><stop offset="1" stop-color="#FFF6C8" stop-opacity="0"></stop></radialGradient></defs>
+    <circle cx="195" cy="360" r="230" fill="url(#wHalo)"></circle>
+  </svg>
+
+  <header style="position: relative; align-self: stretch; height: 48px; display: flex; align-items: center; gap: 10px;">
+    <a href="Home.dc.html" aria-label="Back to home" style="width: 46px; height: 46px; border-radius: 23px; box-sizing: border-box; background: radial-gradient(circle at 35% 25%, #FFFFFF, #F5EFDF 60%, #E3D7B9); border: 2px solid #FFFFFF; box-shadow: 0 4px 0 #B9A77F, 0 8px 14px rgba(40,60,30,0.18); display: flex; align-items: center; justify-content: center; color: #4A3A25;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 L8 12 L15 19"></path></svg>
+    </a>
+    <h1 style="margin: 0; flex-grow: 1; text-align: center; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 22px;">Lucky Lily Wheel</h1>
+    <button aria-label="Show prize odds" aria-expanded="{{ oddsOpenStr }}" onClick="{{ toggleOdds }}" style="width: 46px; height: 46px; border-radius: 23px; box-sizing: border-box; background: radial-gradient(circle at 35% 25%, #FFFFFF, #F5EFDF 60%, #E3D7B9); border: 2px solid #FFFFFF; box-shadow: 0 4px 0 #B9A77F, 0 8px 14px rgba(40,60,30,0.18); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #4A3A25;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"></circle><path d="M12 11 V17 M12 7.2 V7.4"></path></svg>
+    </button>
+  </header>
+
+  <main style="position: relative; flex-grow: 1; align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;">
+    <div style="position: relative; width: 330px; height: 330px;">
+      <svg aria-hidden="true" width="330" height="330" viewBox="0 0 330 330" style="position: absolute; left: 0; top: 0;">
+        <defs>
+          <radialGradient id="wRim" cx="0.5" cy="0.4" r="0.6"><stop offset="0.82" stop-color="#FFE082"></stop><stop offset="0.9" stop-color="#E0A100"></stop><stop offset="1" stop-color="#8A5A00"></stop></radialGradient>
+          <linearGradient id="wRimGloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.7"></stop><stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0"></stop></linearGradient>
+          <radialGradient id="wBulb"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="0.5" stop-color="#FFF59D"></stop><stop offset="1" stop-color="#FFB300"></stop></radialGradient>
+          <filter id="wDrop" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter>
+        </defs>
+        <ellipse cx="165" cy="312" rx="120" ry="14" fill="#1F4A14" opacity="0.28" filter="url(#wDrop)"></ellipse>
+        <circle cx="165" cy="165" r="158" fill="url(#wRim)" stroke="#7A4E00" stroke-width="2"></circle>
+        <circle cx="165" cy="165" r="156" fill="url(#wRimGloss)"></circle>
+        <circle cx="165" cy="165" r="134" fill="#6D4300"></circle>
+        <sc-for list="{{ bulbs }}" as="b" hint-placeholder-count="16">
+          <circle cx="{{ b.x }}" cy="{{ b.y }}" r="5.2" fill="url(#wBulb)" stroke="#A86F00" stroke-width="1"></circle>
+        </sc-for>
+      </svg>
+
+      <div style="position: absolute; left: 35px; top: 35px; width: 260px; height: 260px; border-radius: 130px; overflow: hidden; transform: rotate({{ rot }}deg); transition: transform 3s cubic-bezier(0.12, 0.8, 0.18, 1);">
+        <svg aria-hidden="true" width="260" height="260" viewBox="0 0 260 260" style="position: absolute; left: 0; top: 0;">
+          <defs>
+            <radialGradient id="wShade" cx="0.5" cy="0.5" r="0.5"><stop offset="0.55" stop-color="#000000" stop-opacity="0"></stop><stop offset="1" stop-color="#000000" stop-opacity="0.22"></stop></radialGradient>
+          </defs>
+          <sc-for list="{{ segs }}" as="s" hint-placeholder-count="8">
+            <path d="{{ s.d }}" fill="{{ s.fill }}" stroke="#FFFFFF" stroke-width="2.5"></path>
+          </sc-for>
+          <circle cx="130" cy="130" r="130" fill="url(#wShade)"></circle>
+        </svg>
+        <sc-for list="{{ segs }}" as="s" hint-placeholder-count="8">
+          <div style="{{ s.labelPos }}">
+            <sc-if value="{{ s.coin }}" hint-placeholder-val="{{ true }}">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="wCoin" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF4B8"></stop><stop offset="0.45" stop-color="#FFCA28"></stop><stop offset="1" stop-color="#C08A00"></stop></radialGradient></defs><circle cx="12" cy="12" r="10.2" fill="url(#wCoin)" stroke="#8D6200" stroke-width="1.2"></circle><path d="M8.6 14.6 C 9 9.6, 13.4 7.6, 15.9 8.1 C 15.4 12.6, 12 15.1, 8.6 14.6 Z" fill="#FFE38A" stroke="#9A6B00" stroke-width="0.9"></path></svg>
+            </sc-if>
+            <sc-if value="{{ s.undo }}" hint-placeholder-val="{{ false }}">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFFFFF" opacity="0.9"></circle><path d="M12 18 a6 6 0 1 0 -5.7 -7.9 M3.6 7.4 L6.4 10.4 L9.6 7.8" fill="none" stroke="#AD1457" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </sc-if>
+            <sc-if value="{{ s.hint }}" hint-placeholder-val="{{ false }}">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFF9C4"></circle><circle cx="12" cy="13" r="4.5" fill="#FFEB3B" stroke="#F57F17" stroke-width="1.2"></circle><path d="M8 8 Q5 4 3 6 M16 8 Q19 4 21 6" fill="none" stroke="#5D4037" stroke-width="1.4" stroke-linecap="round"></path></svg>
+            </sc-if>
+            <sc-if value="{{ s.shield }}" hint-placeholder-val="{{ false }}">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L20 5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5 Z" fill="#FFFFFF" stroke="#0277BD" stroke-width="1.8" stroke-linejoin="round"></path><path d="M12 6 V18 M7.5 9 Q12 11 16.5 9 M7.5 13.5 Q12 15.5 16.5 13.5" fill="none" stroke="#29B6F6" stroke-width="1.4" stroke-linecap="round"></path></svg>
+            </sc-if>
+            <sc-if value="{{ s.hammer }}" hint-placeholder-val="{{ false }}">
+              <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFFFFF" opacity="0.9"></circle><rect x="5" y="5" width="11" height="6" rx="1.5" transform="rotate(-35 10.5 8)" fill="#90A4AE" stroke="#37474F" stroke-width="1.2"></rect><path d="M11 10 L17 19" stroke="#6D4C41" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            </sc-if>
+            <span style="{{ s.textStyle }}">{{ s.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div aria-hidden="true" style="position: absolute; left: 133px; top: 133px; width: 64px; height: 64px; border-radius: 32px; box-sizing: border-box; background: radial-gradient(circle at 35% 28%, #FFF8D6 0%, #FFCA28 45%, #B07800 100%); border: 3px solid #FFFFFF; box-shadow: 0 0 0 2px #8A5A00, 0 6px 14px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center;">
+        <svg width="36" height="36" viewBox="0 0 36 36"><path d="M18 6 C 23 11, 23 19, 18 26 C 13 19, 13 11, 18 6 Z" fill="#EC407A" stroke="#AD1457" stroke-width="1"></path><path d="M6 17 C 11 14, 17 18, 18 26 C 11 26, 7 22, 6 17 Z M30 17 C 25 14, 19 18, 18 26 C 25 26, 29 22, 30 17 Z" fill="#F8BBD0" stroke="#AD1457" stroke-width="1"></path></svg>
+      </div>
+
+      <svg aria-hidden="true" width="44" height="54" viewBox="0 0 44 54" style="position: absolute; left: 143px; top: -14px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.35));">
+        <defs><linearGradient id="wPin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A80"></stop><stop offset="0.5" stop-color="#E53935"></stop><stop offset="1" stop-color="#8E0000"></stop></linearGradient></defs>
+        <path d="M22 52 L5 20 A17 17 0 1 1 39 20 Z" fill="url(#wPin)" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"></path>
+        <circle cx="22" cy="17" r="6" fill="#FFE082" stroke="#8A5A00" stroke-width="1.5"></circle>
+        <ellipse cx="15" cy="11" rx="5" ry="3" fill="#FFFFFF" opacity="0.5"></ellipse>
+      </svg>
+    </div>
+
+    <span aria-live="polite" style="min-height: 26px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; color: #2E7D32;">{{ result }}</span>
+
+    <div style="align-self: stretch; display: flex; flex-direction: column; gap: 12px; padding: 0 12px;">
+      <button onClick="{{ spin }}" disabled="{{ freeUsed }}" style="{{ spinStyle }}">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12 a8 8 0 1 1 -2.4 -5.7 M20 4 V8 H16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        {{ spinLabel }}</button>
+      <button style="height: 52px; border-radius: 26px; background: rgba(255,255,255,0.85); border: 1px solid #FFFFFF; box-shadow: 0 6px 16px rgba(30,60,30,0.12); color: #1B2B1F; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px; cursor: pointer;">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="#1B2B1F" stroke-width="2"></rect><path d="M10 9 L15 12 L10 15 Z" fill="#1B2B1F"></path></svg>
+        Watch ad · spin again <span style="font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: #6B7A6E;">(1 left)</span></button>
+    </div>
+  </main>
+
+  <span style="position: relative; font-size: 12px; font-weight: 700; color: #5B6B5F; text-align: center;">1 free spin a day · next free spin in 6 h 12 m</span>
+
+  <sc-if value="{{ oddsOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="region" aria-label="Prize odds" style="position: absolute; left: 16px; right: 16px; top: 72px; border-radius: 24px; background: #FFFBF2; box-shadow: inset 0 1px 0 #FFFFFF, 0 4px 0 rgba(150,130,90,0.35), 0 24px 48px rgba(10,30,10,0.35); padding: 16px; z-index: 3; display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">Prize odds</h2>
+        <button onClick="{{ toggleOdds }}" style="min-height: 40px; border: 0; background: transparent; font-weight: 800; font-size: 14px; color: #2E7D32; cursor: pointer;">Close</button>
+      </div>
+      <sc-for list="{{ odds }}" as="o" hint-placeholder-count="8">
+        <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; border-bottom: 1px solid #EEF2EE; padding: 6px 0;">
+          <span>{{ o.prize }}</span><span style="font-variant-numeric: tabular-nums; font-weight: 800;">{{ o.p }}</span>
+        </div>
+      </sc-for>
+      <span style="font-size: 12px; font-weight: 700; color: #5B6B5F;">Slices look the same size, but the chances above are the real ones. Spins can't be bought.</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { rot: 0, used: false, odds: false, result: '' }; }
+  renderVals() {
+    const prizes = [
+      ['20', 'coin', '30%', 'coins'], ['50', 'coin', '25%', 'coins'], ['100', 'coin', '15%', 'coins'], ['Undo', 'undo', '12%', 'Coil-Back'],
+      ['Hint', 'hint', '10%', 'Firefly'], ['Shield', 'shield', '5%', 'Shell'], ['Hammer', 'hammer', '2.5%', 'Stone'], ['500', 'coin', '0.5%', 'Jackpot']
+    ];
+    const fills = ['#FFF3D6', '#43A047', '#FFF3D6', '#D81B60', '#FFF3D6', '#039BE5', '#FFF3D6', '#FFB300'];
+    const cx = 130, cy = 130, r = 130;
+    const pt = (deg) => { const a = (deg - 90) * Math.PI / 180; return [(cx + r * Math.cos(a)).toFixed(2), (cy + r * Math.sin(a)).toFixed(2)]; };
+    const segs = prizes.map((p, i) => {
+      const a0 = i * 45 - 22.5, a1 = a0 + 45, s = pt(a0), e = pt(a1);
+      const light = fills[i] === '#FFF3D6';
+      return {
+        d: 'M' + cx + ' ' + cy + ' L' + s[0] + ' ' + s[1] + ' A' + r + ' ' + r + ' 0 0 1 ' + e[0] + ' ' + e[1] + ' Z',
+        fill: fills[i], label: p[0],
+        coin: p[1] === 'coin', undo: p[1] === 'undo', hint: p[1] === 'hint', shield: p[1] === 'shield', hammer: p[1] === 'hammer',
+        labelPos: 'position: absolute; left: 100px; top: 100px; width: 60px; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; transform: rotate(' + (i * 45) + 'deg) translateY(-72px);',
+        textStyle: "font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: " + (p[0].length > 4 ? 14 : 18) + 'px; line-height: 1; color: ' + (light ? '#3E2A00' : '#FFFFFF') + '; text-shadow: ' + (light ? '0 1px 0 rgba(255,255,255,0.8)' : '0 1px 2px rgba(0,0,0,0.45)') + ';'
+      };
+    });
+    const bulbs = [];
+    for (let k = 0; k < 16; k++) { const a = (k * 22.5 - 90) * Math.PI / 180; bulbs.push({ x: (165 + 146 * Math.cos(a)).toFixed(1), y: (165 + 146 * Math.sin(a)).toFixed(1) }); }
+    const used = this.state.used;
+    return {
+      segs, bulbs, rot: this.state.rot, result: this.state.result,
+      oddsOpen: this.state.odds, oddsOpenStr: this.state.odds ? 'true' : 'false',
+      toggleOdds: () => this.setState({ odds: !this.state.odds }),
+      odds: prizes.map((p) => ({ prize: p[1] === 'coin' ? p[0] + ' coins' + (p[3] === 'Jackpot' ? ' (Golden Lily Jackpot)' : '') : '1 ' + p[3] + ' ' + p[0], p: p[2] })),
+      freeUsed: used, spinLabel: used ? 'Free spin used today' : 'SPIN FREE',
+      spinStyle: 'height: 64px; border-radius: 32px; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: Fredoka, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 1px; cursor: pointer; ' +
+        (used ? 'border: 0; background: #DDE5DE; color: #5B6B5F;' : 'border: 2px solid #FFF3C4; background: linear-gradient(180deg, #FFE082 0%, #FFB300 50%, #E08A00 100%); color: #4A2E00; text-shadow: 0 1px 0 rgba(255,255,255,0.6); box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -3px 0 rgba(0,0,0,0.12), 0 5px 0 #A86300, 0 14px 24px rgba(168,99,0,0.35);'),
+      spin: () => { if (!used) { this.setState({ rot: 1440 - 45, used: true, result: '' }); setTimeout(() => this.setState({ result: 'You won 50 coins!' }), 3100); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

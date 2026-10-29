@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Garden board</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{ px }}; height: {{ px }}; display: flex; align-items: center; justify-content: center; color: #1B2B1F;">
+  <svg viewBox="{{ vb }}" width="{{ size }}" height="{{ size }}" role="img" aria-label="{{ label }}" style="display: block;">
+    <defs>
+      <linearGradient id="ssWood" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#B9834F"></stop><stop offset="0.45" stop-color="#94603A"></stop><stop offset="1" stop-color="#6B4024"></stop>
+      </linearGradient>
+      <radialGradient id="ssLawn" cx="0.45" cy="0.35" r="0.85">
+        <stop offset="0" stop-color="{{ lawnHi }}"></stop><stop offset="1" stop-color="{{ lawn }}"></stop>
+      </radialGradient>
+      <radialGradient id="ssStoneA" cx="0.32" cy="0.28" r="0.95">
+        <stop offset="0" stop-color="#FDFBF5"></stop><stop offset="0.55" stop-color="#EDE6D6"></stop><stop offset="1" stop-color="#D2C7B0"></stop>
+      </radialGradient>
+      <radialGradient id="ssStoneB" cx="0.32" cy="0.28" r="0.95">
+        <stop offset="0" stop-color="#FAF6EC"></stop><stop offset="0.55" stop-color="#E6DDCB"></stop><stop offset="1" stop-color="#C9BCA3"></stop>
+      </radialGradient>
+      <radialGradient id="ssRock" cx="0.34" cy="0.28" r="0.9">
+        <stop offset="0" stop-color="#D3D8D4"></stop><stop offset="0.5" stop-color="#9DA6A0"></stop><stop offset="1" stop-color="#66706A"></stop>
+      </radialGradient>
+      <radialGradient id="ssEye" cx="0.4" cy="0.35" r="0.7">
+        <stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#DCE3DD"></stop>
+      </radialGradient>
+      <sc-for list="{{ grads }}" as="g" hint-placeholder-count="9">
+        <radialGradient id="{{ g.id }}" cx="0.36" cy="0.3" r="0.78">
+          <stop offset="0" stop-color="{{ g.light }}"></stop><stop offset="0.48" stop-color="{{ g.col }}"></stop><stop offset="1" stop-color="{{ g.dark }}"></stop>
+        </radialGradient>
+      </sc-for>
+      <filter id="ssShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.05"></feGaussianBlur></filter>
+      <filter id="ssSoft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0.45"></feGaussianBlur></filter>
+      <filter id="ssGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.7"></feGaussianBlur></filter>
+      <filter id="ssGrass" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="n"></feTurbulence>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.08  0 0 0 0 0.22  0 0 0 0 0.04  0 0 0 0.9 -0.28"></feColorMatrix>
+        <feComposite in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="ssStoneGrain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="9" result="n"></feTurbulence>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 0 0.24  0 0 0 0.7 -0.24"></feColorMatrix>
+        <feComposite in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+      <filter id="ssWoodGrain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.03 0.9" numOctaves="2" seed="2" result="n"></feTurbulence>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.22  0 0 0 0 0.12  0 0 0 0 0.05  0 0 0 0.9 -0.2"></feColorMatrix>
+        <feComposite in2="SourceGraphic" operator="in"></feComposite>
+      </filter>
+    </defs>
+
+    <rect x="-6" y="-4.6" width="{{ frameW }}" height="{{ frameW }}" rx="5" fill="#4A2C17"></rect>
+    <rect x="-6" y="-6" width="{{ frameW }}" height="{{ frameW }}" rx="5" fill="url(#ssWood)"></rect>
+    <rect x="-6" y="-6" width="{{ frameW }}" height="{{ frameW }}" rx="5" fill="#000000" filter="url(#ssWoodGrain)"></rect>
+    <rect x="-5.6" y="-5.6" width="{{ frameIn }}" height="{{ frameIn }}" rx="4.6" fill="none" stroke="#D9A877" stroke-width="0.5" opacity="0.75"></rect>
+    <path d="{{ seams }}" fill="none" stroke="#5A3820" stroke-width="0.45" opacity="0.8"></path>
+    <sc-for list="{{ nails }}" as="nl" hint-placeholder-count="8">
+      <g><circle cx="{{ nl.x }}" cy="{{ nl.y }}" r="0.62" fill="#3B2616"></circle><circle cx="{{ nl.hx }}" cy="{{ nl.hy }}" r="0.22" fill="#A98463"></circle></g>
+    </sc-for>
+
+    <rect x="-1.6" y="-1.6" width="{{ lawnW }}" height="{{ lawnW }}" rx="2.6" fill="url(#ssLawn)"></rect>
+    <rect x="-1.6" y="-1.6" width="{{ lawnW }}" height="{{ lawnW }}" rx="2.6" fill="#000000" filter="url(#ssGrass)"></rect>
+    <rect x="-1.6" y="-1.6" width="{{ lawnW }}" height="{{ lawnW }}" rx="2.6" fill="none" stroke="#173A0E" stroke-width="1.4" opacity="0.45" filter="url(#ssSoft)"></rect>
+
+    <g filter="url(#ssSoft)" opacity="0.28">
+      <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="49">
+        <rect x="{{ t.sx }}" y="{{ t.sy }}" width="8.8" height="8.8" rx="1.9" fill="#13240C"></rect>
+      </sc-for>
+    </g>
+    <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="49">
+      <rect x="{{ t.x }}" y="{{ t.y }}" width="8.8" height="8.8" rx="1.9" fill="{{ t.fill }}"></rect>
+    </sc-for>
+    <g filter="url(#ssStoneGrain)">
+      <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="49">
+        <rect x="{{ t.x }}" y="{{ t.y }}" width="8.8" height="8.8" rx="1.9" fill="#000000"></rect>
+      </sc-for>
+    </g>
+    <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="49">
+      <path d="{{ t.hl }}" fill="none" stroke="#FFFFFF" stroke-width="0.4" stroke-linecap="round" opacity="0.85"></path>
+    </sc-for>
+    <sc-for list="{{ tufts }}" as="tf" hint-placeholder-count="64">
+      <g>
+        <path d="{{ tf.d }}" fill="none" stroke="#2F6B1E" stroke-width="0.5" stroke-linecap="round"></path>
+        <path d="{{ tf.d2 }}" fill="none" stroke="#9FD67D" stroke-width="0.35" stroke-linecap="round"></path>
+      </g>
+    </sc-for>
+
+    <sc-if value="{{ hammer }}" hint-placeholder-val="{{ false }}">
+      <rect x="-1.6" y="-1.6" width="{{ lawnW }}" height="{{ lawnW }}" rx="2.6" fill="#0F1D0B" opacity="0.5"></rect>
+    </sc-if>
+
+    <g filter="url(#ssShadow)" opacity="0.42">
+      <sc-for list="{{ snakes }}" as="s" hint-placeholder-count="11">
+        <g transform="translate(1.1 2.1)">
+          <path d="{{ s.d }}" fill="none" stroke="#0E1C0A" stroke-width="7.4" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="{{ s.hx }}" cy="{{ s.hy }}" r="4.7" fill="#0E1C0A"></circle>
+        </g>
+      </sc-for>
+      <sc-for list="{{ rocks }}" as="r" hint-placeholder-count="1">
+        <ellipse cx="{{ r.sx }}" cy="{{ r.sy }}" rx="4.4" ry="2.6" fill="#0E1C0A"></ellipse>
+      </sc-for>
+    </g>
+
+    <sc-for list="{{ rocks }}" as="r" hint-placeholder-count="1">
+      <g>
+        <sc-if value="{{ r.glow }}" hint-placeholder-val="{{ false }}">
+          <circle cx="{{ r.x }}" cy="{{ r.y }}" r="6.2" fill="#FFFFFF" opacity="0.95" filter="url(#ssGlow)"></circle>
+        </sc-if>
+        <path d="{{ r.d }}" fill="url(#ssRock)" stroke="#59645D" stroke-width="0.55" stroke-linejoin="round"></path>
+        <path d="{{ r.crack }}" fill="none" stroke="#5B655F" stroke-width="0.35" stroke-linecap="round" opacity="0.8"></path>
+        <ellipse cx="{{ r.hx }}" cy="{{ r.hy }}" rx="1.7" ry="0.9" fill="#FFFFFF" opacity="0.55" filter="url(#ssSoft)"></ellipse>
+        <path d="{{ r.moss }}" fill="#6FAE3E" stroke="#3E7A22" stroke-width="0.3"></path>
+      </g>
+    </sc-for>
+
+    <sc-for list="{{ snakes }}" as="s" hint-placeholder-count="11">
+      <g opacity="{{ s.op }}">
+        <sc-if value="{{ s.glow }}" hint-placeholder-val="{{ false }}">
+          <g filter="url(#ssGlow)">
+            <path d="{{ s.d }}" fill="none" stroke="{{ s.glowColor }}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="{{ s.hx }}" cy="{{ s.hy }}" r="6.6" fill="{{ s.glowColor }}"></circle>
+          </g>
+        </sc-if>
+        <sc-if value="{{ s.tube }}" hint-placeholder-val="{{ true }}">
+          <g>
+            <path d="{{ s.d }}" fill="none" stroke="{{ s.dark }}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="{{ s.d }}" fill="none" stroke="{{ s.col }}" stroke-width="6.7" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="{{ s.d }}" fill="none" stroke="{{ s.dark }}" stroke-width="{{ s.patW }}" stroke-dasharray="{{ s.dash }}" stroke-linecap="{{ s.cap }}" stroke-linejoin="round" opacity="0.22"></path>
+            <path d="{{ s.d }}" transform="translate(-0.45 -0.85)" fill="none" stroke="{{ s.light }}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" filter="url(#ssSoft)"></path>
+            <path d="{{ s.d }}" transform="translate(0.3 0.3)" fill="none" stroke="{{ s.light }}" stroke-width="{{ s.patW }}" stroke-dasharray="{{ s.dash }}" stroke-linecap="{{ s.cap }}" stroke-linejoin="round" opacity="{{ s.patO }}"></path>
+            <path d="{{ s.d }}" transform="translate(-0.75 -1.6)" fill="none" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" opacity="0.75" filter="url(#ssSoft)"></path>
+          </g>
+        </sc-if>
+        <sc-if value="{{ s.cat }}" hint-placeholder-val="{{ false }}">
+          <g>
+            <sc-for list="{{ s.beads }}" as="bd" hint-placeholder-count="3">
+              <g>
+                <circle cx="{{ bd.fx1 }}" cy="{{ bd.fy1 }}" r="0.75" fill="{{ s.dark }}"></circle>
+                <circle cx="{{ bd.fx2 }}" cy="{{ bd.fy2 }}" r="0.75" fill="{{ s.dark }}"></circle>
+                <circle cx="{{ bd.x }}" cy="{{ bd.y }}" r="4.15" fill="url(#{{ s.grad }})" stroke="{{ s.dark }}" stroke-width="0.6"></circle>
+                <ellipse cx="{{ bd.hx }}" cy="{{ bd.hy }}" rx="1.5" ry="0.9" fill="#FFFFFF" opacity="0.6" filter="url(#ssSoft)"></ellipse>
+              </g>
+            </sc-for>
+            <path d="{{ s.ant }}" fill="none" stroke="{{ s.dark }}" stroke-width="0.6" stroke-linecap="round"></path>
+            <circle cx="{{ s.a1x }}" cy="{{ s.a1y }}" r="0.85" fill="url(#{{ s.grad }})" stroke="{{ s.dark }}" stroke-width="0.35"></circle>
+            <circle cx="{{ s.a2x }}" cy="{{ s.a2y }}" r="0.85" fill="url(#{{ s.grad }})" stroke="{{ s.dark }}" stroke-width="0.35"></circle>
+          </g>
+        </sc-if>
+        <circle cx="{{ s.hx }}" cy="{{ s.hy }}" r="4.85" fill="url(#{{ s.grad }})" stroke="{{ s.dark }}" stroke-width="0.65"></circle>
+        <ellipse cx="{{ s.shx }}" cy="{{ s.shy }}" rx="1.8" ry="1.05" fill="#FFFFFF" opacity="0.7" filter="url(#ssSoft)"></ellipse>
+        <circle cx="{{ s.k1x }}" cy="{{ s.k1y }}" r="1.05" fill="#FF7A70" opacity="0.55" filter="url(#ssSoft)"></circle>
+        <circle cx="{{ s.k2x }}" cy="{{ s.k2y }}" r="1.05" fill="#FF7A70" opacity="0.55" filter="url(#ssSoft)"></circle>
+        <circle cx="{{ s.n1x }}" cy="{{ s.n1y }}" r="0.28" fill="{{ s.dark }}"></circle>
+        <circle cx="{{ s.n2x }}" cy="{{ s.n2y }}" r="0.28" fill="{{ s.dark }}"></circle>
+        <circle cx="{{ s.e1x }}" cy="{{ s.e1y }}" r="1.55" fill="url(#ssEye)" stroke="{{ s.dark }}" stroke-width="0.25"></circle>
+        <circle cx="{{ s.e2x }}" cy="{{ s.e2y }}" r="1.55" fill="url(#ssEye)" stroke="{{ s.dark }}" stroke-width="0.25"></circle>
+        <circle cx="{{ s.p1x }}" cy="{{ s.p1y }}" r="0.85" fill="#14200F"></circle>
+        <circle cx="{{ s.p2x }}" cy="{{ s.p2y }}" r="0.85" fill="#14200F"></circle>
+        <circle cx="{{ s.g1x }}" cy="{{ s.g1y }}" r="0.32" fill="#FFFFFF"></circle>
+        <circle cx="{{ s.g2x }}" cy="{{ s.g2y }}" r="0.32" fill="#FFFFFF"></circle>
+      </g>
+    </sc-for>
+
+    <sc-if value="{{ showLane }}" hint-placeholder-val="{{ false }}">
+      <g>
+        <path d="{{ tongue }}" fill="none" stroke="#D81B3C" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="{{ lane }}" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="0.1 2.3" stroke-linecap="round" opacity="0.9"></path>
+        <path d="{{ lane }}" fill="none" stroke="{{ laneColor }}" stroke-width="1.25" stroke-dasharray="0.1 2.3" stroke-linecap="round"></path>
+        <sc-if value="{{ laneBlocked }}" hint-placeholder-val="{{ true }}">
+          <g>
+            <circle cx="{{ xx }}" cy="{{ xy }}" r="3.2" fill="#FFFFFF" stroke="#D32F2F" stroke-width="0.8"></circle>
+            <path d="{{ xd }}" fill="none" stroke="#D32F2F" stroke-width="1.1" stroke-linecap="round"></path>
+          </g>
+        </sc-if>
+      </g>
+    </sc-if>
+
+    <sc-if value="{{ showFly }}" hint-placeholder-val="{{ false }}">
+      <g>
+        <circle cx="{{ flyX }}" cy="{{ flyY }}" r="4.2" fill="#FFF59D" opacity="0.9" filter="url(#ssGlow)"></circle>
+        <ellipse cx="{{ flyWx }}" cy="{{ flyWy }}" rx="1.6" ry="0.9" fill="#FFFFFF" opacity="0.85"></ellipse>
+        <circle cx="{{ flyX }}" cy="{{ flyY }}" r="1.3" fill="#FFD54F" stroke="#B8860B" stroke-width="0.35"></circle>
+      </g>
+    </sc-if>
+
+    <sc-if value="{{ ftue }}" hint-placeholder-val="{{ false }}">
+      <g>
+        <path d="{{ cut }}" fill="#0F1D0B" fill-rule="evenodd" opacity="0.55"></path>
+        <circle cx="15" cy="15" r="5.6" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.9"></circle>
+        <path d="M25 15 L25 25.5 Q25 27.5 27 27.5 L31.5 27.5 Q33.5 27.5 33.5 25.5 L33.5 21 Q33.5 19.6 32.2 19.6 Q30.9 19.6 30.9 21 L30.9 20.2 Q30.9 18.8 29.6 18.8 Q28.3 18.8 28.3 20.2 L28.3 19.6 Q28.3 18.2 27 18.2 Q25.7 18.2 25.7 19.6 L25.7 15.6 Q25.7 14.3 25 14.3 Z" transform="translate(-10 2.4)" fill="#FFFFFF" stroke="#1B2B1F" stroke-width="0.7" stroke-linejoin="round"></path>
+      </g>
+    </sc-if>
+  </svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["play","thumb","hint","preview","hammer","ftue","intro","rush"],"default":"play"},"size":{"editor":"int","default":358,"min":80,"max":600},"tint":{"editor":"color","default":"#7DBF5A","options":["#7DBF5A","#8CC46A","#B9B865","#6FA58A","#6E86A8"]},"$preview":{"width":358,"height":358}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mode = this.props.mode ?? 'play';
+    const size = this.props.size ?? 358;
+    const tint = this.props.tint ?? '#7DBF5A';
+    const mix = (a, b, t) => {
+      const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      const x = p(a), y = p(b);
+      return '#' + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join('');
+    };
+    // colour id: [body, outline, light, dash, width, cap, opacity]
+    const PAL = {
+      red: ['#FF7043', '#BF360C', '#FFD1BF', '0.01 3', 1.9, 'round', 0.85],
+      green: ['#7CB342', '#33691E', '#E3F2C7', '1.6 1.8', 0.9, 'round', 0.85],
+      blue: ['#29B6F6', '#01579B', '#E1F5FE', '0.7 2.6', 5.2, 'butt', 0.45],
+      yellow: ['#FFCA28', '#A87A00', '#FFF8D6', '0.01 2.2', 1.3, 'round', 0.9],
+      purple: ['#9575CD', '#4527A0', '#EDE7F6', '0.01 3.4', 2.2, 'round', 0.8],
+      orange: ['#FFA726', '#D84315', '#FFE6C2', '1 3.2', 6, 'butt', 0.4],
+      pink: ['#F06292', '#AD1457', '#FDE3EC', '0.01 2.6', 1.6, 'round', 0.85],
+      teal: ['#26A69A', '#004D40', '#D6F2EF', '1.4 2.2', 1, 'round', 0.85],
+      gold: ['#FFC928', '#8D6200', '#FFFBE0', '0.01 2.8', 1.6, 'round', 0.95]
+    };
+    const MAIN = { n: 7, rocks: [[2, 2]], snakes: [
+      { id: 'A', c: 'green', b: [[0, 0], [1, 0], [2, 0], [3, 0]] },
+      { id: 'B', c: 'blue', b: [[6, 1], [5, 1], [4, 1], [4, 2]] },
+      { id: 'C', c: 'yellow', b: [[1, 1], [1, 2], [1, 3], [2, 3]] },
+      { id: 'D', c: 'purple', b: [[3, 1], [3, 2], [3, 3]] },
+      { id: 'E', c: 'red', b: [[0, 6], [0, 5], [0, 4]], cat: true },
+      { id: 'F', c: 'orange', b: [[1, 5], [1, 4], [2, 4]] },
+      { id: 'G', c: 'pink', b: [[5, 3], [5, 4], [5, 5]] },
+      { id: 'H', c: 'teal', b: [[6, 6], [5, 6], [4, 6], [3, 6]] },
+      { id: 'I', c: 'red', b: [[4, 3], [4, 4], [3, 4]] },
+      { id: 'J', c: 'green', b: [[2, 5], [3, 5], [4, 5]], cat: true },
+      { id: 'K', c: 'yellow', b: [[6, 5], [6, 4], [6, 3]] }
+    ] };
+    const FTUE = { n: 4, rocks: [], snakes: [
+      { id: 'p1', c: 'green', b: [[2, 1], [1, 1], [0, 1]] },
+      { id: 'p2', c: 'yellow', b: [[1, 3], [1, 2]], cat: true }
+    ] };
+    const INTRO = { n: 5, rocks: [[3, 2]], snakes: [
+      { id: 's1', c: 'green', b: [[2, 2], [1, 2], [0, 2]] },
+      { id: 's2', c: 'blue', b: [[3, 4], [3, 3]] },
+      { id: 's3', c: 'orange', b: [[4, 1], [4, 2], [4, 3]] }
+    ] };
+    const L = mode === 'ftue' ? FTUE : mode === 'intro' ? INTRO : MAIN;
+    const rush = mode === 'rush';
+    const n = L.n, S = 10;
+    const c = (v) => v * S + S / 2;
+    const r2 = (v) => Math.round(v * 100) / 100;
+    const rocks = rush ? [] : L.rocks;
+    const occ = {};
+    L.snakes.forEach((s) => s.b.forEach((p) => { occ[p[0] + ',' + p[1]] = s.id; }));
+    rocks.forEach((p) => { occ[p[0] + ',' + p[1]] = 'rock'; });
+
+    const glowId = mode === 'hint' ? 'A' : null;
+    const laneId = mode === 'preview' ? 'G' : mode === 'intro' ? 's1' : null;
+    const grads = Object.keys(PAL).map((k) => ({ id: 'ssG-' + k, col: PAL[k][0], dark: PAL[k][1], light: PAL[k][2] }));
+
+    const snakes = L.snakes.map((s) => {
+      const key = rush ? 'gold' : s.c;
+      const pal = PAL[key];
+      const h = s.b[0], nb = s.b[1];
+      const dx = h[0] - nb[0], dy = h[1] - nb[1], px = -dy, py = dx;
+      const hx = c(h[0]), hy = c(h[1]);
+      const pt = (fw, sd) => [r2(hx + dx * fw + px * sd), r2(hy + dy * fw + py * sd)];
+      const e1 = pt(1.15, 1.95), e2 = pt(1.15, -1.95), q1 = pt(1.8, 1.95), q2 = pt(1.8, -1.95);
+      const g1 = [r2(q1[0] - 0.3), r2(q1[1] - 0.35)], g2 = [r2(q2[0] - 0.3), r2(q2[1] - 0.35)];
+      const k1 = pt(-0.9, 3), k2 = pt(-0.9, -3), n1 = pt(3.7, 0.75), n2 = pt(3.7, -0.75);
+      const a1 = pt(6.4, 2.6), a2 = pt(6.4, -2.6), b1 = pt(3.4, 1.2), b2 = pt(3.4, -1.2);
+      const d = s.b.map((p, i) => (i ? 'L' : 'M') + c(p[0]) + ' ' + c(p[1])).join(' ');
+      const beads = s.b.slice(1).map((p, i) => {
+        const prev = s.b[i];
+        const ddx = prev[0] - p[0], ddy = prev[1] - p[1];
+        const ppx = -ddy, ppy = ddx;
+        const x = c(p[0]), y = c(p[1]);
+        return { x, y, hx: r2(x - 1.3), hy: r2(y - 1.7),
+          fx1: r2(x + ppx * 3.9), fy1: r2(y + ppy * 3.9), fx2: r2(x - ppx * 3.9), fy2: r2(y - ppy * 3.9) };
+      });
+      return {
+        d, col: pal[0], dark: pal[1], light: pal[2], dash: pal[3], patW: pal[4], cap: pal[5], patO: pal[6], grad: 'ssG-' + key,
+        hx, hy, shx: r2(hx - 1.5), shy: r2(hy - 2.1),
+        e1x: e1[0], e1y: e1[1], e2x: e2[0], e2y: e2[1], p1x: q1[0], p1y: q1[1], p2x: q2[0], p2y: q2[1],
+        g1x: g1[0], g1y: g1[1], g2x: g2[0], g2y: g2[1],
+        k1x: k1[0], k1y: k1[1], k2x: k2[0], k2y: k2[1], n1x: n1[0], n1y: n1[1], n2x: n2[0], n2y: n2[1],
+        tube: !s.cat, cat: !!s.cat, beads,
+        ant: 'M' + b1[0] + ' ' + b1[1] + ' Q' + pt(5, 2.4).join(' ') + ' ' + a1[0] + ' ' + a1[1] + ' M' + b2[0] + ' ' + b2[1] + ' Q' + pt(5, -2.4).join(' ') + ' ' + a2[0] + ' ' + a2[1],
+        a1x: a1[0], a1y: a1[1], a2x: a2[0], a2y: a2[1],
+        glow: mode === 'hammer' || s.id === glowId, glowColor: mode === 'hammer' ? '#FFFFFF' : '#FFE066',
+        op: 1, dir: [dx, dy], head: h
+      };
+    });
+
+    let showLane = false, lane = '', tongue = '', laneColor = '#2E7D32', laneBlocked = false, xx = 0, xy = 0, xd = '';
+    const ls = laneId ? snakes[L.snakes.findIndex((s) => s.id === laneId)] : null;
+    if (ls) {
+      showLane = true;
+      const [dx, dy] = ls.dir;
+      let x = ls.head[0] + dx, y = ls.head[1] + dy, end = null;
+      while (x >= 0 && y >= 0 && x < n && y < n) {
+        if (occ[x + ',' + y]) { end = [x, y]; break; }
+        x += dx; y += dy;
+      }
+      const sx = ls.hx + dx * 7.6, sy = ls.hy + dy * 7.6;
+      let ex, ey;
+      if (end) { laneBlocked = true; laneColor = '#D32F2F'; xx = c(end[0]); xy = c(end[1]); ex = xx - dx * 3.4; ey = xy - dy * 3.4;
+        xd = 'M' + (xx - 1.4) + ' ' + (xy - 1.4) + ' L' + (xx + 1.4) + ' ' + (xy + 1.4) + ' M' + (xx + 1.4) + ' ' + (xy - 1.4) + ' L' + (xx - 1.4) + ' ' + (xy + 1.4);
+      } else { ex = c(x) - dx * 2; ey = c(y) - dy * 2; }
+      lane = 'M' + r2(sx) + ' ' + r2(sy) + ' L' + r2(ex) + ' ' + r2(ey);
+      const t0 = [ls.hx + dx * 4.6, ls.hy + dy * 4.6], t1 = [ls.hx + dx * 6.4, ls.hy + dy * 6.4];
+      const pxv = -dy, pyv = dx;
+      tongue = 'M' + r2(t0[0]) + ' ' + r2(t0[1]) + ' L' + r2(t1[0]) + ' ' + r2(t1[1]) +
+        ' L' + r2(t1[0] + dx * 1.1 + pxv * 0.9) + ' ' + r2(t1[1] + dy * 1.1 + pyv * 0.9) +
+        ' M' + r2(t1[0]) + ' ' + r2(t1[1]) + ' L' + r2(t1[0] + dx * 1.1 - pxv * 0.9) + ' ' + r2(t1[1] + dy * 1.1 - pyv * 0.9);
+    }
+
+    let showFly = false, flyX = 0, flyY = 0, flyWx = 0, flyWy = 0;
+    if (glowId) {
+      const g = snakes[L.snakes.findIndex((s) => s.id === glowId)];
+      showFly = true; flyX = r2(g.hx + 3.5); flyY = r2(g.hy + 5.6); flyWx = r2(flyX - 0.4); flyWy = r2(flyY - 1.4);
+    }
+
+    const o = -6, ow = n * S + 12;
+    const rr = (x0, y0, x1, y1, r) => 'M' + (x0 + r) + ' ' + y0 + ' H' + (x1 - r) + ' A' + r + ' ' + r + ' 0 0 1 ' + x1 + ' ' + (y0 + r) +
+      ' V' + (y1 - r) + ' A' + r + ' ' + r + ' 0 0 1 ' + (x1 - r) + ' ' + y1 + ' H' + (x0 + r) + ' A' + r + ' ' + r + ' 0 0 1 ' + x0 + ' ' + (y1 - r) +
+      ' V' + (y0 + r) + ' A' + r + ' ' + r + ' 0 0 1 ' + (x0 + r) + ' ' + y0 + ' Z';
+    const cut = 'M' + o + ' ' + o + ' H' + (o + ow) + ' V' + (o + ow) + ' H' + o + ' Z ' + rr(-1.6, 8.4, 31.6, 21.6, 5);
+
+    const tiles = [], tufts = [];
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const tx = x * S + 0.6, ty = y * S + 0.6;
+      tiles.push({ x: tx, y: ty, sx: tx + 0.7, sy: ty + 1.0, fill: (x * 3 + y * 5) % 3 === 0 ? 'url(#ssStoneB)' : 'url(#ssStoneA)',
+        hl: 'M' + r2(tx + 1.2) + ' ' + r2(ty + 8.2) + ' V' + r2(ty + 1.9) + ' Q' + r2(tx + 1.2) + ' ' + r2(ty + 0.9) + ' ' + r2(tx + 2.2) + ' ' + r2(ty + 0.9) + ' H' + r2(tx + 7.8) });
+    }
+    for (let y = 0; y <= n; y++) for (let x = 0; x <= n; x++) {
+      if ((x * 7 + y * 3) % 2 === 1) continue;
+      const bx = x * S + 0.2, by = y * S + 0.4;
+      tufts.push({ d: 'M' + r2(bx - 0.7) + ' ' + r2(by) + ' q 0.2 -1.4 -0.5 -2 M' + r2(bx) + ' ' + r2(by) + ' q 0.1 -1.8 0.6 -2.4 M' + r2(bx + 0.6) + ' ' + r2(by) + ' q 0.4 -1.2 1.1 -1.5',
+        d2: 'M' + r2(bx - 0.2) + ' ' + r2(by - 0.2) + ' q 0.1 -1.2 0.4 -1.7' });
+    }
+    const W = n * S + 12;
+    const seams = 'M-6 -6 L-1.6 -1.6 M' + (W - 6) + ' -6 L' + (n * S + 1.6) + ' -1.6 M-6 ' + (W - 6) + ' L-1.6 ' + (n * S + 1.6) + ' M' + (W - 6) + ' ' + (W - 6) + ' L' + (n * S + 1.6) + ' ' + (n * S + 1.6) +
+      ' M' + r2(W * 0.38 - 6) + ' -6 V-1.6 M' + r2(W * 0.62 - 6) + ' ' + (W - 6) + ' V' + (n * S + 1.6);
+    const nails = [[-3.8, -3.8], [W - 8.2, -3.8], [-3.8, W - 8.2], [W - 8.2, W - 8.2], [r2(W / 2 - 6), -3.8], [r2(W / 2 - 6), W - 8.2], [-3.8, r2(W / 2 - 6)], [W - 8.2, r2(W / 2 - 6)]]
+      .map(([x, y]) => ({ x, y, hx: r2(x - 0.2), hy: r2(y - 0.22) }));
+    const rockList = rocks.map((p) => {
+      const x = c(p[0]), y = c(p[1]);
+      return { x, y, sx: x + 1, sy: y + 3.4, glow: mode === 'hammer',
+        d: 'M' + (x - 4.3) + ' ' + (y + 1.8) + ' Q' + (x - 4.8) + ' ' + (y - 2.2) + ' ' + (x - 1.4) + ' ' + (y - 3.8) +
+          ' Q' + (x + 2.4) + ' ' + (y - 4.7) + ' ' + (x + 4.2) + ' ' + (y - 0.8) + ' Q' + (x + 5) + ' ' + (y + 2.8) + ' ' + (x + 1.2) + ' ' + (y + 3.6) +
+          ' Q' + (x - 3.2) + ' ' + (y + 4) + ' ' + (x - 4.3) + ' ' + (y + 1.8) + ' Z',
+        crack: 'M' + (x + 0.6) + ' ' + (y - 1.2) + ' l 1 1.3 l -0.4 1.4 M' + (x - 2) + ' ' + (y + 1.6) + ' l 1.2 0.5',
+        moss: 'M' + (x - 0.6) + ' ' + (y - 3.9) + ' q 2 -1.2 4.2 0.6 q 0.4 0.9 -0.6 1 q -1.2 -0.8 -2 0 q -1.1 -0.4 -1.6 -1.6 Z',
+        hx: x - 1.6, hy: y - 1.9 };
+    });
+    const lawn = rush ? '#C9A43C' : tint;
+    const labels = {
+      play: 'Garden board with 11 snakes and a rock', thumb: 'Board preview', hint: 'Glow Firefly points at the green snake on the top row',
+      preview: 'Pink snake preview: its path is blocked by the blue snake', hammer: 'Hammer mode: snakes and the rock can be smashed',
+      ftue: 'Tutorial: tap the green snake', intro: 'Garden Rock: the green snake is blocked by a rock', rush: 'Golden snakes for the rush round'
+    };
+    return {
+      px: size + 'px', size, label: labels[mode] || labels.play,
+      vb: '-6.5 -6.5 ' + (n * S + 13) + ' ' + (n * S + 14.5),
+      frameW: W, frameIn: W - 0.8, lawnW: n * S + 3.2, lawn, lawnHi: mix(lawn, '#FFFFFF', 0.28),
+      grads, seams, nails, tiles, tufts, rocks: rockList, snakes, hammer: mode === 'hammer',
+      showLane, lane, tongue, laneColor, laneBlocked, xx, xy, xd,
+      showFly, flyX, flyY, flyWx, flyWy, ftue: mode === 'ftue', cut
+    };
+  }
+}
+</script>
+</body>
+</html>

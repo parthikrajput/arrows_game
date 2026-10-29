@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Golden Slither Rush</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FFE082}a:hover{color:#FFF8E1}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: radial-gradient(ellipse 120% 80% at 50% 45%, #2F7A32 0%, #17501C 55%, #0B2E10 100%); color: #FFFFFF; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; padding: 18px 16px 24px; gap: 14px;">
+  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
+    <defs>
+      <radialGradient id="rGlow"><stop offset="0" stop-color="#FFD54F" stop-opacity="0.55"></stop><stop offset="1" stop-color="#FFD54F" stop-opacity="0"></stop></radialGradient>
+      <radialGradient id="rFly"><stop offset="0" stop-color="#FFFDE7"></stop><stop offset="0.35" stop-color="#FFE082" stop-opacity="0.9"></stop><stop offset="1" stop-color="#FFCA28" stop-opacity="0"></stop></radialGradient>
+      <filter id="rBlur"><feGaussianBlur stdDeviation="6"></feGaussianBlur></filter>
+    </defs>
+    <circle cx="195" cy="430" r="240" fill="url(#rGlow)"></circle>
+    <g filter="url(#rBlur)" opacity="0.85"><ellipse cx="-10" cy="820" rx="120" ry="70" fill="#0A2A0E"></ellipse><ellipse cx="400" cy="810" rx="130" ry="80" fill="#0A2A0E"></ellipse><ellipse cx="-20" cy="40" rx="110" ry="60" fill="#0D3412"></ellipse><ellipse cx="410" cy="30" rx="110" ry="60" fill="#0D3412"></ellipse></g>
+    <circle cx="40" cy="150" r="9" fill="url(#rFly)"></circle><circle cx="352" cy="118" r="11" fill="url(#rFly)"></circle>
+    <circle cx="332" cy="752" r="9" fill="url(#rFly)"></circle><circle cx="58" cy="700" r="12" fill="url(#rFly)"></circle>
+    <circle cx="22" cy="420" r="7" fill="url(#rFly)"></circle><circle cx="372" cy="470" r="8" fill="url(#rFly)"></circle>
+  </svg>
+
+  <header style="position: relative; display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 1px; color: #FFE082; text-shadow: 0 2px 0 #B8860B, 0 4px 10px rgba(0,0,0,0.45), 0 0 18px rgba(255,213,79,0.45);">GOLDEN SLITHER RUSH</h1>
+      <span style="height: 40px; padding: 0 14px; border-radius: 20px; background: linear-gradient(180deg, #FFF3B0 0%, #FFCA28 50%, #E0A100 100%); box-shadow: inset 0 1px 0 #FFFFFF, 0 3px 0 #9C6F00, 0 8px 16px rgba(0,0,0,0.35); color: #1B2B1F; display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B2B1F" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9 V13 L15 15 M9 2 H15"></path></svg>
+        0:23</span>
+    </div>
+    <div role="progressbar" aria-label="Time left, 23 of 30 seconds" aria-valuenow="23" aria-valuemin="0" aria-valuemax="30" style="height: 12px; border-radius: 6px; background: #0A2E0E; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.12); padding: 2px; box-sizing: border-box;">
+      <div style="width: 76%; height: 8px; border-radius: 4px; background: linear-gradient(180deg, #FFF3B0, #FFCA28 55%, #E0A100); box-shadow: 0 0 10px rgba(255,202,40,0.7);"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+      <div style="border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.05)); border: 1px solid rgba(255,224,130,0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 8px 18px rgba(0,0,0,0.3); padding: 10px 14px; display: flex; align-items: center; gap: 10px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFCA28" stroke="#B8860B" stroke-width="1.6"></circle><path d="M8.5 14.5 C 9 9.5, 13.5 7.5, 16 8 C 15.5 12.5, 12 15, 8.5 14.5 Z" fill="#FFE082" stroke="#B8860B" stroke-width="1.1"></path></svg>
+        <span style="display: flex; flex-direction: column;"><b style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums;">+90</b><span style="font-size: 12px; font-weight: 800; color: #C8E6C9;">10 per snake</span></span>
+      </div>
+      <div style="border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.05)); border: 1px solid rgba(255,224,130,0.28); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 8px 18px rgba(0,0,0,0.3); padding: 10px 14px; display: flex; align-items: center; gap: 10px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18 C 2 12, 9 9, 12 12 C 15 15, 22 12, 20 6" fill="none" stroke="#B8860B" stroke-width="5" stroke-linecap="round"></path><path d="M4 18 C 2 12, 9 9, 12 12 C 15 15, 22 12, 20 6" fill="none" stroke="#FFCA28" stroke-width="3.4" stroke-linecap="round"></path></svg>
+        <span style="display: flex; flex-direction: column;"><b style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums;">9 / 20</b><span style="font-size: 12px; font-weight: 800; color: #C8E6C9;">snakes out</span></span>
+      </div>
+    </div>
+  </header>
+
+  <div style="position: relative; flex-grow: 1; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 0 22px rgba(255,202,40,0.35)) drop-shadow(0 18px 24px rgba(0,0,0,0.45));">
+    <dc-import name="Board" mode="rush" size="{{ 350 }}" tint="#C9A43C" hint-size="350px,350px"></dc-import>
+  </div>
+
+  <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;">
+    <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; color: #FFE082;">Tap fast! No hearts, no boosters.</span>
+    <span style="font-size: 14px; font-weight: 700; color: #C8E6C9;">Clear all 20 before time runs out for +100</span>
+    <a href="Play.dc.html" style="min-height: 44px; padding: 0 16px; display: flex; align-items: center; text-decoration: none; font-weight: 800; font-size: 14px;">Skip (keep 90 coins)</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

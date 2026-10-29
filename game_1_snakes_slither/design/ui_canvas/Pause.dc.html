@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pause and settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Play" mode="play" level="{{ 37 }}" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(10,22,12,0.55); backdrop-filter: blur(6px);"></div>
+
+  <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box;">
+    <div role="dialog" aria-labelledby="pauseTitle" style="width: 100%; max-height: 100%; overflow-y: auto; border-radius: 28px; background: rgba(255,255,255,0.96); box-shadow: 0 30px 60px rgba(0,0,0,0.35); padding: 26px 22px 18px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+        <h2 id="pauseTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 28px;">Paused</h2>
+        <span style="font-size: 13px; font-weight: 700; color: #7A877C;">Level 37 · 7 moves</span>
+      </div>
+
+      <a href="Play.dc.html" style="align-self: stretch; height: 58px; border-radius: 29px; background: linear-gradient(180deg, #66BB6A, #2E7D32); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 10px 22px rgba(46,125,50,0.35); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"></path></svg>Resume</a>
+
+      <nav aria-label="Leave level" style="align-self: stretch; display: flex; justify-content: space-around;">
+        <sc-for list="{{ navs }}" as="n" hint-placeholder-count="3">
+          <a href="{{ n.href }}" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #4C5C50; font-size: 12px; font-weight: 800;">
+            <span style="width: 54px; height: 54px; border-radius: 27px; background: #F1F5F0; display: flex; align-items: center; justify-content: center; color: #1B2B1F;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.icon }}"></path></svg>
+            </span>{{ n.label }}</a>
+        </sc-for>
+      </nav>
+
+      <div style="align-self: stretch; height: 1px; background: #EDF1EC;"></div>
+
+      <div role="group" aria-label="Quick settings" style="align-self: stretch; display: flex; justify-content: space-around;">
+        <sc-for list="{{ quick }}" as="q" hint-placeholder-count="3">
+          <button aria-pressed="{{ q.pressed }}" onClick="{{ q.flip }}" style="border: 0; background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: #4C5C50;">
+            <span style="{{ q.chip }}">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ q.icon }}"></path></svg>
+            </span>{{ q.label }}</button>
+        </sc-for>
+      </div>
+
+      <button aria-expanded="{{ moreStr }}" onClick="{{ toggleMore }}" style="align-self: stretch; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #2E7D32; cursor: pointer;">
+        {{ moreLabel }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{ chevron }}"><path d="M6 9 L12 15 L18 9"></path></svg>
+      </button>
+
+      <sc-if value="{{ more }}" hint-placeholder-val="{{ false }}">
+        <div style="align-self: stretch; margin-top: -12px; display: flex; flex-direction: column;">
+          <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3">
+            <label style="min-height: 46px; display: flex; align-items: center; gap: 12px; cursor: pointer;">
+              <span style="flex-grow: 1; font-size: 15px; font-weight: 700;">{{ t.name }}</span>
+              <input type="checkbox" checked="{{ t.on }}" onChange="{{ t.flip }}" style="width: 20px; height: 20px; accent-color: #2E7D32;">
+            </label>
+          </sc-for>
+          <label style="min-height: 46px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 700;">
+            Language
+            <select style="height: 34px; border-radius: 17px; border: 0; padding: 0 12px; background: #F1F5F0; color: #1B2B1F; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px;">
+              <option>English</option>
+              <option>ગુજરાતી</option>
+              <option>हिन्दी</option>
+            </select>
+          </label>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px 14px; padding-top: 8px; font-size: 13px; font-weight: 800;">
+            <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
+              <button style="border: 0; background: transparent; padding: 4px 0; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: #2E7D32; cursor: pointer;">{{ l }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <span style="font-size: 11px; font-weight: 700; color: #9AA59D;">Saved on this device · v1.0.0</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { more: false, Sound: true, Music: true, Haptics: true, 'Colour-blind mode': false, 'Brighter nights': false, 'Share diagnostics': true };
+  }
+  renderVals() {
+    const icons = {
+      Sound: 'M4 9 H8 L13 5 V19 L8 15 H4 Z M16.5 8.5 a5 5 0 0 1 0 7 M19 6 a8.5 8.5 0 0 1 0 12',
+      Music: 'M9 18 V6 L19 4 V16 M9 18 a2.5 2.5 0 1 1 -5 0 a2.5 2.5 0 0 1 5 0 Z M19 16 a2.5 2.5 0 1 1 -5 0 a2.5 2.5 0 0 1 5 0 Z',
+      Haptics: 'M8 3 H16 A1.5 1.5 0 0 1 17.5 4.5 V19.5 A1.5 1.5 0 0 1 16 21 H8 A1.5 1.5 0 0 1 6.5 19.5 V4.5 A1.5 1.5 0 0 1 8 3 Z M3 9 V15 M21 9 V15'
+    };
+    const quick = ['Sound', 'Music', 'Haptics'].map((name) => {
+      const on = this.state[name];
+      return {
+        label: name, pressed: on ? 'true' : 'false', icon: icons[name],
+        flip: () => this.setState({ [name]: !this.state[name] }),
+        chip: 'width: 54px; height: 54px; border-radius: 27px; display: flex; align-items: center; justify-content: center; ' +
+          (on ? 'background: #E3F2E1; color: #2E7D32; box-shadow: inset 0 0 0 2px #81C784;' : 'background: #F1F5F0; color: #9AA59D; box-shadow: inset 0 0 0 2px transparent; opacity: 0.8;')
+      };
+    });
+    const toggles = ['Colour-blind mode', 'Brighter nights', 'Share diagnostics'].map((name) => ({
+      name, on: this.state[name], flip: () => this.setState({ [name]: !this.state[name] })
+    }));
+    const navs = [
+      { label: 'Restart', href: 'Play.dc.html', icon: 'M4 12 a8 8 0 1 0 2.5 -5.8 M4 4 V9 H9' },
+      { label: 'Map', href: 'LevelMap.dc.html', icon: 'M9 4 L3 6 V20 L9 18 L15 20 L21 18 V4 L15 6 Z M9 4 V18 M15 6 V20' },
+      { label: 'Home', href: 'Home.dc.html', icon: 'M3 11 L12 4 L21 11 M5.5 9.5 V20 H18.5 V9.5 M10 20 V14 H14 V20' }
+    ];
+    const more = this.state.more;
+    return {
+      quick, toggles, navs, more,
+      moreStr: more ? 'true' : 'false',
+      moreLabel: more ? 'Fewer settings' : 'More settings',
+      chevron: more ? 'transform: rotate(180deg);' : '',
+      toggleMore: () => this.setState({ more: !this.state.more }),
+      links: ['Jungle Guide', 'Spin odds', 'Privacy choices', 'Restore purchases', 'Help']
+    };
+  }
+}
+</script>
+</body>
+</html>

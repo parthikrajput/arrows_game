@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FTUE level 1 tutorial</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Play" mode="ftue" level="{{ 1 }}" hint-size="390px,844px"></dc-import>
+
+  <div role="dialog" aria-label="Tutorial step 1" style="position: absolute; left: 16px; right: 16px; bottom: 116px; border-radius: 24px; background: #FFFBF2; box-shadow: inset 0 1px 0 #FFFFFF, 0 4px 0 rgba(150,130,90,0.35), 0 24px 48px rgba(10,30,10,0.35); padding: 14px 16px 14px 14px; display: flex; gap: 12px; align-items: center;">
+    <div style="flex-shrink: 0; width: 62px; height: 62px; border-radius: 31px; background: radial-gradient(circle at 40% 35%, #F3FBEA, #CFE8C6); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.08), 0 3px 8px rgba(30,60,30,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden;"><dc-import name="Pip" pose="face" size="{{ 58 }}" hint-size="58px,58px"></dc-import></div>
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+      <span style="font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #5B6B5F;">PIP · STEP 1 OF 2</span>
+      <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px; line-height: 1.2;">Tap a snake to slither out!</span>
+      <span style="font-size: 14px; font-weight: 700; color: #5B6B5F;">Only the glowing snake can be tapped right now.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

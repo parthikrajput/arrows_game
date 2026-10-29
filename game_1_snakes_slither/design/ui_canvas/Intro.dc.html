@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mechanic intro card</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Play" mode="play" level="{{ 11 }}" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(16,32,20,0.35), rgba(8,18,10,0.65)); backdrop-filter: blur(3px);"></div>
+
+  <div role="dialog" aria-labelledby="introTitle" style="position: absolute; left: 20px; right: 20px; top: 132px; border-radius: 24px; background: #FFFBF2; box-shadow: inset 0 1px 0 #FFFFFF, 0 4px 0 rgba(150,130,90,0.35), 0 24px 48px rgba(10,30,10,0.35); padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+    <div style="align-self: stretch; display: flex; align-items: center; gap: 12px; text-align: left;">
+      <svg role="img" aria-label="Grandpa Tortoise" width="64" height="64" viewBox="0 0 64 64" style="flex-shrink: 0;">
+        <ellipse cx="34" cy="56" rx="26" ry="4" fill="#1B2B1F" opacity="0.12"></ellipse>
+        <ellipse cx="18" cy="52" rx="5" ry="3.4" fill="#C5E1A5" stroke="#558B2F" stroke-width="1.6"></ellipse>
+        <ellipse cx="50" cy="52" rx="5" ry="3.4" fill="#C5E1A5" stroke="#558B2F" stroke-width="1.6"></ellipse>
+        <path d="M14 46 Q 15 18 38 18 Q 60 18 60 46 Z" fill="#A1887F" stroke="#5D4037" stroke-width="2" stroke-linejoin="round"></path>
+        <path d="M28 22 L24 33 L30 42 M38 19 V31 M48 22 L52 33 L46 42 M24 33 H52 M30 42 H46" fill="none" stroke="#6D4C41" stroke-width="1.6" stroke-linejoin="round"></path>
+        <rect x="12" y="43" width="50" height="6" rx="3" fill="#D7CCC8" stroke="#5D4037" stroke-width="1.6"></rect>
+        <circle cx="13" cy="33" r="9.5" fill="#C5E1A5" stroke="#558B2F" stroke-width="2"></circle>
+        <circle cx="9.5" cy="31" r="3.3" fill="#E3F2FD" stroke="#1B2B1F" stroke-width="1.3"></circle>
+        <circle cx="17" cy="31" r="3.3" fill="#E3F2FD" stroke="#1B2B1F" stroke-width="1.3"></circle>
+        <path d="M12.8 31 H13.7" stroke="#1B2B1F" stroke-width="1.3"></path>
+        <circle cx="9.8" cy="31.4" r="1.1" fill="#1B2B1F"></circle><circle cx="17.3" cy="31.4" r="1.1" fill="#1B2B1F"></circle>
+        <path d="M9.5 37.5 Q 13 40 16.5 37.5" fill="none" stroke="#1B2B1F" stroke-width="1.4" stroke-linecap="round"></path>
+      </svg>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="align-self: flex-start; height: 22px; padding: 0 10px; border-radius: 11px; background: #2E7D32; color: #FFFFFF; display: flex; align-items: center; font-size: 11px; font-weight: 800; letter-spacing: 0.5px;">NEW! · LEVEL 11</span>
+        <h2 id="introTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px; line-height: 1.1;">Garden Rock</h2>
+      </div>
+    </div>
+    <p style="margin: 0; align-self: stretch; text-align: left; font-size: 16px; font-weight: 700; line-height: 1.45; color: #3B5240;">"A rock blocks any snake that heads into it. Clear the other snakes first, or slither around it."</p>
+
+    <div style="border-radius: 18px; background: #E8F5E9; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+      <dc-import name="Board" mode="intro" size="{{ 190 }}" hint-size="190px,190px"></dc-import>
+      <div aria-label="Animation frame 2 of 3" style="display: flex; gap: 6px; padding-bottom: 4px;">
+        <span style="width: 8px; height: 8px; border-radius: 4px; background: #A5D6A7;"></span>
+        <span style="width: 22px; height: 8px; border-radius: 4px; background: #2E7D32;"></span>
+        <span style="width: 8px; height: 8px; border-radius: 4px; background: #A5D6A7;"></span>
+      </div>
+    </div>
+    <span style="font-size: 14px; font-weight: 700; color: #5B6B5F;">Bonk on a rock = −1 heart berry</span>
+
+    <a href="Play.dc.html" style="align-self: stretch; height: 56px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">Got it</a>
+    <span style="font-size: 12px; font-weight: 700; color: #5B6B5F;">See it again in Settings › Jungle Guide</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

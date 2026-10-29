@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Streak Saver</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2E7D32}a:hover{color:#1B5E20}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <dc-import name="Home" hint-size="390px,844px"></dc-import>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(16,32,20,0.35), rgba(8,18,10,0.65)); backdrop-filter: blur(3px);"></div>
+
+  <div role="dialog" aria-labelledby="saverTitle" style="position: absolute; left: 20px; right: 20px; top: 150px; border-radius: 24px; background: #FFFBF2; box-shadow: inset 0 1px 0 #FFFFFF, 0 4px 0 rgba(150,130,90,0.35), 0 24px 48px rgba(10,30,10,0.35); padding: 22px 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+    <span role="img" aria-label="Streak Saver Leaf" style="position: relative; width: 88px; height: 88px; border-radius: 24px; background: linear-gradient(160deg, #EEF8E9, #D5EBCB); display: flex; align-items: center; justify-content: center;">
+      <svg width="54" height="54" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="sLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A5D86E"></stop><stop offset="1" stop-color="#3F8A2E"></stop></linearGradient></defs><path d="M4 20 C 4 10, 10 4, 20 4 C 20 14, 14 20, 4 20 Z" fill="url(#sLeaf)" stroke="#2E6B22" stroke-width="1" stroke-linejoin="round"></path><path d="M4 20 L 15 9 M9 15 H13 M11.5 12.5 V9" stroke="#E6F5D6" stroke-width="0.9" stroke-linecap="round" opacity="0.9"></path></svg>
+      <span aria-hidden="true" style="position: absolute; right: -6px; bottom: -6px; width: 32px; height: 32px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 3px 8px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2.5c1.2 4.6 6 5.6 6 11.2a6 6 0 0 1-12 0c0-3.4 2.3-4.6 2.3-8 2.4 1.2 3.6 2.4 3.6 4.7" fill="#FF8F00"></path></svg></span>
+    </span>
+    <h2 id="saverTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 26px;">Save your streak?</h2>
+    <p style="margin: 0; font-size: 16px; font-weight: 700; line-height: 1.45; color: #3B5240;">You missed 1 day. Keep your 4-day Jungle Streak alive, and today's clear gives the Day 5 reward: 150 coins + 1 Shell Shield.</p>
+    <button style="align-self: stretch; min-height: 58px; border: 0; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer;">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="#FFFFFF" stroke-width="2"></rect><path d="M10 9 L15 12 L10 15 Z" fill="#FFFFFF"></path></svg>
+      Watch ad to save</button>
+    <button style="align-self: stretch; min-height: 54px; border-radius: 16px; background: #FFFFFF; border: 2px solid #C8E6C9; color: #1B2B1F; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px; cursor: pointer;">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFCA28" stroke="#B8860B" stroke-width="1.6"></circle><path d="M8.5 14.5 C 9 9.5, 13.5 7.5, 16 8 C 15.5 12.5, 12 15, 8.5 14.5 Z" fill="#FFE082" stroke="#B8860B" stroke-width="1.1"></path></svg>
+      Save for 200 coins</button>
+    <a href="Home.dc.html" style="min-height: 44px; padding: 0 16px; display: flex; align-items: center; text-decoration: none; color: #5B6B5F; font-weight: 800; font-size: 15px;">Let it reset to Day 1</a>
+    <span style="font-size: 12px; font-weight: 700; color: #5B6B5F;">1 save per 7-day cycle. The missed day's reward isn't paid.</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
