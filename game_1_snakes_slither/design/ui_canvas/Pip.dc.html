@@ -30,35 +30,26 @@
     <filter id="ppGround" x="-30%" y="-200%" width="160%" height="500%"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
   </defs>
 
-  <ellipse cx="100" cy="184" rx="74" ry="9" fill="#14300C" opacity="0.4" filter="url(#ppGround)"></ellipse>
+  <ellipse cx="100" cy="184" rx="82" ry="9" fill="#14300C" opacity="0.4" filter="url(#ppGround)"></ellipse>
 
-  <sc-for list="{{ segs }}" as="s" hint-placeholder-count="5">
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
     <g fill="none" stroke-linecap="round">
-      <path d="{{ s.d }}" stroke="#22451A" stroke-width="{{ s.w0 }}"></path>
-      <path d="{{ s.d }}" stroke="#4C8722" stroke-width="{{ s.w }}"></path>
-      <path d="{{ s.d }}" stroke="#7DB641" stroke-width="{{ s.w1 }}"></path>
-      <path d="{{ s.d }}" stroke="#AEDD72" stroke-width="{{ s.w2 }}" opacity="0.85" filter="url(#ppBlur2)"></path>
-      <sc-if value="{{ s.belly }}" hint-placeholder-val="{{ false }}">
-        <path d="{{ s.d }}" stroke="#E9F0BC" stroke-width="{{ s.wb }}"></path>
-        <path d="{{ s.d }}" stroke="#B9C27A" stroke-width="{{ s.wb }}" stroke-linecap="butt" stroke-dasharray="1 5.5"></path>
-      </sc-if>
-      <sc-if value="{{ s.spots }}" hint-placeholder-val="{{ true }}">
-        <path d="{{ s.d }}" stroke="#2C5616" stroke-width="{{ s.ws }}" stroke-dasharray="5 10" opacity="0.85"></path>
-      </sc-if>
-      <path d="{{ s.d }}" stroke="url(#ppScale)" stroke-width="{{ s.w }}" opacity="0.3"></path>
+      <sc-for list="{{ g.lines }}" as="q" hint-placeholder-count="40"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#1E4210" stroke-width="{{ q.w0 }}"></line></sc-for>
+      <sc-for list="{{ g.lines }}" as="q" hint-placeholder-count="40"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#4E8A24" stroke-width="{{ q.w }}"></line></sc-for>
+      <sc-for list="{{ g.lines }}" as="q" hint-placeholder-count="40"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#7DB843" stroke-width="{{ q.w1 }}"></line></sc-for>
+      <g transform="translate(0 -2)" filter="url(#ppBlur1)" opacity="0.9">
+        <sc-for list="{{ g.lines }}" as="q" hint-placeholder-count="40"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#C5EC90" stroke-width="{{ q.w2 }}"></line></sc-for>
+      </g>
+      <sc-for list="{{ g.belly }}" as="q" hint-placeholder-count="0"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#EEF3C2" stroke-width="{{ q.wb }}"></line></sc-for>
+      <sc-for list="{{ g.scutes }}" as="q" hint-placeholder-count="0"><line x1="{{ q.x1 }}" y1="{{ q.y1 }}" x2="{{ q.x2 }}" y2="{{ q.y2 }}" stroke="#BFC77E" stroke-width="1" stroke-linecap="butt"></line></sc-for>
+      <sc-for list="{{ g.spots }}" as="d" hint-placeholder-count="6"><ellipse cx="{{ d.cx }}" cy="{{ d.cy }}" rx="{{ d.rx }}" ry="{{ d.ry }}" fill="#2C5616" opacity="0.75"></ellipse></sc-for>
     </g>
   </sc-for>
-
-  <sc-if value="{{ wave }}" hint-placeholder-val="{{ false }}">
-    <g fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" opacity="0.9">
-      <path d="M50 98 q7 5 4 14"></path><path d="M58 92 q9 7 5 18"></path>
-    </g>
-  </sc-if>
 
   <g transform="{{ headT }}">
     <path d="M70 60 C 70 40, 84 28, 102 28 C 120 28, 138 40, 138 60 C 137 75, 121 83, 103 83 C 85 83, 70 76, 70 60 Z" transform="translate(-2 3)" fill="#0F2408" opacity="0.28" filter="url(#ppBlur2)"></path>
     <path d="M66 56 C 64 34, 82 22, 100 22 C 118 22, 136 34, 134 56 C 133 72, 118 80, 100 80 C 82 80, 67 72, 66 56 Z" fill="url(#ppHead)" stroke="#22451A" stroke-width="1.8"></path>
-    <path d="M66 56 C 64 34, 82 22, 100 22 C 118 22, 136 34, 134 56 C 133 72, 118 80, 100 80 C 82 80, 67 72, 66 56 Z" fill="url(#ppScale)" opacity="0.22"></path>
+    <path d="M66 56 C 64 34, 82 22, 100 22 C 118 22, 136 34, 134 56 C 133 72, 118 80, 100 80 C 82 80, 67 72, 66 56 Z" fill="url(#ppScale)" opacity="0.1"></path>
     <path d="M78 70 C 88 79, 112 79, 122 70 C 114 76, 86 76, 78 70 Z" fill="#E6EFB8" opacity="0.9"></path>
     <ellipse cx="86" cy="31" rx="13" ry="5" transform="rotate(-14 86 31)" fill="#FFFFFF" opacity="0.5" filter="url(#ppBlur1)"></ellipse>
     <ellipse cx="76" cy="64" rx="5.5" ry="3.2" fill="#FF7F72" opacity="0.5" filter="url(#ppBlur1)"></ellipse>
@@ -74,8 +65,8 @@
         <circle cx="83" cy="46" r="3.2" fill="#FFFFFF"></circle><circle cx="111" cy="46" r="3.2" fill="#FFFFFF"></circle>
         <circle cx="90.5" cy="56" r="1.3" fill="#FFFFFF" opacity="0.9"></circle><circle cx="118.5" cy="56" r="1.3" fill="#FFFFFF" opacity="0.9"></circle>
         <path d="M90 70 Q100 77 110 70" fill="none" stroke="#1A2A12" stroke-width="1.9" stroke-linecap="round"></path>
-        <path d="M100 74 C 100 82, 99 86, 97 90 M97 90 L92 95 M97 90 L98.5 97" fill="none" stroke="#8E1B1B" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M100 74 C 100 82, 99 86, 97 90 M97 90 L92 95 M97 90 L98.5 97" fill="none" stroke="#E5413A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M100 74 C 100 79, 99.5 82, 98.5 85 M98.5 85 L95 89.5 M98.5 85 L100 90" fill="none" stroke="#8E1B1B" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M100 74 C 100 79, 99.5 82, 98.5 85 M98.5 85 L95 89.5 M98.5 85 L100 90" fill="none" stroke="#E5413A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
       </g>
     </sc-if>
     <sc-if value="{{ asleep }}" hint-placeholder-val="{{ false }}">
@@ -110,28 +101,55 @@ class Component extends DCLogic {
   renderVals() {
     const pose = this.props.pose || 'stand';
     const size = this.props.size || 200;
-    const seg = (d, w, o) => Object.assign({ d, w, w0: w + 3, w1: +(w * 0.7).toFixed(1), w2: +(w * 0.32).toFixed(1), wb: +(w * 0.5).toFixed(1), ws: +(w * 0.38).toFixed(1), belly: false, spots: true }, o || {});
-    const back = seg('M42 162 A58 18 0 0 1 158 162', 26);
-    const front = seg('M158 162 A58 18 0 0 1 42 162', 26);
-    const neck = seg('M150 156 C 178 140, 172 110, 140 108 C 110 106, 96 96, 100 74', 24, { belly: true, spots: false });
-    const tailTuck = [seg('M58 172 C 48 182, 30 186, 22 180', 15), seg('M22 180 C 15 175, 18 168, 25 169', 8, { spots: false })];
-    const tailWave = [seg('M52 168 C 28 166, 18 146, 26 128', 16), seg('M26 128 C 30 118, 38 114, 42 107', 9, { spots: false })];
-    let segs;
-    if (pose === 'sleep' || pose === 'coil') {
-      const bBack = seg('M38 164 A62 18 0 0 1 162 164', 26), bFront = seg('M162 164 A62 18 0 0 1 38 164', 26);
-      const tBack = seg('M58 140 A42 13 0 0 1 142 140', 23), tFront = seg('M142 140 A42 13 0 0 1 58 140', 23);
-      const sNeck = seg('M140 136 C 146 126, 132 122, 118 128', 21, { belly: true, spots: false });
-      const sTail = [seg('M52 174 C 42 184, 28 186, 20 178', 14), seg('M20 178 C 14 172, 18 166, 25 168', 8, { spots: false })];
-      segs = [bBack, bFront, tBack, sNeck, tFront].concat(sTail);
+    const resting = pose === 'sleep' || pose === 'coil';
+    // Body: a tapered spiral coil seen from the front. Inner loops sit higher, so drawing the
+    // half-loops in tail-to-centre order already stacks them correctly.
+    const cx = 100, cy = 160, squash = 0.42, R0 = 68, Rin = 34, lift = 26;
+    const T = 1.75 * 2 * Math.PI, N = 160;
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const k = i / N, phi = k * T;
+      const r = R0 - (R0 - Rin) * k;
+      pts.push({ x: cx + r * Math.cos(phi), y: cy - lift * k + r * squash * Math.sin(phi), w: 9 + 17 * Math.pow(k, 0.6), front: Math.sin(phi) > 0 });
     }
-    else if (pose === 'wave') segs = [back, neck, front].concat(tailWave);
-    else segs = [back, neck, front].concat(tailTuck);
-    const labels = { stand: 'Pip, a baby green snake wearing a leaf hat', wave: 'Pip waving hello', sleep: 'Pip asleep on its coil', face: 'Pip' };
+    const runs = [];
+    let cur = null;
+    pts.forEach((p) => {
+      if (!cur || cur.front !== p.front) { if (cur) cur.pts.push(p); cur = { front: p.front, pts: [] }; runs.push(cur); }
+      cur.pts.push(p);
+    });
+    const end = pts[pts.length - 1];
+    const neck = [];
+    if (!resting && pose !== 'face') {
+      const hx = 100, hy = 74;
+      for (let i = 0; i <= 30; i++) {
+        const u = i / 30, a = (1 - u) ** 3, b = 3 * (1 - u) ** 2 * u, c = 3 * (1 - u) * u * u, d = u ** 3;
+        neck.push({ x: a * end.x + b * (end.x + 10) + c * (hx - 18) + d * hx, y: a * end.y + b * (end.y - 30) + c * (hy + 26) + d * hy, w: 24 - 2 * u });
+      }
+    }
+    const f = (n) => n.toFixed(1);
+    const toLines = (arr) => {
+      const out = [];
+      for (let i = 0; i < arr.length - 1; i++) {
+        const p = arr[i], q = arr[i + 1], w = (p.w + q.w) / 2;
+        out.push({ i, x1: f(p.x), y1: f(p.y), x2: f(q.x), y2: f(q.y), w: f(w), w0: f(w + 3), w1: f(w * 0.72), w2: f(w * 0.3), wb: f(w * 0.5), hw: w });
+      }
+      return out;
+    };
+    const groups = runs.map((r) => {
+      const lines = toLines(r.pts);
+      return { lines, belly: [], scutes: [], spots: lines.filter((q) => q.i % 6 === 3).map((q) => ({ cx: q.x1, cy: f(+q.y1 - q.hw * 0.12), rx: f(q.hw * 0.22), ry: f(q.hw * 0.14) })) };
+    });
+    if (neck.length) {
+      const lines = toLines(neck);
+      groups.push({ lines, spots: [], belly: lines,
+        scutes: lines.filter((q) => q.i % 3 === 0).map((q) => ({ x1: f(+q.x1 - q.hw * 0.24), y1: q.y1, x2: f(+q.x1 + q.hw * 0.24), y2: q.y1 })) });
+    }
+    const labels = { stand: 'Pip, a baby green snake wearing a leaf hat', wave: 'Pip, a baby green snake wearing a leaf hat', sleep: 'Pip asleep on its coil', coil: 'Pip resting on its coil', face: 'Pip' };
     return {
-      segs, size,
+      groups: pose === 'face' ? [] : groups, size,
       vb: pose === 'face' ? '60 2 86 86' : '0 0 200 200',
-      headT: (pose === 'sleep' || pose === 'coil') ? 'translate(96 104) scale(0.86) rotate(-7) translate(-100 -52)' : '',
-      wave: pose === 'wave',
+      headT: resting ? 'translate(98 116) scale(0.86) rotate(-7) translate(-100 -52)' : '',
       awake: pose !== 'sleep',
       asleep: pose === 'sleep',
       label: labels[pose] || 'Pip'

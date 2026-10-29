@@ -36,7 +36,7 @@ Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 | File | Props | Used by |
 |---|---|---|
 | `Board.dc.html` | `mode` (play, thumb, hint, preview, hammer, ftue, intro, rush), `size`, `tint` | Play and every gameplay state, Rush, LevelStart |
-| `Pip.dc.html` | `pose` (stand, wave, sleep, coil, face), `size` | Splash (coil), Home, Failed (sleep) |
+| `Pip.dc.html` | `pose` (stand, wave, sleep, coil, face), `size` | Splash and Home (stand logo), Failed (sleep) |
 | `Booster.dc.html` | `kind` (hint, shield, hammer), `size`, `dim` | Play tray, Shop, MiniShop, Gift, Chest, Starter |
 | `Tortoise.dc.html` | `size` | Tutorial bubble, LevelUnavailable |
 
