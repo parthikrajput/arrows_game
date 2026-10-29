@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game flow map</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 1420px; height: 840px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #F4FAF2 0%, #E6F3E3 100%); font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
+  <div style="position: absolute; left: 30px; top: 18px; display: flex; flex-direction: column; gap: 2px; white-space: nowrap;">
+    <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 26px;">Snakes Slither · Phase 1 game flow</h1>
+    <span style="font-size: 13px; font-weight: 700; color: #5B6B5F;">Every box opens its screen. Based on 06 §6 navigation map and 04 §7 reward order.</span>
+  </div>
+  <div style="position: absolute; left: 640px; top: 28px; z-index: 2; display: flex; gap: 14px; font-size: 12px; font-weight: 800; white-space: nowrap;">
+    <sc-for list="{{ legend }}" as="l" hint-placeholder-count="5">
+      <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 14px; height: 14px; border-radius: 4px; background: {{ l.fill }}; border: 2px solid {{ l.stroke }};"></span>{{ l.name }}</span>
+    </sc-for>
+  </div>
+
+  <svg width="1420" height="840" viewBox="0 0 1420 840" style="position: absolute; left: 0; top: 0;" role="img" aria-label="Game flow diagram">
+    <defs>
+      <marker id="fArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#5B6B5F"></path></marker>
+      <filter id="fShadow" x="-10%" y="-20%" width="120%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#1B3A12" flood-opacity="0.18"></feDropShadow></filter>
+    </defs>
+    <sc-for list="{{ edges }}" as="e" hint-placeholder-count="30">
+      <g>
+        <path d="{{ e.d }}" fill="none" stroke="#7E8F80" stroke-width="2" stroke-dasharray="{{ e.dash }}" marker-end="url(#fArrow)"></path>
+        <text x="{{ e.lx }}" y="{{ e.ly }}" text-anchor="middle" style="font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 11px;" fill="#4C5C50" stroke="#F1F8EF" stroke-width="4" paint-order="stroke">{{ e.label }}</text>
+      </g>
+    </sc-for>
+    <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="30">
+      <a href="{{ n.href }}">
+        <rect x="{{ n.x }}" y="{{ n.y }}" width="{{ n.w }}" height="{{ n.h }}" rx="14" fill="{{ n.fill }}" stroke="{{ n.stroke }}" stroke-width="2" stroke-dasharray="{{ n.dash }}" filter="url(#fShadow)"></rect>
+        <text x="{{ n.tx }}" y="{{ n.ty }}" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 15px;" fill="#1B2B1F">{{ n.label }}</text>
+        <text x="{{ n.tx }}" y="{{ n.sy }}" text-anchor="middle" style="font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 11px;" fill="#5B6B5F">{{ n.sub }}</text>
+      </a>
+    </sc-for>
+  </svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1420,"height":840}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const C = {
+      hub: ['#E8F5E9', '#2E7D32'], play: ['#E3F2FD', '#1E88E5'], win: ['#FFF8E1', '#E0A100'],
+      fail: ['#FFEBEE', '#E53935'], meta: ['#F3E5F5', '#8E24AA']
+    };
+    const W = 160, H = 54;
+    const col = (i) => 30 + i * 200, row = (j) => 86 + j * 104;
+    const N = {
+      splash: [0, 0, 'Splash', 'Jungle Dawn intro', 'Main', 'hub'],
+      age: [0, 1, 'Age gate + consent', 'first run only (spec)', '', 'hub', true],
+      wheel: [0, 2, 'Lucky Lily Wheel', 'unlocks after L10', 'Wheel', 'meta'],
+      shop: [0, 3, 'Shop', 'boosters · coins · offers', 'Shop', 'meta'],
+      vip: [0, 4, 'VIP pass', '₹20 / month', 'Vip', 'meta'],
+      ranks: [0, 5, 'Leaderboards', 'Play Games / Game Center', 'Leaderboards', 'meta'],
+      settings: [0, 6, 'Settings', 'from Home ⚙', 'Pause', 'meta'],
+      home: [1, 0, 'Home', 'LEVEL button → Gameplay', 'Home', 'hub'],
+      starter: [1, 1, 'Starter Pack', 'once after L15 · 48 h', 'Starter', 'meta'],
+      saver: [1, 2, 'Streak Saver', 'missed exactly 1 day', 'Saver', 'meta'],
+      map: [2, 0, 'Level Map', 'Garden Meadow path', 'LevelMap', 'hub'],
+      daily: [2, 1, 'Daily Jungle Puzzle', 'unlocks after L15', 'Daily', 'meta'],
+      dres: [2, 2, 'Daily result', '+100 · streak day', 'DailyResult', 'win'],
+      start: [3, 0, 'Level start sheet', 'stars · Play', 'LevelStart', 'hub'],
+      dplay: [3, 1, 'Daily gameplay', 'weekday modifier', 'DailyPlay', 'play'],
+      tut: [3, 2, 'Tutorial / intro card', 'L1–10 · every x1 level', 'Tutorial', 'play'],
+      chest: [3, 4, 'Treasure Chest', 'L500 · then Rush', 'Chest', 'win'],
+      phase: [3, 6, 'Phase complete', 'Garden Hero · Home', 'PhaseComplete', 'win'],
+      play: [4, 2, 'Gameplay', 'tap board = win (proto)', 'Play', 'play'],
+      complete: [4, 3, 'Level complete', 'stars · coins · 2X', 'Complete', 'win'],
+      gift: [4, 4, 'Gift Basket', 'every x0 level', 'Gift', 'win'],
+      rushI: [4, 5, 'Rush intro', 'after L25, 50 … 500', 'RushIntro', 'win'],
+      pause: [5, 0, 'Pause', 'Resume · Restart · Map', 'Pause', 'play'],
+      boost: [5, 1, 'Hint · Hammer', '+ free Preview', 'Hint', 'play'],
+      second: [5, 3, 'Second Chance', '0 hearts · 10 s ring', 'SecondChance', 'fail'],
+      inter: [5, 4, 'Interstitial check', 'every 5 wins, L11+', '', 'win', true],
+      rush: [5, 5, 'Golden Slither Rush', '30 s bonus round', 'Rush', 'win'],
+      stuck: [6, 0, 'Stuck sheet', 'soft-lock · Restart', 'Stuck', 'play'],
+      mini: [6, 1, 'Mini shop sheet', 'booster count 0', 'MiniShop', 'meta'],
+      unavail: [6, 2, 'Level unavailable', 'E-LVL-001 · Retry', 'LevelUnavailable', 'fail'],
+      failed: [6, 3, 'Level failed', 'Retry free · Home', 'Failed', 'fail'],
+      rres: [6, 5, 'Rush results', '→ next level', 'RushResults', 'win']
+    };
+    const nodes = Object.keys(N).map((k) => {
+      const [c, r, label, sub, file, g, dashed] = N[k];
+      const x = col(c), y = row(r);
+      return { k, x, y, w: W, h: H, cx: x + W / 2, cy: y + H / 2, tx: x + W / 2, ty: y + 23, sy: y + 41, label, sub,
+        href: file ? file + '.dc.html' : '#', fill: C[g][0], stroke: C[g][1], dash: dashed ? '6 4' : '' };
+    });
+    const byKey = {};
+    nodes.forEach((n) => { byKey[n.k] = n; });
+    // [from, to, label, dashed, route]
+    const E = [
+      ['splash', 'home', ''], ['splash', 'age', 'first run'], ['age', 'home', '', true],
+      ['home', 'map', ''], ['map', 'start', ''], ['start', 'play', 'Play', false, 'top'],
+      ['home', 'daily', ''], ['daily', 'dplay', ''], ['dplay', 'dres', 'win'], ['dres', 'daily', ''], ['saver', 'daily', ''],
+      ['home', 'starter', ''], ['home', 'wheel', '', false, 'bus'], ['home', 'shop', '', false, 'bus'], ['shop', 'vip', ''],
+      ['home', 'ranks', '', false, 'bus'], ['home', 'settings', '', false, 'bus'],
+      ['tut', 'play', ''], ['play', 'pause', ''], ['play', 'boost', ''], ['boost', 'mini', ''], ['play', 'stuck', ''], ['play', 'unavail', ''],
+      ['play', 'second', 'hearts 0'], ['second', 'failed', ''], ['second', 'play', 'revive', false, 'curve'],
+      ['play', 'complete', 'win'], ['complete', 'gift', 'x0'], ['gift', 'rushI', 'L%25'],
+      ['rushI', 'rush', ''], ['rush', 'rres', ''], ['complete', 'inter', 'Next', true], ['complete', 'chest', 'L500'], ['chest', 'phase', 'after Rush']
+    ];
+    const clip = (a, b) => {
+      const dx = b.cx - a.cx, dy = b.cy - a.cy;
+      const sx = dx === 0 ? Infinity : (a.w / 2 + 4) / Math.abs(dx), sy = dy === 0 ? Infinity : (a.h / 2 + 4) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+      return [a.cx + dx * s, a.cy + dy * s];
+    };
+    const f = (n) => n.toFixed(1);
+    const busX = col(1) - 18;
+    const edges = E.map(([a, b, label, dashed, route]) => {
+      const A = byKey[a], B = byKey[b];
+      let d, lx, ly;
+      if (route === 'bus') {
+        d = 'M' + f(A.x - 4) + ' ' + f(A.cy) + ' L' + f(busX) + ' ' + f(A.cy) + ' L' + f(busX) + ' ' + f(B.cy) + ' L' + f(B.x + B.w + 4) + ' ' + f(B.cy);
+        lx = busX; ly = B.cy;
+      } else if (route === 'top') {
+        d = 'M' + f(A.x + A.w + 4) + ' ' + f(A.cy) + ' L' + f(B.cx) + ' ' + f(A.cy) + ' L' + f(B.cx) + ' ' + f(B.y - 4);
+        lx = B.cx + 18; ly = (A.cy + B.y) / 2;
+      } else if (route === 'curve') {
+        const p = clip(A, B), q = clip(B, A);
+        const mx = (p[0] + q[0]) / 2 + 70, my = (p[1] + q[1]) / 2 - 34;
+        d = 'M' + f(p[0]) + ' ' + f(p[1]) + ' Q' + f(mx) + ' ' + f(my) + ' ' + f(q[0]) + ' ' + f(q[1]);
+        lx = mx; ly = my;
+      } else {
+        const p = clip(A, B), q = clip(B, A);
+        d = 'M' + f(p[0]) + ' ' + f(p[1]) + ' L' + f(q[0]) + ' ' + f(q[1]);
+        lx = (p[0] + q[0]) / 2; ly = (p[1] + q[1]) / 2 - 5;
+      }
+      return { d, dash: dashed ? '6 5' : '', label, lx: f(lx), ly: f(ly) };
+    });
+    const legend = [['Hub', 'hub'], ['Gameplay', 'play'], ['Win & rewards', 'win'], ['Fail', 'fail'], ['Meta & shop', 'meta']]
+      .map(([name, g]) => ({ name, fill: C[g][0], stroke: C[g][1] }));
+    return { nodes, edges, legend };
+  }
+}
+</script>
+</body>
+</html>

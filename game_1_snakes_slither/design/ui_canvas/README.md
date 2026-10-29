@@ -1,6 +1,6 @@
 # Snakes Slither — UI design canvas
 
-Source files for the Phase 1 UI design canvas (34 screens + 5 components), exported from the live Claude design canvas and aligned with the Phase 1 docs.
+Source files for the Phase 1 UI design canvas (35 screens, a flow map and 6 components), exported from the live Claude design canvas and aligned with the Phase 1 docs.
 
 Related docs: [README](../../README.md) · [Phase 1 index](../../phases/phase_1/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md) · [04 Boosters, Coins & Shop](../../phases/phase_1/04_BOOSTERS_COINS_SHOP.md) · [05 Daily & Streak](../../phases/phase_1/05_DAILY_CHALLENGE_AND_STREAK.md)
 
@@ -8,15 +8,27 @@ Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 
 ## Layout
 
-`canvas.json` lists every artboard, its position and its title. Titles use the section numbers of [06 §5](../../phases/phase_1/06_UI_UX_SCREENS.md#5-screens).
+`canvas.json` lists every artboard, its position and its title. Rows follow the game flow; titles use the section numbers of [06 §5](../../phases/phase_1/06_UI_UX_SCREENS.md#5-screens).
 
 | Row | Screens |
 |---|---|
-| 1 · Launch & hub | Main (5.1 Jungle Dawn intro), Home (5.3), LevelMap (5.4), Daily (5.13), Saver, Wheel (5.14) |
-| 2 · Gameplay | Tutorial (5.7), Intro (5.7 card), Play (5.5), Preview, Hint, Hammer, Pause (5.6) |
-| 3 · Results & rewards | SecondChance (5.8), Failed (5.9), Stuck, Complete (5.10), Gift (5.11), Rush (5.12), PhaseComplete (5.18) |
-| 4 · Shop & ranks | Shop (5.15), MiniShop, Vip (5.16), Leaderboards (5.17) |
-| 5 · Phase 1 flows | LevelStart (5.4 sheet), RushIntro, RushResults (5.12), DailyResult (5.13), Chest (L500 Treasure Chest), Starter (Starter Pack popup), LevelUnavailable (`E-LVL-001`) |
+| 0 · Game flow map | Flow (every box links to its screen) — static copy: `flow-map.png` |
+| 1 · Launch, hub & daily | Main (5.1 Jungle Dawn), Home (5.3), Starter, LevelMap (5.4), LevelStart, Daily (5.13), Saver, DailyPlay, DailyResult, Wheel (5.14) |
+| 2 · Gameplay loop | Tutorial (5.7), Intro (5.7 card), Play (5.5), Preview, Hint, Hammer, Pause (5.6), MiniShop, Stuck, LevelUnavailable |
+| 3 · Win & rewards | Complete (5.10), Gift (5.11), RushIntro, Rush (5.12), RushResults, Chest (L500), PhaseComplete (5.18) |
+| 4 · Fail & retry | SecondChance (5.8), Failed (5.9) |
+| 5 · Shop, VIP & ranks | Shop (5.15), Vip (5.16), Leaderboards (5.17) |
+| 6 · Components | Board, Pip, Booster, Tortoise, Backdrop |
+
+## Clickable prototype
+
+Open the canvas in PLAY mode and start from Splash. Prototype-only shortcuts on the gameplay screen: tap the board to win the level, tap the hearts to reach Second Chance, tap a booster to see its state. Main paths:
+
+- Splash → Home → Level Map → Level start → Gameplay → Level complete → Next.
+- Gameplay → hearts 0 → Second Chance → revive (back to Gameplay) or No thanks → Level failed → Retry / Home.
+- Home → Daily → Daily gameplay → Daily result → Daily.
+- Gift Basket and Rush: Gift → Collect; Rush intro → Rush → Rush results → next level. L500: Treasure Chest → Rush intro.
+- Home → Starter Pack bubble, Lily Wheel, Shop → VIP, Ranks, Settings.
 
 5.2 Age Gate is not drawn on the canvas (removed on request); the spec still requires it ([04 §11](../../phases/phase_1/04_BOOSTERS_COINS_SHOP.md#11-compliance-target-age-1050--mixed-audience)).
 
@@ -39,6 +51,7 @@ Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 | `Pip.dc.html` | `pose` (stand, wave, sleep, coil, face), `size` | Splash and Home (stand logo), Failed (sleep) |
 | `Booster.dc.html` | `kind` (hint, shield, hammer), `size`, `dim` | Play tray, Shop, MiniShop, Gift, Chest, Starter |
 | `Tortoise.dc.html` | `size` | Tutorial bubble, LevelUnavailable |
+| `Backdrop.dc.html` | — | Garden background layer for Daily, Shop, Leaderboards, Complete, Gift, PhaseComplete, DailyResult |
 
 ## Format
 

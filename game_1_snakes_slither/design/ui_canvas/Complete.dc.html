@@ -14,7 +14,7 @@ body{margin:0}
 a{color:#2E7D32}a:hover{color:#1B5E20}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 28px; gap: 16px;">
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 28px; gap: 16px;">
   <svg aria-hidden="true" width="390" height="300" viewBox="0 0 390 300" style="position: absolute; left: 0; top: 0;">
     <path d="M40 60 C 46 46, 62 44, 66 52 C 58 62, 48 64, 40 60 Z" fill="#81C784"></path>
     <path d="M320 40 C 330 30, 346 32, 348 42 C 338 48, 328 48, 320 40 Z" fill="#66BB6A"></path>
@@ -49,16 +49,17 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
     </div>
   </div>
 
-  <button style="position: relative; align-self: stretch; min-height: 58px; border-radius: 16px; background: #FFFFFF; border: 2px solid #FFCA28; color: #1B2B1F; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer;">
+  <button style="position: relative; align-self: stretch; min-height: 58px; border-radius: 30px; background: #FFFFFF; border: 2px solid #FFCA28; color: #1B2B1F; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; cursor: pointer;">
     <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="#1B2B1F" stroke-width="2"></rect><path d="M10 9 L15 12 L10 15 Z" fill="#1B2B1F"></path></svg>
     Claim 2X · 40 coins
   </button>
 
   <div style="position: relative; margin-top: auto; align-self: stretch; display: flex; flex-direction: column; gap: 8px;">
-    <a href="Play.dc.html" style="height: 60px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 21px;">Next
+    <a href="Play.dc.html" style="height: 60px; border-radius: 30px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 21px;">Next
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF"></path></svg></a>
     <a href="LevelMap.dc.html" style="height: 48px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 800; font-size: 16px;">Map</a>
   </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none;"><dc-import name="Backdrop" hint-size="390px,844px"></dc-import></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>

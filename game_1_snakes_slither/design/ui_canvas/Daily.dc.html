@@ -14,9 +14,9 @@ body{margin:0}
 a{color:#2E7D32}a:hover{color:#1B5E20}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; padding: 12px 16px 16px; gap: 12px;">
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; padding: 12px 16px 16px; gap: 12px;">
   <header style="height: 48px; display: flex; align-items: center; gap: 10px;">
-    <a href="Home.dc.html" aria-label="Back to home" style="width: 44px; height: 44px; border-radius: 22px; background: #FFFBF2; box-shadow: 0 3px 0 rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; color: #1B2B1F;">
+    <a href="Home.dc.html" aria-label="Back to home" style="width: 46px; height: 46px; border-radius: 23px; box-sizing: border-box; background: radial-gradient(circle at 35% 25%, #FFFFFF, #F5EFDF 60%, #E3D7B9); border: 2px solid #FFFFFF; box-shadow: 0 4px 0 #B9A77F, 0 8px 14px rgba(40,60,30,0.18); display: flex; align-items: center; justify-content: center; color: #1B2B1F;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 L8 12 L15 19"></path></svg>
     </a>
     <h1 style="margin: 0; flex-grow: 1; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px;">Daily Jungle Puzzle</h1>
@@ -37,7 +37,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
       <span>Reward</span>
       <span style="color: #2E7D32;">+100 coins · Day 4: +150 coins</span>
     </div>
-    <a href="Play.dc.html" style="height: 56px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">
+    <a href="DailyPlay.dc.html" style="height: 56px; border-radius: 30px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px;">
       <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF"></path></svg>Play today</a>
   </section>
 
@@ -65,18 +65,18 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
       </sc-for>
     </div>
     <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
-      <div style="border-radius: 16px; background: #FFFBF2; padding: 10px 12px; display: flex; flex-direction: column;">
+      <div style="border-radius: 18px; background: rgba(255,255,255,0.92); box-shadow: 0 8px 20px rgba(30,60,30,0.1); padding: 10px 12px; display: flex; flex-direction: column;">
         <span style="font-size: 12px; font-weight: 800; color: #5B6B5F;">STREAK SAVER</span>
         <span style="font-size: 14px; font-weight: 800;">Ready · 1 per cycle</span>
       </div>
-      <div style="border-radius: 16px; background: #FFFBF2; padding: 10px 12px; display: flex; flex-direction: column;">
+      <div style="border-radius: 18px; background: rgba(255,255,255,0.92); box-shadow: 0 8px 20px rgba(30,60,30,0.1); padding: 10px 12px; display: flex; flex-direction: column;">
         <span style="font-size: 12px; font-weight: 800; color: #5B6B5F;">TROPHY</span>
         <span style="font-size: 14px; font-weight: 800;">Bronze Coil · next Silver</span>
       </div>
     </div>
   </section>
 
-  <section aria-label="October calendar" style="flex-grow: 1; border-radius: 24px; background: #FFFBF2; padding: 12px; display: flex; flex-direction: column; gap: 6px;">
+  <section aria-label="October calendar" style="flex-grow: 1; border-radius: 24px; background: rgba(255,255,255,0.92); box-shadow: 0 10px 26px rgba(30,60,30,0.12); padding: 12px; display: flex; flex-direction: column; gap: 6px;">
     <div style="display: flex; justify-content: space-between; align-items: baseline;">
       <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px;">October 2026</span>
       <span style="display: flex; gap: 10px; font-size: 11px; font-weight: 800; color: #5B6B5F;">
@@ -93,6 +93,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
       </sc-for>
     </div>
   </section>
+  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none;"><dc-import name="Backdrop" hint-size="390px,844px"></dc-import></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>

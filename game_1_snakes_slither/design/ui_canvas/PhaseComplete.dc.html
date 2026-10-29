@@ -14,7 +14,7 @@ body{margin:0}
 a{color:#2E7D32}a:hover{color:#1B5E20}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 28px; gap: 14px; text-align: center;">
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 28px; gap: 14px; text-align: center;">
   <svg aria-hidden="true" width="390" height="420" viewBox="0 0 390 420" style="position: absolute; left: 0; top: 0;">
     <defs>
       <radialGradient id="pcGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFF3B0" stop-opacity="0.95"></stop><stop offset="0.5" stop-color="#FFE57F" stop-opacity="0.35"></stop><stop offset="1" stop-color="#FFE57F" stop-opacity="0"></stop></radialGradient>
@@ -80,10 +80,11 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
   <div style="position: relative; margin-top: auto; align-self: stretch; display: flex; flex-direction: column; gap: 8px;">
     <div role="note" style="height: 56px; border-radius: 16px; background: #F7F9FA; border: 2px dashed #9AA59D; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; color: #5B6B5F;">Phase 2 coming soon</div>
     <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
-      <a href="LevelMap.dc.html" style="height: 52px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">Replay for 3 stars</a>
-      <a href="Home.dc.html" style="height: 52px; border-radius: 16px; background: #FFFFFF; border: 2px solid #C8E6C9; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #1B2B1F; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">Home</a>
+      <a href="LevelMap.dc.html" style="height: 52px; border-radius: 30px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">Replay for 3 stars</a>
+      <a href="Home.dc.html" style="height: 52px; border-radius: 28px; background: #FFFFFF; border: 2px solid #D5E3D3; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #1B2B1F; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px;">Home</a>
     </div>
   </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none;"><dc-import name="Backdrop" hint-size="390px,844px"></dc-import></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>

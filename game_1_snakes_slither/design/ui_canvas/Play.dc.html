@@ -41,7 +41,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
     </div>
     <div style="flex-grow: 1; display: flex; justify-content: center;">
       <sc-if value="{{ showHearts }}" hint-placeholder-val="{{ true }}">
-        <div role="img" aria-label="{{ heartsLabel }}" style="position: relative; display: flex; gap: 2px; padding: 5px 9px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(40,60,30,0.15);">
+        <a href="{{ failHref }}" aria-label="{{ heartsLabel }}" style="position: relative; text-decoration: none; display: flex; gap: 2px; padding: 5px 9px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(40,60,30,0.15);">
           <sc-for list="{{ heartList }}" as="h" hint-placeholder-count="3">
             <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
               <defs><radialGradient id="pBerry" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FF8A80"></stop><stop offset="0.5" stop-color="#E53935"></stop><stop offset="1" stop-color="#9F1A1A"></stop></radialGradient></defs>
@@ -56,7 +56,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
               <span style="position: absolute; right: -4px; bottom: -4px; width: 18px; height: 18px; border-radius: 9px; background: #E65100; border: 2px solid #FFFFFF; box-sizing: border-box; color: #FFFFFF; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">2</span>
             </span>
           </sc-if>
-        </div>
+        </a>
       </sc-if>
     </div>
     <span style="height: 38px; padding: 0 12px 0 4px; border-radius: 19px; box-sizing: border-box; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(40,60,30,0.15); display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;">
@@ -67,26 +67,26 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
 
   <div style="position: relative; height: 26px; display: flex; align-items: center; justify-content: center; gap: 10px;">
     <sc-if value="{{ showMoves }}" hint-placeholder-val="{{ true }}">
-      <span style="height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(255,255,255,0.6); font-size: 13px; font-weight: 800; color: #3B5240; font-variant-numeric: tabular-nums; display: flex; align-items: center;">Moves {{ moves }}</span>
+      <span style="height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(255,255,255,0.6); font-size: 13px; font-weight: 800; color: #3B5240; font-variant-numeric: tabular-nums; display: flex; align-items: center;">{{ movesText }}</span>
     </sc-if>
     <sc-if value="{{ hammerMode }}" hint-placeholder-val="{{ false }}">
       <span style="height: 28px; padding: 0 10px 0 12px; border-radius: 14px; background: #1B2B1F; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">Tap a snake or rock<a href="Play.dc.html" style="color: #A5D6A7; text-decoration: none; min-height: 28px; display: flex; align-items: center;">Cancel</a></span>
     </sc-if>
   </div>
 
-  <div style="position: relative; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+  <a href="{{ winHref }}" aria-label="Garden board" style="position: relative; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-decoration: none;">
     <dc-import name="Board" mode="{{ boardMode }}" size="{{ 358 }}" hint-size="358px,358px"></dc-import>
-  </div>
+  </a>
 
   <p style="position: relative; margin: 0 0 8px; min-height: 20px; text-align: center; font-size: 14px; font-weight: 800; color: {{ tipColor }}; text-shadow: 0 1px 0 rgba(255,255,255,0.6);">{{ tip }}</p>
 
   <nav aria-label="Boosters" style="position: relative; height: 96px; box-sizing: border-box; padding: 10px 8px 6px; border-radius: 24px; background: linear-gradient(180deg, #B07A4C 0%, #8C5A35 60%, #6E4325 100%); border: 2px solid #5A3820; box-shadow: inset 0 2px 0 rgba(255,255,255,0.28), inset 0 -3px 0 rgba(0,0,0,0.22), 0 8px 18px rgba(40,30,10,0.28); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; align-items: start;">
     <sc-for list="{{ boosters }}" as="b" hint-placeholder-count="4">
       <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
-        <button aria-label="{{ b.aria }}" style="{{ b.btnStyle }}">
+        <a href="{{ b.href }}" aria-label="{{ b.aria }}" style="{{ b.btnStyle }}">
           <dc-import name="Booster" kind="{{ b.kind }}" size="{{ 42 }}" dim="{{ b.dim }}" hint-size="42px,42px"></dc-import>
           <span style="{{ b.badgeStyle }}">{{ b.badge }}</span>
-        </button>
+        </a>
         <span style="font-size: 10.5px; font-weight: 800; color: #FFF3DC; text-align: center; line-height: 1.1; text-shadow: 0 1px 0 #4A2C17;">{{ b.label }}</span>
       </div>
     </sc-for>
@@ -99,7 +99,7 @@ a{color:#2E7D32}a:hover{color:#1B5E20}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["play","hint","preview","hammer","ftue"],"default":"play"},"level":{"editor":"int","default":37,"min":1,"max":500},"hearts":{"editor":"int","default":3,"min":0,"max":3},"moves":{"editor":"int","default":7,"min":0,"max":99},"shield":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["play","hint","preview","hammer","ftue"],"default":"play"},"level":{"editor":"int","default":37,"min":1,"max":500},"hearts":{"editor":"int","default":3,"min":0,"max":3},"moves":{"editor":"int","default":7,"min":0,"max":99},"shield":{"editor":"boolean","default":false},"label":{"editor":"text","default":""},"par":{"editor":"int","default":0},"winHref":{"editor":"text","default":"Complete.dc.html"},"failHref":{"editor":"text","default":"SecondChance.dc.html"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   renderVals() {
     const mode = this.props.mode ?? 'play';
@@ -129,8 +129,9 @@ class Component extends DCLogic {
       if (locked) { badge = 'L' + unlock[k]; badgeBg = '#6E5A45'; }
       else if (k === 'shield' && shield) { badge = '1/1'; badgeBg = '#6E5A45'; }
       const badgeStyle = 'position: absolute; top: -5px; right: -7px; min-width: 22px; height: 22px; padding: 0 5px; box-sizing: border-box; border-radius: 11px; border: 2px solid #FFFFFF; background: ' + badgeBg + '; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 3px rgba(0,0,0,0.3);';
+      const hrefs = { hint: 'Hint.dc.html', shield: 'Hint.dc.html', hammer: 'Hammer.dc.html' };
       return {
-        kind: k, dim: locked,
+        kind: k, dim: locked, href: locked ? '#' : (active ? 'Play.dc.html' : hrefs[k]),
         btnStyle, badge, badgeStyle, iconOp: locked ? 0.4 : 1,
         label: locked ? 'Unlocks L' + unlock[k] : names[k],
         aria: names[k] + (locked ? ', locked until level ' + unlock[k] : ', ' + counts[k] + ' left')
@@ -145,7 +146,9 @@ class Component extends DCLogic {
     };
     const chip = level === 41 ? ['NEW!', '#2E7D32'] : (level % 10 === 9 && level > 10) ? ['HARD', '#C62828'] : null;
     return {
-      levelLabel: ftue ? 'Level 1' : 'Lv ' + level, showChip: !!chip, chipText: chip ? chip[0] : '', chipBg: chip ? chip[1] : '#2E7D32',
+      levelLabel: this.props.label || (ftue ? 'Level 1' : 'Lv ' + level),
+      movesText: this.props.par ? 'Moves ' + moves + ' / par ' + this.props.par : 'Moves ' + moves,
+      winHref: this.props.winHref || 'Complete.dc.html', failHref: this.props.failHref || 'SecondChance.dc.html', showChip: !!chip, chipText: chip ? chip[0] : '', chipBg: chip ? chip[1] : '#2E7D32',
       showHearts: !ftue, heartList, heartsLabel: hearts + ' of 3 heart berries' + (shield ? ', shield active' : ''), shield,
       showMoves: !ftue && mode !== 'hammer', hammerMode: mode === 'hammer', moves,
       boardMode: mode, boosters, tip: tips[mode] || '', tipColor: mode === 'preview' ? '#B71C1C' : '#2F4733',

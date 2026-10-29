@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Garden backdrop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0}</style></helmet>
+<svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="display: block;">
+  <defs>
+    <radialGradient id="bdBokeh"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.6"></stop><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop></radialGradient>
+    <radialGradient id="bdLeafA" cx="0.3" cy="0.3" r="0.9"><stop offset="0" stop-color="#9ED27E"></stop><stop offset="1" stop-color="#4E9A3C"></stop></radialGradient>
+    <radialGradient id="bdLeafB" cx="0.3" cy="0.3" r="0.9"><stop offset="0" stop-color="#B9E3A0"></stop><stop offset="1" stop-color="#6DB056"></stop></radialGradient>
+    <linearGradient id="bdGrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8CC870" stop-opacity="0"></stop><stop offset="0.45" stop-color="#8CC870" stop-opacity="0.55"></stop><stop offset="1" stop-color="#5DA548" stop-opacity="0.8"></stop></linearGradient>
+    <g id="bdLeaf"><path d="M0 0 C 14 -22, 48 -26, 72 -6 C 48 12, 16 14, 0 0 Z"></path><path d="M2 -1 Q 36 -10 68 -6" fill="none" stroke="#E8F7DC" stroke-width="1.6" opacity="0.6"></path></g>
+    <filter id="bdBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.5"></feGaussianBlur></filter>
+  </defs>
+  <circle cx="58" cy="120" r="50" fill="url(#bdBokeh)"></circle>
+  <circle cx="340" cy="210" r="38" fill="url(#bdBokeh)"></circle>
+  <circle cx="300" cy="90" r="22" fill="url(#bdBokeh)"></circle>
+  <circle cx="40" cy="430" r="28" fill="url(#bdBokeh)"></circle>
+  <circle cx="356" cy="520" r="30" fill="url(#bdBokeh)"></circle>
+
+  <g filter="url(#bdBlur)" opacity="0.55">
+    <use href="#bdLeaf" transform="translate(-24 52) rotate(28) scale(1.3)" fill="url(#bdLeafB)"></use>
+    <use href="#bdLeaf" transform="translate(414 40) rotate(150) scale(1.2)" fill="url(#bdLeafB)"></use>
+  </g>
+  <g opacity="0.75">
+    <use href="#bdLeaf" transform="translate(-30 18) rotate(40) scale(1.05)" fill="url(#bdLeafA)"></use>
+    <use href="#bdLeaf" transform="translate(420 6) rotate(140) scale(0.95)" fill="url(#bdLeafA)"></use>
+  </g>
+
+  <path d="M0 700 Q 60 660 120 690 T 250 680 T 390 670 V 844 H 0 Z" fill="url(#bdGrass)"></path>
+  <g fill="#5DA548" opacity="0.55">
+    <path d="M10 844 L16 780 L22 844 Z"></path><path d="M26 844 L34 770 L40 844 Z"></path><path d="M44 844 L50 792 L56 844 Z"></path>
+    <path d="M330 844 L338 776 L344 844 Z"></path><path d="M350 844 L356 760 L364 844 Z"></path><path d="M368 844 L374 788 L380 844 Z"></path>
+  </g>
+  <g opacity="0.85">
+    <circle cx="70" cy="812" r="5" fill="#F8BBD0"></circle><circle cx="70" cy="812" r="2" fill="#FFD54F"></circle>
+    <circle cx="318" cy="806" r="5" fill="#FFFFFF"></circle><circle cx="318" cy="806" r="2" fill="#FFD54F"></circle>
+    <circle cx="300" cy="826" r="4" fill="#F8BBD0"></circle>
+  </g>
+</svg>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
