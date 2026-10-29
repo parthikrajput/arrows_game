@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: 'Lilita'; src: url('node_modules/@fontsource/lilita-one/files/lilita-one-latin-400-normal.woff2') format('woff2'); }
+html, body { margin: 0; background: transparent; }
+#logo { position: relative; width: 1200px; height: 1000px; }
+#logo img.m { position: absolute; left: 50%; top: 95px; width: 840px; transform: translateX(-50%); }
+svg { position: absolute; left: 0; top: 0; }
+</style>
+</head>
+<body>
+<div id="logo">
+  <img class="m" src="out/hero_leaves.png">
+  <svg width="1200" height="1000" viewBox="0 0 1200 1000">
+    <defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFF4A8"/><stop offset="0.28" stop-color="#FFD84A"/><stop offset="0.6" stop-color="#F4B72F"/><stop offset="1" stop-color="#D9861A"/>
+      </linearGradient>
+      <linearGradient id="cream" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFFFF"/><stop offset="0.55" stop-color="#FFF6DA"/><stop offset="1" stop-color="#EBD9A8"/>
+      </linearGradient>
+      <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8A5A2E"/><stop offset="0.5" stop-color="#6B421F"/><stop offset="1" stop-color="#4A2C12"/>
+      </linearGradient>
+      <linearGradient id="woodTop" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#B07A44"/><stop offset="1" stop-color="#8A5A2E"/>
+      </linearGradient>
+      <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5DB646"/><stop offset="1" stop-color="#1F6E2A"/></linearGradient>
+      <filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#0A2A12" flood-opacity="0.45"/></filter>
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.25" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 0.25  0 0 0 0 0.14  0 0 0 0 0.05  0 0 0 0.35 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+      <symbol id="leaf" viewBox="0 0 100 220"><path d="M50 0 C 95 50, 100 150, 50 220 C 0 150, 5 50, 50 0 Z" fill="url(#leafG)"/><path d="M50 10 V 215" stroke="#C9EE9A" stroke-width="4" opacity="0.6"/></symbol>
+    </defs>
+
+    <!-- leaves behind the sign -->
+    <g filter="url(#sh)">
+      <use href="#leaf" x="70" y="560" width="120" height="260" transform="rotate(-62 130 690)"/>
+      <use href="#leaf" x="1010" y="560" width="120" height="260" transform="rotate(62 1070 690)"/>
+      <use href="#leaf" x="110" y="700" width="110" height="230" transform="rotate(-110 165 815)"/>
+      <use href="#leaf" x="980" y="700" width="110" height="230" transform="rotate(110 1035 815)"/>
+      <use href="#leaf" x="180" y="760" width="90" height="190" transform="rotate(-150 225 855)"/>
+      <use href="#leaf" x="930" y="760" width="90" height="190" transform="rotate(150 975 855)"/>
+    </g>
+
+    <!-- wooden sign -->
+    <g filter="url(#sh)">
+      <path d="M160 600 Q 600 560 1040 600 L 1060 870 Q 600 905 140 870 Z" fill="#3A220D"/>
+      <path d="M170 590 Q 600 550 1030 590 L 1048 856 Q 600 890 152 856 Z" fill="url(#wood)"/>
+      <path d="M170 590 Q 600 550 1030 590 L 1048 856 Q 600 890 152 856 Z" fill="#000" filter="url(#grain)"/>
+      <path d="M170 590 Q 600 550 1030 590 L 1032 610 Q 600 572 168 610 Z" fill="url(#woodTop)" opacity="0.8"/>
+    </g>
+
+    <!-- SNAKE -->
+    <g style="font-family: Lilita; font-size: 250px;" text-anchor="middle">
+      <g fill="#7A3E0A">
+        <text x="600" y="760">SNAKE</text><text x="600" y="766">SNAKE</text><text x="600" y="772">SNAKE</text><text x="600" y="778">SNAKE</text><text x="600" y="784">SNAKE</text>
+      </g>
+      <text x="600" y="784" fill="none" stroke="#3E1E04" stroke-width="26" stroke-linejoin="round">SNAKE</text>
+      <text x="600" y="760" fill="none" stroke="#5A2C06" stroke-width="22" stroke-linejoin="round">SNAKE</text>
+      <text x="600" y="760" fill="url(#gold)">SNAKE</text>
+      <text x="600" y="760" fill="none" stroke="#FFF8C8" stroke-width="3" opacity="0.7" transform="translate(0 -3)">SNAKE</text>
+    </g>
+    <!-- SLITHER -->
+    <g style="font-family: Lilita; font-size: 128px; letter-spacing: 4px;" text-anchor="middle">
+      <g fill="#6B5432"><text x="600" y="868">SLITHER</text><text x="600" y="873">SLITHER</text><text x="600" y="878">SLITHER</text></g>
+      <text x="600" y="878" fill="none" stroke="#2A1606" stroke-width="18" stroke-linejoin="round">SLITHER</text>
+      <text x="600" y="868" fill="none" stroke="#3E2410" stroke-width="15" stroke-linejoin="round">SLITHER</text>
+      <text x="600" y="868" fill="url(#cream)">SLITHER</text>
+    </g>
+
+    <!-- small front leaves on the sign corners -->
+    <use href="#leaf" x="120" y="820" width="70" height="150" transform="rotate(-125 155 895)"/>
+    <use href="#leaf" x="1010" y="820" width="70" height="150" transform="rotate(125 1045 895)"/>
+  </svg>
+</div>
+<script>
+document.fonts.ready.then(() => { const i = document.querySelector('img.m'); if (i.complete) window.__done = true; else i.onload = () => window.__done = true; });
+</script>
+</body>
+</html>

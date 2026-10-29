@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Pause and settings</title>
+<title>Pause</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -11,116 +11,30 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
 <style>
 body{margin:0}
-a{color:#2E7D32}a:hover{color:#1B5E20}
+a{color:inherit;text-decoration:none}
+.ss-press{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s}
+.ss-press:hover{transform:translateY(-1px)}
+.ss-press:active{transform:translateY(2px) scale(.97)}
+@keyframes ssBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes ssPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes ssGlow{0%,100%{box-shadow:0 0 0 0 rgba(168,217,79,.55)}60%{box-shadow:0 0 0 14px rgba(168,217,79,0)}}
+@keyframes ssIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ssPop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes ssFall{0%{transform:translate(0,-60px) rotate(0)}100%{transform:translate(60px,920px) rotate(260deg)}}
+@keyframes ssSway{0%,100%{transform:perspective(600px) rotateY(-10deg)}50%{transform:perspective(600px) rotateY(10deg)}}
+@keyframes ssFloatUp{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes ssConfetti{0%{transform:translateY(-40px) rotate(0)}100%{transform:translateY(860px) rotate(540deg)}}
+@keyframes ssShine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+.ss-in{animation:ssIn .5s cubic-bezier(.2,.9,.3,1) both}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; position: relative; overflow: hidden; font-family: 'Nunito', system-ui, sans-serif; color: #1B2B1F;">
-  <dc-import name="Play" mode="play" level="{{ 37 }}" hint-size="390px,844px"></dc-import>
-  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(10,22,12,0.55); backdrop-filter: blur(6px);"></div>
-
-  <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box;">
-    <div role="dialog" aria-labelledby="pauseTitle" style="width: 100%; max-height: 100%; overflow-y: auto; border-radius: 28px; background: rgba(255,255,255,0.96); box-shadow: 0 30px 60px rgba(0,0,0,0.35); padding: 26px 22px 18px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 20px;">
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-        <h2 id="pauseTitle" style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 28px;">Paused</h2>
-        <span style="font-size: 13px; font-weight: 700; color: #7A877C;">Level 37 · 7 moves</span>
-      </div>
-
-      <a href="Play.dc.html" style="align-self: stretch; height: 58px; border-radius: 29px; background: linear-gradient(180deg, #66BB6A, #2E7D32); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 10px 22px rgba(46,125,50,0.35); display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px;">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"></path></svg>Resume</a>
-
-      <nav aria-label="Leave level" style="align-self: stretch; display: flex; justify-content: space-around;">
-        <sc-for list="{{ navs }}" as="n" hint-placeholder-count="3">
-          <a href="{{ n.href }}" style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: #4C5C50; font-size: 12px; font-weight: 800;">
-            <span style="width: 54px; height: 54px; border-radius: 27px; background: #F1F5F0; display: flex; align-items: center; justify-content: center; color: #1B2B1F;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.icon }}"></path></svg>
-            </span>{{ n.label }}</a>
-        </sc-for>
-      </nav>
-
-      <div style="align-self: stretch; height: 1px; background: #EDF1EC;"></div>
-
-      <div role="group" aria-label="Quick settings" style="align-self: stretch; display: flex; justify-content: space-around;">
-        <sc-for list="{{ quick }}" as="q" hint-placeholder-count="3">
-          <button aria-pressed="{{ q.pressed }}" onClick="{{ q.flip }}" style="border: 0; background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: #4C5C50;">
-            <span style="{{ q.chip }}">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ q.icon }}"></path></svg>
-            </span>{{ q.label }}</button>
-        </sc-for>
-      </div>
-
-      <button aria-expanded="{{ moreStr }}" onClick="{{ toggleMore }}" style="align-self: stretch; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #2E7D32; cursor: pointer;">
-        {{ moreLabel }}
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="{{ chevron }}"><path d="M6 9 L12 15 L18 9"></path></svg>
-      </button>
-
-      <sc-if value="{{ more }}" hint-placeholder-val="{{ false }}">
-        <div style="align-self: stretch; margin-top: -12px; display: flex; flex-direction: column;">
-          <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3">
-            <label style="min-height: 46px; display: flex; align-items: center; gap: 12px; cursor: pointer;">
-              <span style="flex-grow: 1; font-size: 15px; font-weight: 700;">{{ t.name }}</span>
-              <input type="checkbox" checked="{{ t.on }}" onChange="{{ t.flip }}" style="width: 20px; height: 20px; accent-color: #2E7D32;">
-            </label>
-          </sc-for>
-          <label style="min-height: 46px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 700;">
-            Language
-            <select style="height: 34px; border-radius: 17px; border: 0; padding: 0 12px; background: #F1F5F0; color: #1B2B1F; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px;">
-              <option>English</option>
-              <option>ગુજરાતી</option>
-              <option>हिन्दी</option>
-            </select>
-          </label>
-          <div style="display: flex; flex-wrap: wrap; gap: 6px 14px; padding-top: 8px; font-size: 13px; font-weight: 800;">
-            <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
-              <button style="border: 0; background: transparent; padding: 4px 0; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: #2E7D32; cursor: pointer;">{{ l }}</button>
-            </sc-for>
-          </div>
-        </div>
-      </sc-if>
-
-      <span style="font-size: 11px; font-weight: 700; color: #9AA59D;">Saved on this device · v1.0.0</span>
-    </div>
-  </div>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: #1E4A2A; color: #163B28; font-family: 'Nunito', system-ui, sans-serif; ">
+<img src="/_blob/ac6157b13f690f8a475d566508cd8cb8" alt="" aria-hidden="true" style="position: absolute; inset: 0; width: 390px; height: 844px; object-fit: cover; z-index: 0; filter: blur(3px) saturate(0.9); transform: scale(1.04);"><div aria-hidden="true" style="position: absolute; inset: 0; z-index: 0; background: rgba(3,38,20,0.6);"></div><div style="position: relative; z-index: 1;"><div aria-hidden="true" style="position: relative; z-index: 3; height: 44px; padding: 0 22px 0 26px; display: flex; align-items: center; justify-content: space-between; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; color: #FFFFFF;"><span>9:41</span><span style="display: flex; gap: 6px; align-items: center;"><svg width="18" height="12" viewBox="0 0 18 12"><g fill="#FFFFFF"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 L5.6 9 A3.4 3.4 0 0 1 10.4 9 Z M2.8 6.3 A7.4 7.4 0 0 1 13.2 6.3 L11.8 7.7 A5.4 5.4 0 0 0 4.2 7.7 Z M0 3.5 A11.4 11.4 0 0 1 16 3.5 L14.6 4.9 A9.4 9.4 0 0 0 1.4 4.9 Z" fill="#FFFFFF"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="#FFFFFF" opacity="0.45"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#FFFFFF"/><rect x="23.5" y="4" width="1.8" height="4" rx="1" fill="#FFFFFF" opacity="0.45"/></svg></span></div></div><div style="position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center;"><div style="position: relative; z-index: 2; margin: 0 22px; padding: 26px 20px 20px; border-radius: 28px; background: #FFFEF8; border: 1px solid #ECE5CF; box-shadow: inset 0 1px 0 #FFFFFF, 0 6px 0 #D6CBAA, 0 30px 60px rgba(0,0,0,0.35); display: flex; flex-direction: column; align-items: center; text-align: center; animation: ssPop .5s cubic-bezier(.2,1.2,.4,1) both;"><h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 30px;">Paused</h1><p style="margin: 4px 0 0; font-size: 14px; font-weight: 700; color: #6B7F70;">Level 3 · Score 1,240</p><div style="align-self: stretch; margin-top: 20px; display: flex; flex-direction: column; gap: 10px;"><a href="Play.dc.html" class="ss-press" style="position: relative; overflow: hidden; height: 56px; width: 100%; box-sizing: border-box; border-radius: 20px; background: linear-gradient(180deg, #23A766 0%, #13864D 42%, #075B35 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.32), inset 0 -2px 0 rgba(0,0,0,0.12), 0 4px 0 #03432A, 0 12px 22px rgba(7,91,53,0.28); display: flex; align-items: center; justify-content: center; gap: 10px; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 21px; text-shadow: 0 1px 0 rgba(0,0,0,0.18); "><span aria-hidden="true" style="position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent); animation: ssShine 3.6s ease-in-out infinite;"></span><span style="position: relative;">Resume</span></a><a href="Play.dc.html" class="ss-press" style="height: 50px; box-sizing: border-box; border-radius: 18px; background: #EFE9D6; border: 1px solid #E2D9BE; box-shadow: inset 0 1px 0 #FFFFFF, 0 3px 0 #D6CBAA; display: flex; align-items: center; justify-content: center; color: #163B28; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px; ">Restart</a><a href="Home.dc.html" class="ss-press" style="height: 50px; box-sizing: border-box; border-radius: 18px; background: #EFE9D6; border: 1px solid #E2D9BE; box-shadow: inset 0 1px 0 #FFFFFF, 0 3px 0 #D6CBAA; display: flex; align-items: center; justify-content: center; color: #163B28; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 17px; ">Home</a></div><div style="margin-top: 18px; display: flex; gap: 14px;"><button aria-pressed="true" aria-label="Sound" class="ss-press" style="width: 52px; height: 52px; border-radius: 26px; border: 0; cursor: pointer; background: #E3F2D3; color: #13864D; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9 H8 L13 5 V19 L8 15 H4 Z"/><path d="M16.5 8.5 a5 5 0 0 1 0 7"/></svg></button><button aria-pressed="true" aria-label="Music" class="ss-press" style="width: 52px; height: 52px; border-radius: 26px; border: 0; cursor: pointer; background: #E3F2D3; color: #13864D; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 V5 L19 3 V15"/><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="15" r="2.5"/></svg></button><button aria-pressed="false" aria-label="Vibration" class="ss-press" style="width: 52px; height: 52px; border-radius: 26px; border: 0; cursor: pointer; background: #EDE6D0; color: #9AA59D; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="18" rx="2"/><path d="M4 8 V16 M20 8 V16"/></svg></button><a href="Settings.dc.html" aria-label="Settings" class="ss-press" style="width: 52px; height: 52px; border-radius: 26px; background: #EDE6D0; color: #163B28; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8 V5.2 M12 18.8 V21.2 M2.8 12 H5.2 M18.8 12 H21.2 M5.5 5.5 L7.2 7.2 M16.8 16.8 L18.5 18.5 M5.5 18.5 L7.2 16.8 M16.8 7.2 L18.5 5.5"/></svg></a></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { more: false, Sound: true, Music: true, Haptics: true, 'Colour-blind mode': false, 'Brighter nights': false, 'Share diagnostics': true };
-  }
-  renderVals() {
-    const icons = {
-      Sound: 'M4 9 H8 L13 5 V19 L8 15 H4 Z M16.5 8.5 a5 5 0 0 1 0 7 M19 6 a8.5 8.5 0 0 1 0 12',
-      Music: 'M9 18 V6 L19 4 V16 M9 18 a2.5 2.5 0 1 1 -5 0 a2.5 2.5 0 0 1 5 0 Z M19 16 a2.5 2.5 0 1 1 -5 0 a2.5 2.5 0 0 1 5 0 Z',
-      Haptics: 'M8 3 H16 A1.5 1.5 0 0 1 17.5 4.5 V19.5 A1.5 1.5 0 0 1 16 21 H8 A1.5 1.5 0 0 1 6.5 19.5 V4.5 A1.5 1.5 0 0 1 8 3 Z M3 9 V15 M21 9 V15'
-    };
-    const quick = ['Sound', 'Music', 'Haptics'].map((name) => {
-      const on = this.state[name];
-      return {
-        label: name, pressed: on ? 'true' : 'false', icon: icons[name],
-        flip: () => this.setState({ [name]: !this.state[name] }),
-        chip: 'width: 54px; height: 54px; border-radius: 27px; display: flex; align-items: center; justify-content: center; ' +
-          (on ? 'background: #E3F2E1; color: #2E7D32; box-shadow: inset 0 0 0 2px #81C784;' : 'background: #F1F5F0; color: #9AA59D; box-shadow: inset 0 0 0 2px transparent; opacity: 0.8;')
-      };
-    });
-    const toggles = ['Colour-blind mode', 'Brighter nights', 'Share diagnostics'].map((name) => ({
-      name, on: this.state[name], flip: () => this.setState({ [name]: !this.state[name] })
-    }));
-    const navs = [
-      { label: 'Restart', href: 'Play.dc.html', icon: 'M4 12 a8 8 0 1 0 2.5 -5.8 M4 4 V9 H9' },
-      { label: 'Map', href: 'LevelMap.dc.html', icon: 'M9 4 L3 6 V20 L9 18 L15 20 L21 18 V4 L15 6 Z M9 4 V18 M15 6 V20' },
-      { label: 'Home', href: 'Home.dc.html', icon: 'M3 11 L12 4 L21 11 M5.5 9.5 V20 H18.5 V9.5 M10 20 V14 H14 V20' }
-    ];
-    const more = this.state.more;
-    return {
-      quick, toggles, navs, more,
-      moreStr: more ? 'true' : 'false',
-      moreLabel: more ? 'Fewer settings' : 'More settings',
-      chevron: more ? 'transform: rotate(180deg);' : '',
-      toggleMore: () => this.setState({ more: !this.state.more }),
-      links: ['Jungle Guide', 'Spin odds', 'Privacy choices', 'Restore purchases', 'Help']
-    };
-  }
+  renderVals() { return {}; }
 }
 </script>
 </body>

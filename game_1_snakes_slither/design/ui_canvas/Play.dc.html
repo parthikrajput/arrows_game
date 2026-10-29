@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Gameplay HUD</title>
+<title>Gameplay</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -11,149 +11,33 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
 <style>
 body{margin:0}
-a{color:#2E7D32}a:hover{color:#1B5E20}
+a{color:inherit;text-decoration:none}
+.ss-press{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s}
+.ss-press:hover{transform:translateY(-1px)}
+.ss-press:active{transform:translateY(2px) scale(.97)}
+@keyframes ssBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes ssPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes ssGlow{0%,100%{box-shadow:0 0 0 0 rgba(168,217,79,.55)}60%{box-shadow:0 0 0 14px rgba(168,217,79,0)}}
+@keyframes ssIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ssPop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes ssFall{0%{transform:translate(0,-60px) rotate(0)}100%{transform:translate(60px,920px) rotate(260deg)}}
+@keyframes ssSway{0%,100%{transform:perspective(600px) rotateY(-10deg)}50%{transform:perspective(600px) rotateY(10deg)}}
+@keyframes ssFloatUp{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes ssConfetti{0%{transform:translateY(-40px) rotate(0)}100%{transform:translateY(860px) rotate(540deg)}}
+@keyframes ssShine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+.ss-in{animation:ssIn .5s cubic-bezier(.2,.9,.3,1) both}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #DCF0E0 0%, #C3E4C5 42%, #9CCF8C 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; padding: 12px 16px 12px;">
-  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
-    <defs>
-      <radialGradient id="pBush" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="#8BCB6A"></stop><stop offset="1" stop-color="#3F8A35"></stop></radialGradient>
-      <radialGradient id="pBokeh" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.55"></stop><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"></stop></radialGradient>
-    </defs>
-    <circle cx="60" cy="150" r="46" fill="url(#pBokeh)"></circle>
-    <circle cx="340" cy="110" r="34" fill="url(#pBokeh)"></circle>
-    <circle cx="320" cy="230" r="20" fill="url(#pBokeh)"></circle>
-    <ellipse cx="-10" cy="790" rx="120" ry="80" fill="url(#pBush)" opacity="0.9"></ellipse>
-    <ellipse cx="400" cy="800" rx="130" ry="86" fill="url(#pBush)" opacity="0.9"></ellipse>
-    <circle cx="70" cy="735" r="5" fill="#FFFFFF"></circle><circle cx="70" cy="735" r="2" fill="#FFCA28"></circle>
-    <circle cx="330" cy="742" r="5" fill="#F8BBD0"></circle><circle cx="330" cy="742" r="2" fill="#FFCA28"></circle>
-  </svg>
-
-  <header style="position: relative; height: 64px; display: flex; align-items: center; gap: 8px;">
-    <a href="Pause.dc.html" aria-label="Pause" style="width: 46px; height: 46px; border-radius: 16px; box-sizing: border-box; background: radial-gradient(circle at 35% 25%, #FFFFFF, #F5EFDF 60%, #E3D7B9); border: 2px solid #FFFFFF; box-shadow: 0 4px 0 #B9A77F, 0 8px 14px rgba(40,60,30,0.18); display: flex; align-items: center; justify-content: center; color: #4A3A25;">
-      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5" fill="currentColor"></rect><rect x="14" y="5" width="4" height="14" rx="1.5" fill="currentColor"></rect></svg>
-    </a>
-    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 70px;">
-      <span style="height: 32px; padding: 0 12px; border-radius: 10px; box-sizing: border-box; background: linear-gradient(180deg, #C08A55 0%, #94603A 55%, #7A4B2A 100%); border: 2px solid #5A3820; box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 3px 0 #4A2C17, 0 6px 10px rgba(0,0,0,0.18); display: flex; align-items: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; color: #FFF6E5; text-shadow: 0 1px 0 #4A2C17;">{{ levelLabel }}</span>
-      <sc-if value="{{ showChip }}" hint-placeholder-val="{{ false }}">
-        <span style="height: 18px; padding: 0 8px; border-radius: 9px; background: {{ chipBg }}; color: #FFFFFF; display: flex; align-items: center; font-size: 10px; font-weight: 800; letter-spacing: 0.4px;">{{ chipText }}</span>
-      </sc-if>
-    </div>
-    <div style="flex-grow: 1; display: flex; justify-content: center;">
-      <sc-if value="{{ showHearts }}" hint-placeholder-val="{{ true }}">
-        <a href="{{ failHref }}" aria-label="{{ heartsLabel }}" style="position: relative; text-decoration: none; display: flex; gap: 2px; padding: 5px 9px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(40,60,30,0.15);">
-          <sc-for list="{{ heartList }}" as="h" hint-placeholder-count="3">
-            <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
-              <defs><radialGradient id="pBerry" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FF8A80"></stop><stop offset="0.5" stop-color="#E53935"></stop><stop offset="1" stop-color="#9F1A1A"></stop></radialGradient></defs>
-              <path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="{{ h.fill }}" stroke="{{ h.stroke }}" stroke-width="1.2"></path>
-              <ellipse cx="7.6" cy="9" rx="2.1" ry="1.3" fill="#FFFFFF" opacity="{{ h.shine }}" transform="rotate(-25 7.6 9)"></ellipse>
-              <path d="M12 7.6 C 12.4 5, 14.6 3.6, 16.6 4 C 15.8 6.2, 14 7.5, 12 7.6 Z" fill="{{ h.leaf }}" stroke="{{ h.leafDark }}" stroke-width="0.5"></path>
-            </svg>
-          </sc-for>
-          <sc-if value="{{ shield }}" hint-placeholder-val="{{ false }}">
-            <span aria-label="Safety Shell Shield, 2 charges" style="position: absolute; right: -16px; top: -10px; width: 36px; height: 32px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));">
-              <svg width="36" height="32" viewBox="0 0 24 21" aria-hidden="true"><defs><radialGradient id="pShell" cx="0.4" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF1DC"></stop><stop offset="0.6" stop-color="#FFC27A"></stop><stop offset="1" stop-color="#E07B2C"></stop></radialGradient></defs><path d="M2 17 Q12 -2 22 17 Q12 20.5 2 17 Z" fill="url(#pShell)" stroke="#B4501A" stroke-width="1" stroke-linejoin="round"></path><path d="M12 3.5 V18.6 M7 7.2 L9 18.2 M17 7.2 L15 18.2" stroke="#B4501A" stroke-width="0.9" stroke-linecap="round"></path></svg>
-              <span style="position: absolute; right: -4px; bottom: -4px; width: 18px; height: 18px; border-radius: 9px; background: #E65100; border: 2px solid #FFFFFF; box-sizing: border-box; color: #FFFFFF; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">2</span>
-            </span>
-          </sc-if>
-        </a>
-      </sc-if>
-    </div>
-    <span style="height: 38px; padding: 0 12px 0 4px; border-radius: 19px; box-sizing: border-box; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(40,60,30,0.15); display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;">
-      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="pCoin" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF4B8"></stop><stop offset="0.45" stop-color="#FFCA28"></stop><stop offset="1" stop-color="#C08A00"></stop></radialGradient></defs><circle cx="12" cy="12" r="10.2" fill="url(#pCoin)" stroke="#8D6200" stroke-width="1.1"></circle><circle cx="12" cy="12" r="7.6" fill="none" stroke="#B8860B" stroke-width="0.8" opacity="0.7"></circle><path d="M8.6 14.6 C 9 9.6, 13.4 7.6, 15.9 8.1 C 15.4 12.6, 12 15.1, 8.6 14.6 Z M8.6 14.6 L 12.8 10.6" fill="#FFE38A" stroke="#9A6B00" stroke-width="0.9" stroke-linejoin="round"></path></svg>
-      1,250
-    </span>
-  </header>
-
-  <div style="position: relative; height: 26px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-    <sc-if value="{{ showMoves }}" hint-placeholder-val="{{ true }}">
-      <span style="height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(255,255,255,0.6); font-size: 13px; font-weight: 800; color: #3B5240; font-variant-numeric: tabular-nums; display: flex; align-items: center;">{{ movesText }}</span>
-    </sc-if>
-    <sc-if value="{{ hammerMode }}" hint-placeholder-val="{{ false }}">
-      <span style="height: 28px; padding: 0 10px 0 12px; border-radius: 14px; background: #1B2B1F; color: #FFFFFF; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.25);">Tap a snake or rock<a href="Play.dc.html" style="color: #A5D6A7; text-decoration: none; min-height: 28px; display: flex; align-items: center;">Cancel</a></span>
-    </sc-if>
-  </div>
-
-  <a href="{{ winHref }}" aria-label="Garden board" style="position: relative; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-decoration: none;">
-    <dc-import name="Board" mode="{{ boardMode }}" size="{{ 358 }}" hint-size="358px,358px"></dc-import>
-  </a>
-
-  <p style="position: relative; margin: 0 0 8px; min-height: 20px; text-align: center; font-size: 14px; font-weight: 800; color: {{ tipColor }}; text-shadow: 0 1px 0 rgba(255,255,255,0.6);">{{ tip }}</p>
-
-  <nav aria-label="Boosters" style="position: relative; height: 96px; box-sizing: border-box; padding: 10px 8px 6px; border-radius: 24px; background: linear-gradient(180deg, #B07A4C 0%, #8C5A35 60%, #6E4325 100%); border: 2px solid #5A3820; box-shadow: inset 0 2px 0 rgba(255,255,255,0.28), inset 0 -3px 0 rgba(0,0,0,0.22), 0 8px 18px rgba(40,30,10,0.28); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; align-items: start;">
-    <sc-for list="{{ boosters }}" as="b" hint-placeholder-count="4">
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 3px;">
-        <a href="{{ b.href }}" aria-label="{{ b.aria }}" style="{{ b.btnStyle }}">
-          <dc-import name="Booster" kind="{{ b.kind }}" size="{{ 42 }}" dim="{{ b.dim }}" hint-size="42px,42px"></dc-import>
-          <span style="{{ b.badgeStyle }}">{{ b.badge }}</span>
-        </a>
-        <span style="font-size: 10.5px; font-weight: 800; color: #FFF3DC; text-align: center; line-height: 1.1; text-shadow: 0 1px 0 #4A2C17;">{{ b.label }}</span>
-      </div>
-    </sc-for>
-  </nav>
-
-  <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ true }}">
-    <div style="position: relative; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.5);">
-      <div role="note" aria-label="Banner ad placeholder" style="height: 50px; border-radius: 8px; background: rgba(255,255,255,0.85); border: 1px dashed #7E8F80; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #4C5C50; letter-spacing: 0.4px;">AD · adaptive banner (L11+, hidden for VIP)</div>
-    </div>
-  </sc-if>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: #3C8A2E; color: #163B28; font-family: 'Nunito', system-ui, sans-serif; ">
+<a href="{{ winHref }}" aria-label="Game board (prototype: tap to finish the level)" style="position: absolute; inset: 0; z-index: 0; display: block;"><img src="/_blob/ac6157b13f690f8a475d566508cd8cb8" alt="Snake on the grass with apples" style="width: 390px; height: 844px; object-fit: cover; display: block;"></a><div aria-hidden="true" style="position: absolute; inset: 0 0 auto 0; height: 150px; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(3,35,18,0.5), rgba(3,35,18,0));"></div><span aria-hidden="true" style="position: absolute; z-index: 2; left: 262px; top: 188px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; color: #FFE27A; text-shadow: 0 2px 0 #7A4A00, 0 4px 8px rgba(0,0,0,0.35); animation: ssFloatUp 1.6s ease-out infinite; pointer-events: none;">+10</span><div style="position: relative; z-index: 3;"><div aria-hidden="true" style="position: relative; z-index: 3; height: 44px; padding: 0 22px 0 26px; display: flex; align-items: center; justify-content: space-between; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; color: #FFFFFF;"><span>9:41</span><span style="display: flex; gap: 6px; align-items: center;"><svg width="18" height="12" viewBox="0 0 18 12"><g fill="#FFFFFF"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 L5.6 9 A3.4 3.4 0 0 1 10.4 9 Z M2.8 6.3 A7.4 7.4 0 0 1 13.2 6.3 L11.8 7.7 A5.4 5.4 0 0 0 4.2 7.7 Z M0 3.5 A11.4 11.4 0 0 1 16 3.5 L14.6 4.9 A9.4 9.4 0 0 0 1.4 4.9 Z" fill="#FFFFFF"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="#FFFFFF" opacity="0.45"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#FFFFFF"/><rect x="23.5" y="4" width="1.8" height="4" rx="1" fill="#FFFFFF" opacity="0.45"/></svg></span></div><div style="padding: 4px 16px 0; display: flex; align-items: center; gap: 10px;"><a href="Pause.dc.html" aria-label="Pause" class="ss-press" style="width: 50px; height: 50px; border-radius: 25px; background: rgba(4,52,30,0.72); border: 1px solid rgba(255,255,255,0.16); box-shadow: 0 6px 14px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1.5" fill="#FFFFFF"/><rect x="14" y="4" width="5" height="16" rx="1.5" fill="#FFFFFF"/></svg></a><div style="flex: 1;"></div><a href="{{ failHref }}" aria-label="Score (prototype: tap to fail)" style="display: block;"><div style="min-width: 86px; height: 50px; padding: 0 12px; box-sizing: border-box; border-radius: 14px; background: rgba(4,52,30,0.72); border: 1px solid rgba(255,255,255,0.16); box-shadow: 0 6px 14px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: center;"><span style="font-size: 11px; font-weight: 800; letter-spacing: 0.6px; color: #FFD84A;">SCORE</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums;">{{ score }}</span></div></a><div style="min-width: 86px; height: 50px; padding: 0 12px; box-sizing: border-box; border-radius: 14px; background: rgba(4,52,30,0.72); border: 1px solid rgba(255,255,255,0.16); box-shadow: 0 6px 14px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: center;"><span style="font-size: 11px; font-weight: 800; letter-spacing: 0.6px; color: #FFD84A;">BEST</span><span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums;">{{ best }}</span></div></div><div style="margin: 10px 16px 0; height: 8px; border-radius: 4px; background: rgba(0,0,0,0.25); overflow: hidden;"><div style="width: {{ goalPct }}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FFE27A, #F4B72F);"></div></div><div style="margin: 4px 16px 0; display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.4);"><span>{{ label }}</span><span>Goal {{ goal }}</span></div></div><div aria-label="Direction pad" style="position: absolute; z-index: 3; right: 20px; bottom: 34px; width: 132px; height: 132px; border-radius: 66px; background: rgba(4,52,30,0.45); border: 2px solid rgba(255,255,255,0.25); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.2);"><button aria-label="Up" class="ss-press" style="position: absolute; left: 44px; top: 4px; width: 40px; height: 40px; border: 0; border-radius: 20px; background: rgba(255,255,255,0.16); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="transform: rotate(0deg);"><path d="M12 5 L19 15 H5 Z" fill="#FFFFFF"/></svg></button><button aria-label="Down" class="ss-press" style="position: absolute; left: 44px; bottom: 4px; width: 40px; height: 40px; border: 0; border-radius: 20px; background: rgba(255,255,255,0.16); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="transform: rotate(180deg);"><path d="M12 5 L19 15 H5 Z" fill="#FFFFFF"/></svg></button><button aria-label="Left" class="ss-press" style="position: absolute; left: 4px; top: 44px; width: 40px; height: 40px; border: 0; border-radius: 20px; background: rgba(255,255,255,0.16); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="transform: rotate(-90deg);"><path d="M12 5 L19 15 H5 Z" fill="#FFFFFF"/></svg></button><button aria-label="Right" class="ss-press" style="position: absolute; right: 4px; top: 44px; width: 40px; height: 40px; border: 0; border-radius: 20px; background: rgba(255,255,255,0.16); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="transform: rotate(90deg);"><path d="M12 5 L19 15 H5 Z" fill="#FFFFFF"/></svg></button><span aria-hidden="true" style="position: absolute; left: 46px; top: 46px; width: 36px; height: 36px; border-radius: 18px; background: radial-gradient(circle at 35% 30%, #FFFFFF, #CFE6C2); box-shadow: 0 4px 10px rgba(0,0,0,0.3);"></span></div><div style="position: absolute; z-index: 3; left: 16px; bottom: 40px; height: 34px; padding: 0 12px; border-radius: 17px; background: rgba(4,52,30,0.6); color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800;"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="#E5322D"/><path d="M12 5 V2" stroke="#5A3A1A" stroke-width="2"/><ellipse cx="15" cy="4" rx="3" ry="1.4" fill="#4CAF50"/></svg>Length 22</div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["play","hint","preview","hammer","ftue"],"default":"play"},"level":{"editor":"int","default":37,"min":1,"max":500},"hearts":{"editor":"int","default":3,"min":0,"max":3},"moves":{"editor":"int","default":7,"min":0,"max":99},"shield":{"editor":"boolean","default":false},"label":{"editor":"text","default":""},"par":{"editor":"int","default":0},"winHref":{"editor":"text","default":"Complete.dc.html"},"failHref":{"editor":"text","default":"SecondChance.dc.html"},"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"label":{"editor":"text","default":"Level 3"},"score":{"editor":"number","default":1240},"best":{"editor":"number","default":3520},"goal":{"editor":"number","default":600},"winHref":{"editor":"text","default":"Complete.dc.html"},"failHref":{"editor":"text","default":"Failed.dc.html"},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
   renderVals() {
-    const mode = this.props.mode ?? 'play';
-    const level = this.props.level ?? (mode === 'ftue' ? 1 : 37);
-    const hearts = this.props.hearts ?? 3;
-    const moves = this.props.moves ?? 7;
-    const shield = !!(this.props.shield ?? false);
-    const ftue = mode === 'ftue';
-    const heartList = [0, 1, 2].map((i) => {
-      const on = i < hearts;
-      return { fill: on ? 'url(#pBerry)' : '#F3E9E6', stroke: on ? '#8E1515' : '#D7A8A3', leaf: on ? '#66BB6A' : '#D5E6D3', leafDark: on ? '#2E7D32' : '#AFC7AD', shine: on ? 0.75 : 0.3 };
-    });
-    const unlock = { hint: 3, shield: 15, hammer: 25 };
-    const counts = { hint: mode === 'hint' ? 1 : 2, shield: shield ? 0 : 1, hammer: 1 };
-    const names = { hint: 'Firefly Hint', shield: 'Shell Shield', hammer: 'Stone Hammer' };
-    const keys = ['hint', 'shield', 'hammer'];
-    const boosters = keys.map((k) => {
-      const locked = level < unlock[k];
-      const active = (mode === 'hammer' && k === 'hammer') || (mode === 'hint' && k === 'hint') || (shield && k === 'shield');
-      const dim = mode === 'hammer' && k !== 'hammer';
-      const base = 'position: relative; width: 56px; height: 56px; border-radius: 28px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; ';
-      let btnStyle = base + 'background: radial-gradient(circle at 35% 25%, #FFFFFF 0%, #F8F2E2 55%, #E6D8B6 100%); border: 2px solid #FFF8E8; box-shadow: inset 0 -3px 5px rgba(120,90,40,0.18), 0 4px 0 #5A3820, 0 6px 10px rgba(0,0,0,0.3);';
-      if (active) btnStyle = base + 'background: radial-gradient(circle at 35% 25%, #FFFFFF 0%, #FFF3C4 55%, #FFD54F 100%); border: 3px solid #FFE082; box-shadow: 0 0 0 4px rgba(255,213,79,0.45), 0 0 18px rgba(255,213,79,0.8), 0 4px 0 #5A3820;';
-      if (locked) btnStyle = base + 'background: radial-gradient(circle at 35% 25%, #B79A7A, #8C6A4A); border: 2px dashed #D9C2A2; box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);';
-      if (dim) btnStyle += ' opacity: 0.45;';
-      let badge = String(counts[k]), badgeBg = 'linear-gradient(#5DBB63, #2E7D32)';
-      if (locked) { badge = 'L' + unlock[k]; badgeBg = '#6E5A45'; }
-      else if (k === 'shield' && shield) { badge = '1/1'; badgeBg = '#6E5A45'; }
-      const badgeStyle = 'position: absolute; top: -5px; right: -7px; min-width: 22px; height: 22px; padding: 0 5px; box-sizing: border-box; border-radius: 11px; border: 2px solid #FFFFFF; background: ' + badgeBg + '; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 3px rgba(0,0,0,0.3);';
-      const hrefs = { hint: 'Hint.dc.html', shield: 'Hint.dc.html', hammer: 'Hammer.dc.html' };
-      return {
-        kind: k, dim: locked, href: locked ? '#' : (active ? 'Play.dc.html' : hrefs[k]),
-        btnStyle, badge, badgeStyle, iconOp: locked ? 0.4 : 1,
-        label: locked ? 'Unlocks L' + unlock[k] : names[k],
-        aria: names[k] + (locked ? ', locked until level ' + unlock[k] : ', ' + counts[k] + ' left')
-      };
-    });
-    const tips = {
-      play: 'Hold a snake to preview its path.',
-      hint: 'The firefly found the next safe snake.',
-      preview: 'Blocked! Release to cancel. Preview is free.',
-      hammer: 'Smash 1 snake or rock. It counts as an exit.',
-      ftue: ''
-    };
-    const chip = level === 41 ? ['NEW!', '#2E7D32'] : (level % 10 === 9 && level > 10) ? ['HARD', '#C62828'] : null;
-    return {
-      levelLabel: this.props.label || (ftue ? 'Level 1' : 'Lv ' + level),
-      movesText: this.props.par ? 'Moves ' + moves + ' / par ' + this.props.par : 'Moves ' + moves,
-      winHref: this.props.winHref || 'Complete.dc.html', failHref: this.props.failHref || 'SecondChance.dc.html', showChip: !!chip, chipText: chip ? chip[0] : '', chipBg: chip ? chip[1] : '#2E7D32',
-      showHearts: !ftue, heartList, heartsLabel: hearts + ' of 3 heart berries' + (shield ? ', shield active' : ''), shield,
-      showMoves: !ftue && mode !== 'hammer', hammerMode: mode === 'hammer', moves,
-      boardMode: mode, boosters, tip: tips[mode] || '', tipColor: mode === 'preview' ? '#B71C1C' : '#2F4733',
-      showBanner: !ftue && level >= 11
-    };
+    const p = this.props, score = p.score ?? 1240, goal = p.goal ?? 600;
+    return { score: score.toLocaleString('en-US'), best: (p.best ?? 3520).toLocaleString('en-US'), goal, goalPct: Math.min(100, Math.round(score / goal * 100)),
+      label: p.label ?? 'Level 3', winHref: p.winHref ?? 'Complete.dc.html', failHref: p.failHref ?? 'Failed.dc.html' };
   }
 }
 </script>

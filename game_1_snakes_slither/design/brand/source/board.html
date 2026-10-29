@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// Params: w, h, theme=forest|desert|snow|space|beach|candy, snake=1|0, skin=green|...
+const P = new URLSearchParams(location.search);
+const W = +(P.get('w') || 780), H = +(P.get('h') || 1240);
+const FRUIT = P.get('fruit') !== '0';
+const THEME = P.get('theme') || 'forest', SNAKE = P.get('snake') !== '0', SKIN = P.get('skin') || 'green';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+
+let seed = 21; const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+function canvasTex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const T = {
+  forest: { g1: '#4FA33A', g2: '#3B8A2D', blade: ['rgba(160,220,100,0.5)', 'rgba(30,90,30,0.45)'], sky: '#2E6B2A', fog: '#2E6B2A' },
+  desert: { g1: '#E9C27A', g2: '#D9A95C', blade: ['rgba(255,235,180,0.5)', 'rgba(170,110,50,0.35)'], sky: '#F2C987', fog: '#E9B56E' },
+  snow:   { g1: '#F4F8FC', g2: '#DCE8F3', blade: ['rgba(255,255,255,0.7)', 'rgba(150,180,210,0.35)'], sky: '#BFD7EE', fog: '#C9DDF0' },
+  space:  { g1: '#3A2A6E', g2: '#251A4E', blade: ['rgba(160,140,255,0.35)', 'rgba(10,5,30,0.5)'], sky: '#120A2E', fog: '#1A1040' },
+  beach:  { g1: '#F3DDA6', g2: '#E7C988', blade: ['rgba(255,250,220,0.5)', 'rgba(190,150,80,0.3)'], sky: '#7FD3E8', fog: '#9FDCEB' },
+  candy:  { g1: '#FFC1DA', g2: '#F7A6C8', blade: ['rgba(255,255,255,0.5)', 'rgba(220,100,160,0.3)'], sky: '#FFD6E8', fog: '#FFD0E4' }
+}[THEME];
+scene.background = new THREE.Color(T.sky);
+scene.fog = new THREE.Fog(T.fog, 22, 40);
+
+// ---------- Ground ----------
+const ground = canvasTex(1024, 1600, (g, w, h) => {
+  const a = g.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, w * 0.75);
+  a.addColorStop(0, T.g1); a.addColorStop(1, T.g2); g.fillStyle = a; g.fillRect(0, 0, w, h);
+  // soft patches
+  for (let i = 0; i < 40; i++) { g.fillStyle = rnd() > 0.5 ? T.blade[0].replace(/[\d.]+\)$/, '0.12)') : T.blade[1].replace(/[\d.]+\)$/, '0.12)'); g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 40 + rnd() * 90, 30 + rnd() * 60, rnd() * 3, 0, 7); g.fill(); }
+  const n = THEME === 'space' ? 2500 : 16000;
+  for (let i = 0; i < n; i++) {
+    const x = rnd() * w, y = rnd() * h, l = THEME === 'forest' ? 4 + rnd() * 9 : 1 + rnd() * 3;
+    g.strokeStyle = rnd() > 0.5 ? T.blade[0] : T.blade[1]; g.lineWidth = THEME === 'forest' ? 1.5 : 2;
+    g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rnd() - 0.5) * 3, y - l); g.stroke();
+  }
+  if (THEME === 'space') for (let i = 0; i < 260; i++) { g.fillStyle = `rgba(255,255,255,${0.3 + rnd() * 0.7})`; g.beginPath(); g.arc(rnd() * w, rnd() * h, rnd() * 2.2, 0, 7); g.fill(); }
+  if (THEME === 'candy') for (let i = 0; i < 180; i++) { g.fillStyle = ['#FFFFFF', '#FFE16B', '#7FD8FF', '#B98CFF'][i % 4]; g.save(); g.translate(rnd() * w, rnd() * h); g.rotate(rnd() * 3); g.fillRect(-6, -2, 12, 4); g.restore(); }
+});
+ground.wrapS = ground.wrapT = THREE.RepeatWrapping; ground.repeat.set(1, 1);
+const gm = new THREE.Mesh(new THREE.PlaneGeometry(14, 22), new THREE.MeshStandardMaterial({ map: ground, roughness: THEME === 'snow' ? 0.6 : 0.95 }));
+gm.rotation.x = -Math.PI / 2; gm.receiveShadow = true; scene.add(gm);
+if (THEME === 'beach') {
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(14, 6), new THREE.MeshPhysicalMaterial({ color: '#2EC4D6', roughness: 0.1, transmission: 0, clearcoat: 1, transparent: true, opacity: 0.9 }));
+  water.rotation.x = -Math.PI / 2; water.position.set(0, 0.02, -8.5); scene.add(water);
+  const foam = new THREE.Mesh(new THREE.PlaneGeometry(14, 0.35), new THREE.MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.8 }));
+  foam.rotation.x = -Math.PI / 2; foam.position.set(0, 0.03, -5.5); scene.add(foam);
+}
+
+// ---------- Props ----------
+const std = (c, r = 0.6, extra = {}) => new THREE.MeshPhysicalMaterial({ color: c, roughness: r, clearcoat: 0.4, envMapIntensity: 0.35, ...extra });
+function add(m, x, z, y = 0) { m.position.set(x, y, z); m.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } }); scene.add(m); return m; }
+function bush(s, cols = ['#2F7D32', '#3E9B3A', '#246B2A']) { const g = new THREE.Group(); for (let i = 0; i < 5; i++) { const b = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5 * s * (0.7 + rnd() * 0.5), 2), std(cols[i % 3], 0.8, { flatShading: true })); b.position.set((rnd() - 0.5) * s, 0.3 * s + rnd() * 0.2 * s, (rnd() - 0.5) * s); g.add(b); } return g; }
+function rock(s, c = '#8E9A92') { const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.4 * s, 0), std(c, 0.85, { flatShading: true })); r.scale.set(1.2, 0.7, 1); r.rotation.y = rnd() * 3; r.position.y = 0.15 * s; const g = new THREE.Group(); g.add(r); return g; }
+function fruit(kind) {
+  const g = new THREE.Group();
+  const col = { apple: '#E5322D', orange: '#F79A1E', berry: '#7A3FB8', ice: '#9FE3FF', star: '#FFD54A', candy: '#FF5FA2', shell: '#FFB3A0' }[kind];
+  const b = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 24), std(col, 0.25, { clearcoat: 1, clearcoatRoughness: 0.1, emissive: kind === 'star' ? '#7A5A00' : '#000000' }));
+  b.scale.set(1, 0.92, 1); b.position.y = 0.27; g.add(b);
+  if (kind === 'apple' || kind === 'orange') {
+    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.025, 0.14), std('#5A3A1A')); st.position.y = 0.58; g.add(st);
+    const lf = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 8), std('#4CAF50', 0.5)); lf.scale.set(1.6, 0.3, 0.8); lf.position.set(0.1, 0.6, 0); lf.rotation.z = 0.5; g.add(lf);
+  }
+  return g;
+}
+function tree(kind) {
+  const g = new THREE.Group();
+  if (kind === 'pine') { const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.5), std('#6B4A2E')); tr.position.y = 0.25; g.add(tr); for (let i = 0; i < 3; i++) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.7 - i * 0.18, 0.8, 8), std(i === 2 ? '#F4F8FC' : '#2F6E4E', 0.7, { flatShading: true })); c.position.y = 0.7 + i * 0.45; g.add(c); } }
+  if (kind === 'cactus') { const m = std('#4E9A4A', 0.6); const c = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 1.0, 8, 16), m); c.position.y = 0.7; g.add(c); [[-1, 0.8], [1, 1.0]].forEach(([s, y]) => { const a = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.4, 8, 12), m); a.position.set(s * 0.35, y, 0); g.add(a); const k = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.2, 8, 12), m); k.rotation.z = Math.PI / 2; k.position.set(s * 0.22, y - 0.25, 0); g.add(k); }); }
+  if (kind === 'lolly') { const st = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.2), std('#FFFFFF', 0.3)); st.position.y = 0.6; g.add(st); const d = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.14, 40), std(['#FF5FA2', '#7FD8FF', '#FFD54A'][Math.floor(rnd() * 3)], 0.2, { clearcoat: 1 })); d.rotation.x = Math.PI / 2; d.position.y = 1.35; g.add(d); const sw = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.05, 12, 40), std('#FFFFFF', 0.2)); sw.position.set(0, 1.35, 0.08); g.add(sw); }
+  if (kind === 'crystal') { for (let i = 0; i < 4; i++) { const c = new THREE.Mesh(new THREE.OctahedronGeometry(0.3 + rnd() * 0.25, 0), std(['#9B7BFF', '#5FD3FF', '#FF7BE5'][i % 3], 0.1, { clearcoat: 1, emissive: '#2A1060' })); c.scale.y = 1.8; c.position.set((rnd() - 0.5) * 0.6, 0.4, (rnd() - 0.5) * 0.6); c.rotation.z = (rnd() - 0.5) * 0.6; g.add(c); } }
+  if (kind === 'palm') { const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.13, 1.6, 10), std('#A0764A')); tr.position.y = 0.8; tr.rotation.z = 0.15; g.add(tr); for (let i = 0; i < 6; i++) { const f = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 8), std('#3FA64A', 0.6)); f.scale.set(1.4, 0.12, 0.35); const a = i / 6 * Math.PI * 2; f.position.set(0.12 + Math.cos(a) * 0.5, 1.62, Math.sin(a) * 0.5); f.rotation.y = -a; f.rotation.z = -0.35; g.add(f); } }
+  return g;
+}
+
+const edgeSpots = [];
+const NP = +(P.get('props') || 18);
+for (let i = 0; i < NP; i++) { const side = i % 2 ? 1 : -1; edgeSpots.push([side * (3.3 + rnd() * 1.6), -9 + i * (19 / NP) + rnd() * 0.5]); }
+const PROPS = {
+  forest: () => rnd() > 0.35 ? bush(1 + rnd() * 0.6) : rock(1 + rnd() * 0.5),
+  desert: () => rnd() > 0.5 ? tree('cactus') : rock(1 + rnd(), '#C98F5A'),
+  snow: () => rnd() > 0.4 ? tree('pine') : rock(1 + rnd() * 0.5, '#DDE8F2'),
+  space: () => rnd() > 0.4 ? tree('crystal') : rock(1 + rnd() * 0.6, '#4A3C7A'),
+  beach: () => rnd() > 0.55 ? tree('palm') : rock(0.8 + rnd() * 0.4, '#D8C7A6'),
+  candy: () => rnd() > 0.35 ? tree('lolly') : bush(1 + rnd() * 0.4, ['#FF8DC0', '#FFB6D9', '#C79BFF'])
+};
+edgeSpots.forEach(([x, z]) => add(PROPS[THEME](), x, z));
+const FK = { forest: 'apple', desert: 'orange', snow: 'ice', space: 'star', beach: 'shell', candy: 'candy' }[THEME];
+(FRUIT ? [[-1.6, -3.2], [1.9, -1.2], [-2.0, 2.6], [2.2, 4.2], [0.6, -5.2], [2.3, 6.6], [-2.6, 0.6], [-2.4, -6.4]] : []).forEach(([x, z]) => add(fruit(FK), x, z));
+
+// ---------- Segmented snake ----------
+if (SNAKE) {
+  const C = { green: ['#3FA83F', '#2C8A33', '#F2E07C'], red: ['#E8483A', '#B92E26', '#FFE1A6'], blue: ['#3A9BE0', '#1E6FB8', '#DDF1FF'], gold: ['#F5C534', '#C99412', '#FFF2B8'], ninja: ['#3A3F47', '#202328', '#6B717B'] }[SKIN] || ['#3FA83F', '#2C8A33', '#F2E07C'];
+  const path = new THREE.CatmullRomCurve3([[0.4, 7.5], [-0.8, 6.0], [-1.0, 4.4], [0.4, 3.2], [1.1, 1.8], [0.5, 0.4], [-0.1, -0.6], [0.35, -1.9]].map(([x, z]) => new THREE.Vector3(x, 0, z)));
+  const NSEG = 22;
+  for (let i = 0; i < NSEG; i++) {
+    const u = i / (NSEG - 1), p = path.getPointAt(u), r = 0.2 + 0.15 * Math.min(1, u * 2.5);
+    const col = new THREE.Color(SKIN === 'rainbow' ? new THREE.Color().setHSL((u * 0.9) % 1, 0.9, 0.52) : (i % 2 ? C[0] : C[1]));
+    const s = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 24), std(col, 0.35, { clearcoat: 0.8, clearcoatRoughness: 0.35 }));
+    s.scale.set(1, 0.9, 1); add(s, p.x, p.z, r * 0.88);
+    const belly = new THREE.Mesh(new THREE.SphereGeometry(r * 0.55, 16, 12), std(C[2], 0.5)); belly.scale.set(1, 0.4, 1); belly.position.set(0, r * 0.82, 0); s.add(belly); belly.visible = false;
+  }
+  // head
+  const hp = path.getPointAt(1), ht = path.getTangentAt(1);
+  const head = new THREE.Group(); head.scale.setScalar(1.3); add(head, hp.x + ht.x * 0.35, hp.z + ht.z * 0.35, 0.38);
+  head.lookAt(head.position.clone().add(new THREE.Vector3(ht.x, 0, ht.z)));
+  const hm = std(SKIN === 'rainbow' ? '#F0442C' : C[0], 0.28, { clearcoat: 1, clearcoatRoughness: 0.1 });
+  const sk = new THREE.Mesh(new THREE.SphereGeometry(0.46, 40, 30), hm); sk.scale.set(1.05, 0.8, 1.2); head.add(sk);
+  const white = std('#FFFFFF', 0.15, { clearcoat: 1 }), blk = std('#111111', 0.2);
+  [-1, 1].forEach((s) => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 16), white); e.position.set(s * 0.22, 0.28, 0.2); head.add(e); const p = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 12), blk); p.position.set(s * 0.22, 0.36, 0.28); head.add(p); const gl = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 6), new THREE.MeshBasicMaterial({ color: '#fff' })); gl.position.set(s * 0.2, 0.43, 0.32); head.add(gl); });
+  const tg = std('#E2343C', 0.3, { clearcoat: 1 });
+  const tc = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.45), tg); tc.rotation.x = Math.PI / 2; tc.position.set(0, -0.05, 0.72); head.add(tc);
+  [-1, 1].forEach((s) => { const f = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.16), tg); f.rotation.set(Math.PI / 2, 0, 0); f.rotation.y = s * 0.5; f.position.set(s * 0.04, -0.05, 0.98); head.add(f); });
+}
+
+// ---------- Lights / camera ----------
+scene.add(new THREE.HemisphereLight('#FFFDF0', THEME === 'space' ? '#100830' : '#2A4A20', THEME === 'space' ? 0.5 : 0.75));
+const key = new THREE.DirectionalLight(THEME === 'space' ? '#C8B8FF' : '#FFF2D6', THEME === 'space' ? 2.0 : 2.6);
+key.position.set(-6, 12, 4); key.castShadow = true; key.shadow.mapSize.set(4096, 4096);
+Object.assign(key.shadow.camera, { left: -9, right: 9, top: 12, bottom: -12 }); key.shadow.radius = 6; key.shadow.bias = -0.0004;
+scene.add(key);
+const cam = new THREE.PerspectiveCamera(+(P.get('fov') || 40), W / H, 0.1, 100);
+const cz = +(P.get('cz') || 6.5), cy = +(P.get('cy') || 15);
+cam.position.set(0, cy, cz); cam.lookAt(0, 0, +(P.get('tz') || 0.6));
+renderer.render(scene, cam);
+window.__done = true;
+</script>
+</body>
+</html>

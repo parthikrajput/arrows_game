@@ -4,352 +4,406 @@
   "v": 1,
   "at": "2026-10-27T17:05:00Z"
  },
- "title": "Snakes Slither Game UI",
+ "title": "Snake Slither Game UI",
  "launch": {
   "view": "canvas"
  },
  "pages": [],
  "boards": {
-  "Flow.dc.html": {
+  "Brand.dc.html": {
    "x": 0,
    "y": 0,
-   "w": 1420,
-   "h": 840,
-   "title": "Game flow map (Phase 1)",
+   "w": 1640,
+   "h": 940,
+   "title": "Brand \u00b7 icon, logo, palette, banner"
+  },
+  "ScreenFlow.dc.html": {
+   "x": 1760,
+   "y": 0,
+   "w": 2066,
+   "h": 1614,
+   "title": "Screen flow",
    "is_interactive": true
   },
   "Main.dc.html": {
    "x": 0,
-   "y": 4140,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.1 · Splash · Jungle Dawn intro",
+   "title": "Splash",
    "is_interactive": true
   },
   "Home.dc.html": {
    "x": 470,
-   "y": 4140,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.3 · Home",
-   "is_interactive": true
-  },
-  "Starter.dc.html": {
-   "x": 940,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "Starter Pack popup (04 §8.4)",
+   "title": "Home",
    "is_interactive": true
   },
   "LevelMap.dc.html": {
-   "x": 1410,
-   "y": 4140,
+   "x": 940,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.4 · Level map",
-   "is_interactive": true
-  },
-  "LevelStart.dc.html": {
-   "x": 1880,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "5.4 · Level start sheet",
-   "is_interactive": true
-  },
-  "Daily.dc.html": {
-   "x": 2350,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "5.13 · Daily puzzle & streak",
-   "is_interactive": true
-  },
-  "Saver.dc.html": {
-   "x": 2820,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "Streak Saver popup",
-   "is_interactive": true
-  },
-  "DailyPlay.dc.html": {
-   "x": 3290,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "5.13 · Daily gameplay (Tue · Par Moves)",
-   "is_interactive": true
-  },
-  "DailyResult.dc.html": {
-   "x": 3760,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "5.13 · Daily result",
-   "is_interactive": true
-  },
-  "Wheel.dc.html": {
-   "x": 4230,
-   "y": 4140,
-   "w": 390,
-   "h": 844,
-   "title": "5.14 · Lucky Lily Wheel",
-   "is_interactive": true
-  },
-  "Tutorial.dc.html": {
-   "x": 0,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "5.7 · FTUE L1 tutorial",
-   "is_interactive": true
-  },
-  "Intro.dc.html": {
-   "x": 470,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "5.7 · Mechanic intro card (L11)",
+   "title": "Level Map",
    "is_interactive": true
   },
   "Play.dc.html": {
-   "x": 940,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "5.5 · Gameplay HUD",
-   "is_interactive": true
-  },
-  "Preview.dc.html": {
    "x": 1410,
-   "y": 5404,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "Tongue-Flick Preview (blocked)",
-   "is_interactive": true
-  },
-  "Hint.dc.html": {
-   "x": 1880,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "Glow Firefly Hint + Shield",
-   "is_interactive": true
-  },
-  "Hammer.dc.html": {
-   "x": 2350,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "Hammer target mode",
+   "title": "Gameplay",
    "is_interactive": true
   },
   "Pause.dc.html": {
-   "x": 2820,
-   "y": 5404,
+   "x": 1880,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.6 · Pause & settings",
-   "is_interactive": true
-  },
-  "MiniShop.dc.html": {
-   "x": 3290,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "Mini shop sheet (04 §3)",
-   "is_interactive": true
-  },
-  "Stuck.dc.html": {
-   "x": 3760,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "Stuck sheet (07 §12)",
-   "is_interactive": true
-  },
-  "LevelUnavailable.dc.html": {
-   "x": 4230,
-   "y": 5404,
-   "w": 390,
-   "h": 844,
-   "title": "Level unavailable (E-LVL-001)",
+   "title": "Pause",
    "is_interactive": true
   },
   "Complete.dc.html": {
-   "x": 0,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.10 · Level complete",
-   "is_interactive": true
-  },
-  "Gift.dc.html": {
-   "x": 470,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.11 · Jungle Gift Basket (L40)",
-   "is_interactive": true
-  },
-  "RushIntro.dc.html": {
-   "x": 940,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.12 · Rush intro card",
-   "is_interactive": true
-  },
-  "Rush.dc.html": {
-   "x": 1410,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.12 · Golden Slither Rush",
-   "is_interactive": true
-  },
-  "RushResults.dc.html": {
-   "x": 1880,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.12 · Rush results",
-   "is_interactive": true
-  },
-  "Chest.dc.html": {
    "x": 2350,
-   "y": 6668,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.11 · Jungle Treasure Chest (L500)",
-   "is_interactive": true
-  },
-  "PhaseComplete.dc.html": {
-   "x": 2820,
-   "y": 6668,
-   "w": 390,
-   "h": 844,
-   "title": "5.18 · Phase complete",
-   "is_interactive": true
-  },
-  "SecondChance.dc.html": {
-   "x": 0,
-   "y": 7932,
-   "w": 390,
-   "h": 844,
-   "title": "5.8 · Second Chance",
+   "title": "Level Complete",
    "is_interactive": true
   },
   "Failed.dc.html": {
-   "x": 470,
-   "y": 7932,
+   "x": 2820,
+   "y": 1980,
    "w": 390,
    "h": 844,
-   "title": "5.9 · Level failed",
+   "title": "Level Failed",
+   "is_interactive": true
+  },
+  "Daily.dc.html": {
+   "x": 3290,
+   "y": 1980,
+   "w": 390,
+   "h": 844,
+   "title": "Daily Challenge",
    "is_interactive": true
   },
   "Shop.dc.html": {
    "x": 0,
-   "y": 9196,
+   "y": 3084,
    "w": 390,
    "h": 844,
-   "title": "5.15 · Shop",
+   "title": "Shop \u00b7 skins, food, themes",
+   "is_interactive": true
+  },
+  "SkinPreview.dc.html": {
+   "x": 470,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Snake skin preview",
+   "is_interactive": true
+  },
+  "Themes.dc.html": {
+   "x": 940,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Theme selection",
+   "is_interactive": true
+  },
+  "Rewards.dc.html": {
+   "x": 1410,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Rewards",
+   "is_interactive": true
+  },
+  "Leaderboards.dc.html": {
+   "x": 1880,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Leaderboard",
+   "is_interactive": true
+  },
+  "Profile.dc.html": {
+   "x": 2350,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Profile",
+   "is_interactive": true
+  },
+  "Settings.dc.html": {
+   "x": 2820,
+   "y": 3084,
+   "w": 390,
+   "h": 844,
+   "title": "Settings",
+   "is_interactive": true
+  },
+  "Starter.dc.html": {
+   "x": 0,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Starter Pack popup (04 \u00a78.4)",
+   "is_interactive": true
+  },
+  "LevelStart.dc.html": {
+   "x": 470,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.4 \u00b7 Level start sheet",
+   "is_interactive": true
+  },
+  "Saver.dc.html": {
+   "x": 940,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Streak Saver popup",
+   "is_interactive": true
+  },
+  "DailyPlay.dc.html": {
+   "x": 1410,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.13 \u00b7 Daily gameplay (Tue \u00b7 Par Moves)",
+   "is_interactive": true
+  },
+  "DailyResult.dc.html": {
+   "x": 1880,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.13 \u00b7 Daily result",
+   "is_interactive": true
+  },
+  "Wheel.dc.html": {
+   "x": 2350,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.14 \u00b7 Lucky Lily Wheel",
+   "is_interactive": true
+  },
+  "Tutorial.dc.html": {
+   "x": 2820,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.7 \u00b7 FTUE L1 tutorial",
+   "is_interactive": true
+  },
+  "Intro.dc.html": {
+   "x": 3290,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.7 \u00b7 Mechanic intro card (L11)",
+   "is_interactive": true
+  },
+  "Preview.dc.html": {
+   "x": 3760,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Tongue-Flick Preview (blocked)",
+   "is_interactive": true
+  },
+  "Hint.dc.html": {
+   "x": 4230,
+   "y": 4448,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Glow Firefly Hint + Shield",
+   "is_interactive": true
+  },
+  "Hammer.dc.html": {
+   "x": 0,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Hammer target mode",
+   "is_interactive": true
+  },
+  "MiniShop.dc.html": {
+   "x": 470,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Mini shop sheet (04 \u00a73)",
+   "is_interactive": true
+  },
+  "Stuck.dc.html": {
+   "x": 940,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Stuck sheet (07 \u00a712)",
+   "is_interactive": true
+  },
+  "LevelUnavailable.dc.html": {
+   "x": 1410,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 Level unavailable (E-LVL-001)",
+   "is_interactive": true
+  },
+  "Gift.dc.html": {
+   "x": 1880,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.11 \u00b7 Jungle Gift Basket (L40)",
+   "is_interactive": true
+  },
+  "RushIntro.dc.html": {
+   "x": 2350,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.12 \u00b7 Rush intro card",
+   "is_interactive": true
+  },
+  "Rush.dc.html": {
+   "x": 2820,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.12 \u00b7 Golden Slither Rush",
+   "is_interactive": true
+  },
+  "RushResults.dc.html": {
+   "x": 3290,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.12 \u00b7 Rush results",
+   "is_interactive": true
+  },
+  "Chest.dc.html": {
+   "x": 3760,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.11 \u00b7 Jungle Treasure Chest (L500)",
+   "is_interactive": true
+  },
+  "PhaseComplete.dc.html": {
+   "x": 4230,
+   "y": 5472,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.18 \u00b7 Phase complete",
+   "is_interactive": true
+  },
+  "SecondChance.dc.html": {
+   "x": 0,
+   "y": 6496,
+   "w": 390,
+   "h": 844,
+   "title": "Archive \u00b7 5.8 \u00b7 Second Chance",
    "is_interactive": true
   },
   "Vip.dc.html": {
    "x": 470,
-   "y": 9196,
+   "y": 6496,
    "w": 390,
    "h": 844,
-   "title": "5.16 · VIP paywall",
+   "title": "Archive \u00b7 5.16 \u00b7 VIP paywall",
    "is_interactive": true
-  },
-  "Leaderboards.dc.html": {
-   "x": 940,
-   "y": 9196,
-   "w": 390,
-   "h": 844,
-   "title": "5.17 · Leaderboards",
-   "is_interactive": true
-  },
-  "Board.dc.html": {
-   "x": 0,
-   "y": 10460,
-   "w": 358,
-   "h": 358,
-   "title": "Component · Garden board"
-  },
-  "Pip.dc.html": {
-   "x": 438,
-   "y": 10460,
-   "w": 200,
-   "h": 200,
-   "title": "Component · Pip mascot"
-  },
-  "Booster.dc.html": {
-   "x": 718,
-   "y": 10460,
-   "w": 64,
-   "h": 64,
-   "title": "Component · Booster icon"
-  },
-  "Tortoise.dc.html": {
-   "x": 862,
-   "y": 10460,
-   "w": 64,
-   "h": 64,
-   "title": "Component · Grandpa Tortoise"
   },
   "Backdrop.dc.html": {
-   "x": 1006,
-   "y": 10460,
+   "x": 940,
+   "y": 6496,
    "w": 390,
    "h": 844,
-   "title": "Component · Garden backdrop"
+   "title": "Archive \u00b7 Component \u00b7 Garden backdrop"
   },
-  "ScreenFlow.dc.html": {
+  "Flow.dc.html": {
    "x": 0,
-   "y": 1240,
-   "w": 3030,
-   "h": 2568,
-   "title": "Screen flow · real screens in game order",
+   "y": 7520,
+   "w": 1420,
+   "h": 840,
+   "title": "Archive \u00b7 Game flow map (Phase 1)",
    "is_interactive": true
   },
   "AppIcon.dc.html": {
-   "x": 1560,
-   "y": 0,
+   "x": 1500,
+   "y": 7520,
    "w": 1240,
    "h": 760,
-   "title": "App icon · Snake Slither"
+   "title": "Archive \u00b7 App icon \u00b7 Snake Slither"
+  },
+  "Board.dc.html": {
+   "x": 2820,
+   "y": 7520,
+   "w": 358,
+   "h": 358,
+   "title": "Archive \u00b7 Component \u00b7 Garden board"
+  },
+  "Pip.dc.html": {
+   "x": 3258,
+   "y": 7520,
+   "w": 200,
+   "h": 200,
+   "title": "Archive \u00b7 Component \u00b7 Pip mascot"
+  },
+  "Booster.dc.html": {
+   "x": 3538,
+   "y": 7520,
+   "w": 64,
+   "h": 64,
+   "title": "Archive \u00b7 Component \u00b7 Booster icon"
+  },
+  "Tortoise.dc.html": {
+   "x": 3682,
+   "y": 7520,
+   "w": 64,
+   "h": 64,
+   "title": "Archive \u00b7 Component \u00b7 Grandpa Tortoise"
   }
  },
  "order": [
-  "Flow.dc.html",
-  "AppIcon.dc.html",
+  "Brand.dc.html",
   "ScreenFlow.dc.html",
   "Main.dc.html",
   "Home.dc.html",
-  "Starter.dc.html",
   "LevelMap.dc.html",
-  "LevelStart.dc.html",
+  "Play.dc.html",
+  "Pause.dc.html",
+  "Complete.dc.html",
+  "Failed.dc.html",
   "Daily.dc.html",
+  "Shop.dc.html",
+  "SkinPreview.dc.html",
+  "Themes.dc.html",
+  "Rewards.dc.html",
+  "Leaderboards.dc.html",
+  "Profile.dc.html",
+  "Settings.dc.html",
+  "Starter.dc.html",
+  "LevelStart.dc.html",
   "Saver.dc.html",
   "DailyPlay.dc.html",
   "DailyResult.dc.html",
   "Wheel.dc.html",
   "Tutorial.dc.html",
   "Intro.dc.html",
-  "Play.dc.html",
   "Preview.dc.html",
   "Hint.dc.html",
   "Hammer.dc.html",
-  "Pause.dc.html",
   "MiniShop.dc.html",
   "Stuck.dc.html",
   "LevelUnavailable.dc.html",
-  "Complete.dc.html",
   "Gift.dc.html",
   "RushIntro.dc.html",
   "Rush.dc.html",
@@ -357,70 +411,41 @@
   "Chest.dc.html",
   "PhaseComplete.dc.html",
   "SecondChance.dc.html",
-  "Failed.dc.html",
-  "Shop.dc.html",
   "Vip.dc.html",
-  "Leaderboards.dc.html",
+  "Backdrop.dc.html",
+  "Flow.dc.html",
+  "AppIcon.dc.html",
   "Board.dc.html",
   "Pip.dc.html",
   "Booster.dc.html",
-  "Tortoise.dc.html",
-  "Backdrop.dc.html"
+  "Tortoise.dc.html"
  ],
  "notes": {
-  "row0": {
+  "n0": {
    "x": 0,
-   "y": -300,
-   "text": "0 · Game flow map — every box opens its screen",
+   "y": -160,
+   "text": "Snake Slither \u00b7 new look (from the reference image) \u2014 brand + screen flow",
    "kind": "title1",
    "maxW": 4600
   },
-  "row1": {
+  "n1": {
    "x": 0,
-   "y": 3840,
-   "text": "1 · Launch, hub & daily",
+   "y": 1810,
+   "text": "1 \u00b7 Core loop \u2014 splash, home, map, gameplay, results, daily",
    "kind": "title1",
    "maxW": 4600
   },
-  "row2": {
+  "n2": {
    "x": 0,
-   "y": 5104,
-   "text": "2 · Gameplay loop",
+   "y": 2914,
+   "text": "2 \u00b7 Shop, skins, themes, rewards, ranks, profile, settings",
    "kind": "title1",
    "maxW": 4600
   },
-  "row3": {
+  "n3": {
    "x": 0,
-   "y": 6368,
-   "text": "3 · Win & rewards",
-   "kind": "title1",
-   "maxW": 4600
-  },
-  "row4": {
-   "x": 0,
-   "y": 7632,
-   "text": "4 · Fail & retry",
-   "kind": "title1",
-   "maxW": 4600
-  },
-  "row5": {
-   "x": 0,
-   "y": 8896,
-   "text": "5 · Shop, VIP & ranks",
-   "kind": "title1",
-   "maxW": 4600
-  },
-  "row6": {
-   "x": 0,
-   "y": 10160,
-   "text": "6 · Shared components",
-   "kind": "title1",
-   "maxW": 4600
-  },
-  "rowSF": {
-   "x": 0,
-   "y": 940,
-   "text": "0b · Screen flow — the real screens along the game flow",
+   "y": 4148,
+   "text": "Archive \u00b7 earlier puzzle version (Phase 1 docs). Kept for reference, not part of the new flow.",
    "kind": "title1",
    "maxW": 4600
   }

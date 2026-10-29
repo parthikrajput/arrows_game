@@ -1,66 +1,90 @@
-# Snakes Slither — UI design canvas
+# Snake Slither — UI design canvas
 
-Source files for the Phase 1 UI design canvas (35 screens, a flow map and 6 components), exported from the live Claude design canvas and aligned with the Phase 1 docs.
+Source files for the Snake Slither UI design canvas. It holds the new look from the reference image: 15 screens, a brand board and a screen flow board. The earlier puzzle version is kept in an archive section.
 
-Related docs: [README](../../README.md) · [Phase 1 index](../../phases/phase_1/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md) · [04 Boosters, Coins & Shop](../../phases/phase_1/04_BOOSTERS_COINS_SHOP.md) · [05 Daily & Streak](../../phases/phase_1/05_DAILY_CHALLENGE_AND_STREAK.md)
+Related docs: [README](../../README.md) · [Brand assets](../brand/README.md) · [Phase 1 index](../../phases/phase_1/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md)
 
 Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 
+## Important: the design now differs from the Phase 1 docs
+
+The new screens follow the reference image, not the Phase 1 docs:
+
+- Gameplay is classic snake: eat fruit, grow, score and best score, swipe or D-pad. The docs describe a puzzle (tap snakes out, moves and par, hearts, boosters).
+- New features that are not in the docs: gems, snake skins, food items, themes, a Rewards screen, a Profile screen and a Settings screen.
+
+The docs are not changed yet. Update them before any build work starts.
+
 ## Layout
 
-`canvas.json` lists every artboard, its position and its title. Rows follow the game flow; titles use the section numbers of [06 §5](../../phases/phase_1/06_UI_UX_SCREENS.md#5-screens).
+`canvas.json` lists every artboard, its position and its title.
 
-| Row | Screens |
+| Section | Boards |
 |---|---|
-| 0 · Game flow map | Flow (every box links to its screen) — static copy: `flow-map.png` |
-| 0b · Screen flow | ScreenFlow: the 32 real screens, scaled down and connected in game order (click any to open) |
-| 1 · Launch, hub & daily | Main (5.1 Jungle Dawn), Home (5.3), Starter, LevelMap (5.4), LevelStart, Daily (5.13), Saver, DailyPlay, DailyResult, Wheel (5.14) |
-| 2 · Gameplay loop | Tutorial (5.7), Intro (5.7 card), Play (5.5), Preview, Hint, Hammer, Pause (5.6), MiniShop, Stuck, LevelUnavailable |
-| 3 · Win & rewards | Complete (5.10), Gift (5.11), RushIntro, Rush (5.12), RushResults, Chest (L500), PhaseComplete (5.18) |
-| 4 · Fail & retry | SecondChance (5.8), Failed (5.9) |
-| 5 · Shop, VIP & ranks | Shop (5.15), Vip (5.16), Leaderboards (5.17) |
-| 6 · Components | Board, Pip, Booster, Tortoise, Backdrop |
+| Top | `Brand` (app icon, logo, palette, store banner, type and buttons) · `ScreenFlow` (all 15 screens, scaled down and connected in game order) |
+| 1 · Core loop | `Main` (Splash), `Home`, `LevelMap`, `Play` (Gameplay), `Pause`, `Complete`, `Failed`, `Daily` |
+| 2 · Meta | `Shop` (Skins, Food, Themes tabs), `SkinPreview`, `Themes`, `Rewards` (Daily, Milestones), `Leaderboards` (Global, Friends), `Profile`, `Settings` |
+| Archive | The earlier puzzle screens and components (`Starter`, `Hint`, `Hammer`, `Rush`, `Wheel`, `Board`, `Pip`, `Booster`, and others). Titles start with "Archive". |
+
+Screenshots of every new screen are in `screens/`.
 
 ## Clickable prototype
 
-Open the canvas in PLAY mode and start from Splash. Prototype-only shortcuts on the gameplay screen: tap the board to win the level, tap the hearts to reach Second Chance, tap a booster to see its state. Main paths:
+Open the canvas in Play mode and start from Splash.
 
-- Splash → Home → Level Map → Level start → Gameplay → Level complete → Next.
-- Gameplay → hearts 0 → Second Chance → revive (back to Gameplay) or No thanks → Level failed → Retry / Home.
-- Home → Daily → Daily gameplay → Daily result → Daily.
-- Gift Basket and Rush: Gift → Collect; Rush intro → Rush → Rush results → next level. L500: Treasure Chest → Rush intro.
-- Home → Starter Pack bubble, Lily Wheel, Shop → VIP, Ranks, Settings.
+- Splash → Home → Level Map → Gameplay → Level Complete → Next Level.
+- Gameplay → pause button → Pause → Resume, Restart, Home or Settings.
+- Prototype-only shortcuts on Gameplay: tap the board to finish the level; tap the Score box to reach Level Failed.
+- Level Failed → Retry or Home.
+- Home → Daily Challenge card → Play Now.
+- Home → gift button → Rewards. Home → avatar → Profile. Home → coin or gem pill → Shop.
+- Home bottom nav → Shop, Ranks (Leaderboard), Awards (Rewards), Settings.
+- Shop → tap a skin → Skin Preview. Shop → Themes tab → See all themes → Themes.
 
-5.2 Age Gate is not drawn on the canvas (removed on request); the spec still requires it ([04 §11](../../phases/phase_1/04_BOOSTERS_COINS_SHOP.md#11-compliance-target-age-1050--mixed-audience)).
+Interactive parts that work inside a screen:
 
-## Phase 1 values used on the canvas
+- Tabs in Shop, Rewards and Leaderboard.
+- The Claim button in Rewards.
+- Left and right arrows in Skin Preview (cycles all 6 skins).
+- Theme cards in Themes (changes the big preview and the button).
+- Sound, Music, Vibration and Notifications toggles in Settings.
 
-- Boosters: 3 only — Glow Firefly Hint (L3), Safety Shell Shield (L15), Magic Stone Hammer (L25). Shop prices 60/150, 80/200, 100/250.
-- Gift Basket L40: 150 coins + 1 Hint (rotation `(L/10) mod 3`).
-- Lucky Lily Wheel: 20 / 50 / 100 / 75 / Hint / Shield / Hammer / 500, equal slices, odds in the ⓘ sheet.
-- Streak ladder: 50 · 75 · 100+Hint · 150 · 150+Shield · 200+Hammer · 450+all 3+trophy.
-- Golden Slither Rush T1: 20 snakes, 30 s, +10 per snake, +100 full clear.
-- Treasure Chest L500: 1,000 coins + 2 of each booster + "Garden Hero" badge.
-- Starter Pack: ₹79, 800 coins + 3 Hint + 2 Hammer + 2 Shield, 48 h window after L15.
-- Stuck sheet: Restart only, no heart loss (`E-GAME-004`).
+## Values used on the screens
 
-## Shared components
+| Item | Value |
+|---|---|
+| Wallet | 8,420 coins, 96 gems |
+| Skins | Classic (equipped), Red 200, Blue 200, Rainbow 300, Gold 500, Ninja 500 |
+| Themes | Forest (equipped), Desert 200, Snow 200, Space 300, Beach 300, Candy 300 |
+| Food | Apple (owned), Golden Apple 150, Berry Mix 200, Magic Melon 250 |
+| Coin packs | 500 for ₹49, 1,200 for ₹99, 3,000 for ₹199 (+25%) |
+| Daily login | 50, 75, 100 coins, 1 gem, 150, 200 coins, then 5 gems on day 7 |
+| Daily Challenge | Play 3 games (50), Collect 20 fruits (80), Reach 500 score (100), all three = +5 gems |
+| Level Complete | 3 stars, +120 coins, +3 gems |
 
-| File | Props | Used by |
-|---|---|---|
-| `Board.dc.html` | `mode` (play, thumb, hint, preview, hammer, ftue, intro, rush), `size`, `tint` | Play and every gameplay state, Rush, LevelStart |
-| `Pip.dc.html` | `pose` (stand, wave, sleep, coil, face), `size` | Splash and Home (stand logo), Failed (sleep) |
-| `Booster.dc.html` | `kind` (hint, shield, hammer), `size`, `dim` | Play tray, Shop, MiniShop, Gift, Chest, Starter |
-| `Tortoise.dc.html` | `size` | Tutorial bubble, LevelUnavailable |
-| `Backdrop.dc.html` | — | Garden background layer for Daily, Shop, Leaderboards, Complete, Gift, PhaseComplete, DailyResult |
+These are sample values for the design. Final numbers must come from the economy docs.
+
+## Colors and type
+
+| Token | Hex |
+|---|---|
+| Forest (primary) | `#075B35` |
+| Emerald (secondary) | `#13864D` |
+| Leaf | `#A8D94F` |
+| Gold | `#F4B72F` |
+| Cream (background) | `#F7F4E8` |
+| Card | `#FFFEF8` |
+| Text | `#163B28` |
+
+Headlines use Fredoka; body text, labels and numbers use Nunito.
 
 ## Format
 
-Each `*.dc.html` file is one artboard: HTML/SVG markup inside `<x-dc>` with `{{ }}` bindings, `sc-for` / `sc-if` blocks, `dc-import` for components, and a `class Component extends DCLogic` script whose `renderVals()` supplies the values. `support.js` is provided by the canvas runtime and is not part of this folder, so open the files in the canvas, not directly in a browser.
+Each `*.dc.html` file is one artboard: HTML and SVG inside `<x-dc>`, with these parts:
 
-## Design tokens
+- `{{ }}` bindings, `sc-for` and `sc-if` blocks.
+- A `class Component extends DCLogic` script whose `renderVals()` supplies the values.
 
-- Colours: bgSage `#E8F5E9`, primary `#2E7D32`, coinGold `#FFCA28`, heart `#E53935`, splashCanopy `#12301F`.
-- Fonts: Fredoka (headings, numbers) and Nunito (body).
-- Snake palette: red `#FF7043`, green `#7CB342`, blue `#29B6F6`, yellow `#FFCA28`, purple `#9575CD`, orange `#FFA726`, pink `#F06292`, teal `#26A69A`.
-- Realism: SVG radial and linear gradients, `feGaussianBlur` soft shadows, `feTurbulence` textures for grass, dirt, stone and wood, and layered strokes to shade the snake tubes.
+Images are canvas assets (`/_blob/<id>`). The same images are in [brand](../brand/README.md). The canvas runtime provides `support.js`, which is not in this folder. Open the files in the canvas, not directly in a browser.
+
+The new screens are generated by the Python scripts in [`../brand/source`](../brand/source). `v2_common.py` holds the shared parts: status bar, buttons, cards, coin, gem and star icons, and animations.

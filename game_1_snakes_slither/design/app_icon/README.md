@@ -2,7 +2,9 @@
 
 Premium 3D app icon: a glossy emerald snake coiled on a small grass island, deep forest-green background, soft key light from the upper left and a lime rim light.
 
-Related docs: [UI canvas](../ui_canvas/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md)
+> Replaced: the current icon and logo are in [brand](../brand/README.md). This folder keeps the earlier icon for reference.
+
+Related docs: [Brand assets](../brand/README.md) · [UI canvas](../ui_canvas/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md)
 
 | File | What it is |
 |---|---|

@@ -11,141 +11,30 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
 <style>
 body{margin:0}
-a{color:#2E7D32}a:hover{color:#1B5E20}
+a{color:inherit;text-decoration:none}
+.ss-press{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s}
+.ss-press:hover{transform:translateY(-1px)}
+.ss-press:active{transform:translateY(2px) scale(.97)}
+@keyframes ssBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes ssPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes ssGlow{0%,100%{box-shadow:0 0 0 0 rgba(168,217,79,.55)}60%{box-shadow:0 0 0 14px rgba(168,217,79,0)}}
+@keyframes ssIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ssPop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes ssFall{0%{transform:translate(0,-60px) rotate(0)}100%{transform:translate(60px,920px) rotate(260deg)}}
+@keyframes ssSway{0%,100%{transform:perspective(600px) rotateY(-10deg)}50%{transform:perspective(600px) rotateY(10deg)}}
+@keyframes ssFloatUp{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes ssConfetti{0%{transform:translateY(-40px) rotate(0)}100%{transform:translateY(860px) rotate(540deg)}}
+@keyframes ssShine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+.ss-in{animation:ssIn .5s cubic-bezier(.2,.9,.3,1) both}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #7DBF5A; color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif;">
-  <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0;">
-    <defs>
-      <radialGradient id="lmLawn" cx="0.5" cy="0.45" r="0.85"><stop offset="0" stop-color="#A9DA86"></stop><stop offset="0.7" stop-color="#78B856"></stop><stop offset="1" stop-color="#5A9A3E"></stop></radialGradient>
-      <radialGradient id="lmTree" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#8FD06A"></stop><stop offset="1" stop-color="#2D6E27"></stop></radialGradient>
-      <radialGradient id="lmPond" cx="0.4" cy="0.35" r="0.75"><stop offset="0" stop-color="#B3E5FC"></stop><stop offset="0.6" stop-color="#4FC3F7"></stop><stop offset="1" stop-color="#0277BD"></stop></radialGradient>
-      <filter id="lmGrass" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.12" numOctaves="2" seed="5" result="n"></feTurbulence><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.1  0 0 0 0 0.25  0 0 0 0 0.05  0 0 0 0.9 -0.3"></feColorMatrix><feComposite in2="SourceGraphic" operator="in"></feComposite></filter>
-      <filter id="lmDirt" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="2" seed="8" result="n"></feTurbulence><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0 0.1  0 0 0 0.9 -0.25"></feColorMatrix><feComposite in2="SourceGraphic" operator="in"></feComposite></filter>
-      <filter id="lmShadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"></feGaussianBlur></filter>
-    </defs>
-    <rect x="0" y="0" width="390" height="844" fill="url(#lmLawn)"></rect>
-    <rect x="0" y="0" width="390" height="844" fill="#000000" filter="url(#lmGrass)"></rect>
-
-    <ellipse cx="330" cy="672" rx="48" ry="24" fill="#2E5A1E" opacity="0.35" filter="url(#lmShadow)"></ellipse>
-    <ellipse cx="330" cy="668" rx="46" ry="22" fill="url(#lmPond)" stroke="#9E8B6A" stroke-width="3"></ellipse>
-    <ellipse cx="316" cy="660" rx="14" ry="4" fill="#FFFFFF" opacity="0.55"></ellipse>
-    <g fill="#43A047"><ellipse cx="344" cy="674" rx="7" ry="4"></ellipse><ellipse cx="322" cy="678" rx="5" ry="3"></ellipse></g>
-
-    <path d="{{ vine }}" fill="none" stroke="#2E4A1E" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" opacity="0.25" filter="url(#lmShadow)"></path>
-    <path d="{{ vine }}" fill="none" stroke="#8A6A45" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
-    <path d="{{ vine }}" fill="none" stroke="#C7A57A" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"></path>
-    <path d="{{ vine }}" fill="none" stroke="#000000" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" filter="url(#lmDirt)"></path>
-    <path d="{{ vine }}" fill="none" stroke="#E8D3B0" stroke-width="3" stroke-dasharray="3 17" stroke-linecap="round" opacity="0.9"></path>
-
-    <g opacity="0.97">
-      <ellipse cx="46" cy="702" rx="30" ry="9" fill="#1F4A14" opacity="0.35" filter="url(#lmShadow)"></ellipse>
-      <rect x="42" y="662" width="8" height="40" rx="3" fill="#6D4C41"></rect>
-      <circle cx="46" cy="646" r="32" fill="url(#lmTree)"></circle>
-      <ellipse cx="356" cy="366" rx="28" ry="8" fill="#1F4A14" opacity="0.35" filter="url(#lmShadow)"></ellipse>
-      <rect x="352" y="328" width="8" height="36" rx="3" fill="#6D4C41"></rect>
-      <circle cx="356" cy="314" r="28" fill="url(#lmTree)"></circle>
-      <ellipse cx="22" cy="250" rx="38" ry="24" fill="url(#lmTree)"></ellipse>
-      <ellipse cx="370" cy="560" rx="34" ry="22" fill="url(#lmTree)"></ellipse>
-      <ellipse cx="34" cy="470" rx="26" ry="18" fill="url(#lmTree)"></ellipse>
-      <ellipse cx="376" cy="150" rx="30" ry="20" fill="url(#lmTree)"></ellipse>
-    </g>
-    <g><circle cx="330" cy="200" r="4" fill="#FFFFFF"></circle><circle cx="330" cy="200" r="1.6" fill="#FFD54F"></circle><circle cx="80" cy="390" r="4" fill="#F48FB1"></circle><circle cx="80" cy="390" r="1.6" fill="#FFD54F"></circle><circle cx="250" cy="760" r="4" fill="#FFFFFF"></circle><circle cx="250" cy="760" r="1.6" fill="#FFD54F"></circle><circle cx="120" cy="140" r="4" fill="#F48FB1"></circle><circle cx="120" cy="140" r="1.6" fill="#FFD54F"></circle><circle cx="300" cy="460" r="3.5" fill="#FFFFFF"></circle><circle cx="300" cy="460" r="1.4" fill="#FFD54F"></circle></g>
-  </svg>
-
-  <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="9">
-    <div style="{{ n.pos }}">
-      <sc-if value="{{ n.isCurrent }}" hint-placeholder-val="{{ false }}">
-        <a href="LevelStart.dc.html" aria-label="Level {{ n.n }}, play now" style="position: relative; width: 64px; height: 64px; border-radius: 32px; background: radial-gradient(circle at 35% 28%, #C5F29E 0%, #5CB848 50%, #2E7D32 100%); border: 3px solid #FFFFFF; box-sizing: border-box; box-shadow: 0 0 0 6px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,160,0.9), 0 5px 0 #1B5E20, 0 10px 14px rgba(0,0,0,0.3); text-shadow: 0 2px 0 rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;">{{ n.n }}
-          <span style="position: absolute; top: -26px; height: 22px; padding: 0 8px; border-radius: 11px; background: #1B2B1F; color: #FFFFFF; display: flex; align-items: center; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800;">YOU</span>
-        </a>
-      </sc-if>
-      <sc-if value="{{ n.isDone }}" hint-placeholder-val="{{ true }}">
-        <a href="Play.dc.html" aria-label="Level {{ n.n }}, {{ n.stars }} stars" style="width: 56px; height: 56px; border-radius: 28px; background: radial-gradient(circle at 35% 28%, #FFFFFF 0%, #F1EADB 55%, #CFC3AA 100%); border: 3px solid #8BCB5F; box-sizing: border-box; box-shadow: inset 0 -3px 4px rgba(120,100,60,0.2), 0 4px 0 #8E826A, 0 9px 12px rgba(0,0,0,0.28); display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: #1B2B1F;">
-          <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19px; line-height: 1;">{{ n.n }}</span>
-          <span style="display: flex; gap: 1px;">
-            <sc-for list="{{ n.starList }}" as="s" hint-placeholder-count="3">
-              <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z" fill="{{ s.fill }}" stroke="#B8860B" stroke-width="1.4"></path></svg>
-            </sc-for>
-          </span>
-        </a>
-      </sc-if>
-      <sc-if value="{{ n.isLocked }}" hint-placeholder-val="{{ false }}">
-        <div aria-label="{{ n.aria }}" style="{{ n.lockStyle }}">
-          <span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 18px; line-height: 1;">{{ n.n }}</span>
-          <sc-if value="{{ n.plain }}" hint-placeholder-val="{{ true }}">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B6B5F" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
-          </sc-if>
-          <sc-if value="{{ n.hard }}" hint-placeholder-val="{{ false }}">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15.5" rx="5" ry="4.2" fill="#C62828"></ellipse><circle cx="6" cy="9.5" r="2.2" fill="#C62828"></circle><circle cx="10" cy="6.5" r="2.2" fill="#C62828"></circle><circle cx="14" cy="6.5" r="2.2" fill="#C62828"></circle><circle cx="18" cy="9.5" r="2.2" fill="#C62828"></circle></svg>
-          </sc-if>
-          <sc-if value="{{ n.gift }}" hint-placeholder-val="{{ false }}">
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 H21 L19 21 H5 Z" fill="#BCAAA4" stroke="#5D4037" stroke-width="1.5" stroke-linejoin="round"></path><path d="M7 10 Q 12 1 17 10" fill="none" stroke="#5D4037" stroke-width="1.8"></path><path d="M12 13 L9 11 V15 Z M12 13 L15 11 V15 Z" fill="#E53935"></path></svg>
-          </sc-if>
-          <sc-if value="{{ n.isNew }}" hint-placeholder-val="{{ false }}">
-            <span style="position: absolute; top: -12px; right: -18px; height: 20px; padding: 0 7px; border-radius: 10px; background: #2E7D32; color: #FFFFFF; display: flex; align-items: center; font-size: 10px; font-weight: 800;">NEW!</span>
-          </sc-if>
-        </div>
-      </sc-if>
-    </div>
-  </sc-for>
-
-  <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 120px; background: linear-gradient(180deg, rgba(20,50,15,0.45) 0%, rgba(20,50,15,0) 100%); pointer-events: none;"></div>
-  <header style="position: absolute; left: 16px; right: 16px; top: 12px; height: 48px; display: flex; align-items: center; gap: 10px;">
-    <a href="Home.dc.html" aria-label="Back to home" style="width: 46px; height: 46px; flex-shrink: 0; border-radius: 23px; box-sizing: border-box; background: radial-gradient(circle at 35% 25%, #FFFFFF, #F5EFDF 60%, #E3D7B9); border: 2px solid #FFFFFF; box-shadow: 0 4px 0 #B9A77F, 0 8px 14px rgba(20,40,15,0.3); display: flex; align-items: center; justify-content: center; color: #4A3A25;">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 L8 12 L15 19"></path></svg>
-    </a>
-    <div style="flex-grow: 1; display: flex; flex-direction: column; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.45);">
-      <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 23px; line-height: 1.1;">Garden Meadow</h1>
-      <span style="font-size: 12px; font-weight: 800;">Levels 11–100 · 98 stars</span>
-    </div>
-    <span style="height: 40px; padding: 0 12px 0 5px; border-radius: 20px; box-sizing: border-box; background: linear-gradient(180deg, #FFFFFF, #F2ECDD); border: 2px solid #FFFFFF; box-shadow: 0 3px 0 #C9B993, 0 6px 12px rgba(20,40,15,0.25); display: flex; align-items: center; gap: 6px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;">
-      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="lmCoin" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF4B8"></stop><stop offset="0.45" stop-color="#FFCA28"></stop><stop offset="1" stop-color="#C08A00"></stop></radialGradient></defs><circle cx="12" cy="12" r="10.2" fill="url(#lmCoin)" stroke="#8D6200" stroke-width="1.1"></circle><path d="M8.6 14.6 C 9 9.6, 13.4 7.6, 15.9 8.1 C 15.4 12.6, 12 15.1, 8.6 14.6 Z" fill="#FFE38A" stroke="#9A6B00" stroke-width="0.9"></path></svg>1,250</span>
-  </header>
-
-  <a href="Play.dc.html" aria-label="Jump to current level" style="position: absolute; right: 16px; bottom: 76px; height: 44px; padding: 0 14px; border-radius: 22px; background: rgba(27,43,31,0.9); color: #FFFFFF; display: flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2" fill="#FFFFFF"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
-    Jump to L37</a>
-
-  <div role="note" aria-label="Banner ad placeholder" style="position: absolute; left: 16px; right: 16px; bottom: 12px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.88); border: 1px dashed #7E8F80; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #4C5C50; letter-spacing: 0.4px;">AD · adaptive banner</div>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: #3C8A2E; color: #163B28; font-family: 'Nunito', system-ui, sans-serif; ">
+<img src="/_blob/58905559541b13dcdfdc01ccb9c50c98" alt="" aria-hidden="true" style="position: absolute; inset: 0; width: 390px; height: 844px; object-fit: cover; z-index: 0;"><div aria-hidden="true" style="position: absolute; inset: 0 0 auto 0; height: 140px; z-index: 1; background: linear-gradient(180deg, rgba(4,40,22,0.55), rgba(4,40,22,0));"></div><svg aria-label="Level path" width="390" height="844" viewBox="0 0 390 844" style="position: absolute; inset: 0; z-index: 1;"><defs><radialGradient id="gNode" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF2A8"/><stop offset="0.5" stop-color="#F9C93A"/><stop offset="1" stop-color="#D98E10"/></radialGradient><radialGradient id="cNode" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#4FD08A"/><stop offset="0.55" stop-color="#13864D"/><stop offset="1" stop-color="#075B35"/></radialGradient><radialGradient id="sNode" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#F4F2EA"/><stop offset="0.6" stop-color="#C9C8BE"/><stop offset="1" stop-color="#9DA197"/></radialGradient><filter id="pathBlur"><feGaussianBlur stdDeviation="3"/></filter></defs><path d="M 200 860 C 120 760, 110 660, 150 600 S 290 560, 252 528 S 120 480, 160 452 S 290 400, 238 374 S 100 330, 140 300 S 280 260, 236 228 S 110 190, 156 160 S 290 120, 250 96 S 200 40, 230 -20" fill="none" stroke="#3E5F22" stroke-width="44" stroke-linecap="round" opacity="0.35" filter="url(#pathBlur)"/><path d="M 200 860 C 120 760, 110 660, 150 600 S 290 560, 252 528 S 120 480, 160 452 S 290 400, 238 374 S 100 330, 140 300 S 280 260, 236 228 S 110 190, 156 160 S 290 120, 250 96 S 200 40, 230 -20" fill="none" stroke="#B8915A" stroke-width="34" stroke-linecap="round"/><path d="M 200 860 C 120 760, 110 660, 150 600 S 290 560, 252 528 S 120 480, 160 452 S 290 400, 238 374 S 100 330, 140 300 S 280 260, 236 228 S 110 190, 156 160 S 290 120, 250 96 S 200 40, 230 -20" fill="none" stroke="#D9BC85" stroke-width="26" stroke-linecap="round"/><path d="M 200 860 C 120 760, 110 660, 150 600 S 290 560, 252 528 S 120 480, 160 452 S 290 400, 238 374 S 100 330, 140 300 S 280 260, 236 228 S 110 190, 156 160 S 290 120, 250 96 S 200 40, 230 -20" fill="none" stroke="#E9D3A2" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 18" opacity="0.9"/><path d="M 200 860 C 120 760, 110 660, 150 600 S 290 560, 252 528 S 120 480, 160 452" fill="none" stroke="#F4B72F" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" opacity="0.9"/><g transform="translate(150 600)"><ellipse cx="0" cy="12" rx="24" ry="8" fill="#000" opacity="0.25"/><circle r="22" cy="4" fill="#B97A08"/><circle r="22" fill="url(#gNode)"/><circle r="16" fill="none" stroke="#FFF3B8" stroke-width="2" opacity="0.8"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px;" fill="#7A4A00">1</text><path transform="translate(-16 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#FFD84A" stroke="#B97A08" stroke-width="1.4"/><path transform="translate(0 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#FFD84A" stroke="#B97A08" stroke-width="1.4"/><path transform="translate(16 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#FFD84A" stroke="#B97A08" stroke-width="1.4"/></g><g transform="translate(252 528)"><ellipse cx="0" cy="12" rx="24" ry="8" fill="#000" opacity="0.25"/><circle r="22" cy="4" fill="#B97A08"/><circle r="22" fill="url(#gNode)"/><circle r="16" fill="none" stroke="#FFF3B8" stroke-width="2" opacity="0.8"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px;" fill="#7A4A00">2</text><path transform="translate(-16 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#FFD84A" stroke="#B97A08" stroke-width="1.4"/><path transform="translate(0 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#FFD84A" stroke="#B97A08" stroke-width="1.4"/><path transform="translate(16 -32) scale(0.5)" d="M0 -11l3.2 6.6 7.3.9-5.4 5 1.4 7.2L0 15.1l-6.5 3.6 1.4-7.2-5.4-5 7.3-.9z" fill="#D8D2BE" stroke="#B97A08" stroke-width="1.4"/></g><g transform="translate(160 452)"><circle r="34" fill="#A8D94F" opacity="0.45"><animate attributeName="r" values="28;40;28" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.6;0;0.6" dur="1.8s" repeatCount="indefinite"/></circle><ellipse cx="0" cy="14" rx="28" ry="9" fill="#000" opacity="0.28"/><circle r="27" cy="5" fill="#03432A"/><circle r="27" fill="url(#cNode)"/><circle r="27" fill="none" stroke="#FFFFFF" stroke-width="3"/><text y="8" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;" fill="#FFFFFF">3</text><g transform="translate(0 -44)"><animateTransform attributeName="transform" type="translate" values="0 -44; 0 -52; 0 -44" dur="1.4s" repeatCount="indefinite"/><path d="M0 14 C -14 0, -14 -16, 0 -16 C 14 -16, 14 0, 0 14 Z" fill="#E84B3C" stroke="#FFFFFF" stroke-width="2.5"/><circle cy="-4" r="5" fill="#FFFFFF"/></g></g><g transform="translate(238 374)"><ellipse cx="0" cy="11" rx="21" ry="7" fill="#000" opacity="0.22"/><circle r="20" cy="4" fill="#6E746C"/><circle r="20" fill="url(#sNode)"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;" fill="#4E554E">4</text></g><g transform="translate(140 300)"><ellipse cx="0" cy="11" rx="21" ry="7" fill="#000" opacity="0.22"/><circle r="20" cy="4" fill="#6E746C"/><circle r="20" fill="url(#sNode)"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;" fill="#4E554E">5</text></g><g transform="translate(236 228)"><ellipse cx="0" cy="11" rx="21" ry="7" fill="#000" opacity="0.22"/><circle r="20" cy="4" fill="#6E746C"/><circle r="20" fill="url(#sNode)"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;" fill="#4E554E">6</text></g><g transform="translate(156 160)"><ellipse cx="0" cy="11" rx="21" ry="7" fill="#000" opacity="0.22"/><circle r="20" cy="4" fill="#6E746C"/><circle r="20" fill="url(#sNode)"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;" fill="#4E554E">7</text></g><g transform="translate(250 96)"><ellipse cx="0" cy="11" rx="21" ry="7" fill="#000" opacity="0.22"/><circle r="20" cy="4" fill="#6E746C"/><circle r="20" fill="url(#sNode)"/><text y="7" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 18px;" fill="#4E554E">8</text></g></svg><div style="position: relative; z-index: 3;"><div aria-hidden="true" style="position: relative; z-index: 3; height: 44px; padding: 0 22px 0 26px; display: flex; align-items: center; justify-content: space-between; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; color: #FFFFFF;"><span>9:41</span><span style="display: flex; gap: 6px; align-items: center;"><svg width="18" height="12" viewBox="0 0 18 12"><g fill="#FFFFFF"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 L5.6 9 A3.4 3.4 0 0 1 10.4 9 Z M2.8 6.3 A7.4 7.4 0 0 1 13.2 6.3 L11.8 7.7 A5.4 5.4 0 0 0 4.2 7.7 Z M0 3.5 A11.4 11.4 0 0 1 16 3.5 L14.6 4.9 A9.4 9.4 0 0 0 1.4 4.9 Z" fill="#FFFFFF"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="#FFFFFF" opacity="0.45"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#FFFFFF"/><rect x="23.5" y="4" width="1.8" height="4" rx="1" fill="#FFFFFF" opacity="0.45"/></svg></span></div><div style="height: 52px; padding: 0 16px; display: flex; align-items: center; gap: 10px;"><a href="Home.dc.html" aria-label="Back" class="ss-press" style="width: 40px; height: 40px; border-radius: 20px; background: #FFFEF8; box-shadow: 0 3px 0 #C9BE9C, 0 8px 16px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; color: #163B28;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg></a><h1 style="margin: 0; flex: 1; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; color: #FFFFFF; text-shadow: 0 2px 6px rgba(0,0,0,0.35);">Level Map</h1><div style="height: 36px; padding: 0 8px 0 7px; border-radius: 18px; background: rgba(4,52,30,0.55); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 4px 12px rgba(22,59,40,0.1); display: flex; align-items: center; gap: 6px; color: #FFFFFF;"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" style="flex: none;"><defs><linearGradient id="stg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE98A"/><stop offset="0.5" stop-color="#F9C93A"/><stop offset="1" stop-color="#E39A12"/></linearGradient></defs><path d="M12 2.2l2.95 6.1 6.7.85-4.95 4.6 1.3 6.65L12 17.1l-6 3.3 1.3-6.65L2.35 9.15l6.7-.85z" fill="url(#stg)" stroke="#C98200" stroke-width="1.1" stroke-linejoin="round"/><path d="M8.6 8.9 L11 8.6" stroke="#FFFBE0" stroke-width="1.4" stroke-linecap="round"/></svg><span style="font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;">5 / 24</span></div></div></div><div style="position: absolute; z-index: 3; left: 12px; right: 12px; bottom: 14px; animation: ssIn .5s .2s both;"><div style="background: #FFFEF8; border: 1px solid #ECE5CF; border-radius: 20px; box-shadow: inset 0 1px 0 #FFFFFF, 0 2px 0 rgba(180,165,120,0.18), 0 10px 24px rgba(22,59,40,0.07); padding: 16px 16px 18px; border-radius: 24px;"><div style="display: flex; align-items: flex-start; gap: 12px;"><div style="flex: 1;"><h2 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;">Level 3</h2><p style="margin: 2px 0 0; font-size: 14px; font-weight: 700; color: #6B7F70;">Complete this level to earn rewards</p></div><div style="display: flex; gap: 6px;"><span style="height: 30px; padding: 0 9px; border-radius: 15px; background: #FDF3D3; display: flex; align-items: center; gap: 4px; font-weight: 800; font-size: 14px;"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="flex: none;"><defs><radialGradient id="cg18" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#FFF2A8"/><stop offset="0.45" stop-color="#F9C93A"/><stop offset="1" stop-color="#D98E10"/></radialGradient></defs><circle cx="12" cy="12.6" r="10.4" fill="#B8730A"/><circle cx="12" cy="11.6" r="10.4" fill="url(#cg18)"/><circle cx="12" cy="11.6" r="7" fill="none" stroke="#C98200" stroke-width="1.4" opacity="0.7"/><path d="M12 7.2 l1.3 2.7 3 .4 -2.2 2.1 .5 3 -2.6-1.4 -2.6 1.4 .5-3 -2.2-2.1 3-.4z" fill="#FFE27A" stroke="#C98200" stroke-width="0.6"/></svg>50</span><span style="height: 30px; padding: 0 9px; border-radius: 15px; background: #E3F2D3; display: flex; align-items: center; gap: 4px; font-weight: 800; font-size: 14px;"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style="flex: none;"><path d="M7 3.5 H17 L22 9.5 L12 21.5 L2 9.5 Z" fill="#0C7A43"/><path d="M7 3.5 H17 L22 9.5 H2 Z" fill="#3FD07E"/><path d="M2 9.5 H22 L12 21.5 Z" fill="#17A35A"/><path d="M7 3.5 L9.5 9.5 L12 3.5 L14.5 9.5 L17 3.5" fill="none" stroke="#B8FFD6" stroke-width="0.9" stroke-linejoin="round" opacity="0.9"/><path d="M9.5 9.5 L12 21.5 L14.5 9.5" fill="none" stroke="#0C7A43" stroke-width="0.8" opacity="0.6"/><path d="M5 8.5 L7.5 5" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/></svg>1</span></div></div><div style="margin-top: 10px; display: flex; gap: 14px; font-size: 13px; font-weight: 800; color: #6B7F70;"><span>Goal: 600 points</span><span>Fruits: 15</span></div><div style="margin-top: 14px;"><a href="Play.dc.html" class="ss-press" style="position: relative; overflow: hidden; height: 56px; width: 100%; box-sizing: border-box; border-radius: 20px; background: linear-gradient(180deg, #23A766 0%, #13864D 42%, #075B35 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.32), inset 0 -2px 0 rgba(0,0,0,0.12), 0 4px 0 #03432A, 0 12px 22px rgba(7,91,53,0.28); display: flex; align-items: center; justify-content: center; gap: 10px; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; text-shadow: 0 1px 0 rgba(0,0,0,0.18); "><span aria-hidden="true" style="position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent); animation: ssShine 3.6s ease-in-out infinite;"></span><span style="position: relative;">Play</span></a></div></div></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
-  renderVals() {
-    const cur = 37, stars = { 34: 3, 35: 2, 36: 3 };
-    const pts = [];
-    for (let i = 0; i < 9; i++) {
-      const lv = 42 - i;
-      pts.push({ lv, x: Math.round(195 + 100 * Math.sin(i * 0.95 + 0.4)), y: 118 + i * 76 });
-    }
-    // Catmull-Rom through node centres → cubic Béziers; extended off both screen edges
-    const all = [{ x: pts[0].x - 40, y: -40 }].concat(pts, [{ x: pts[8].x - 60, y: 900 }]);
-    let vine = 'M' + all[0].x + ' ' + all[0].y;
-    for (let i = 0; i < all.length - 1; i++) {
-      const p0 = all[Math.max(0, i - 1)], p1 = all[i], p2 = all[i + 1], p3 = all[Math.min(all.length - 1, i + 2)];
-      const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
-      const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
-      vine += ' C' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ' ' + c2y.toFixed(1) + ' ' + p2.x + ' ' + p2.y;
-    }
-    const nodes = pts.map((p) => {
-      const n = p.lv, isCurrent = n === cur, isDone = n < cur, isLocked = n > cur;
-      const size = isCurrent ? 64 : isDone ? 56 : 52;
-      const hard = n % 10 === 9, gift = n % 10 === 0, isNew = n % 10 === 1;
-      const st = stars[n] || 0;
-      return {
-        n, isCurrent, isDone, isLocked, hard: isLocked && hard, gift: isLocked && gift, isNew: isLocked && isNew,
-        plain: isLocked && !hard && !gift, stars: st,
-        starList: [0, 1, 2].map((k) => ({ fill: k < st ? '#FFCA28' : '#FFFFFF' })),
-        aria: 'Level ' + n + ', locked' + (hard ? ', hard' : '') + (gift ? ', gift basket' : '') + (isNew ? ', new mechanic' : ''),
-        pos: 'position: absolute; left: ' + (p.x - size / 2) + 'px; top: ' + (p.y - size / 2) + 'px;',
-        lockStyle: 'position: relative; width: 52px; height: 52px; border-radius: 26px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #5B6B5F; ' +
-          'box-shadow: inset 0 -3px 4px rgba(0,0,0,0.18), 0 4px 0 #6F7570, 0 8px 12px rgba(0,0,0,0.25); ' +
-          (hard ? 'background: radial-gradient(circle at 35% 28%, #FFF3F1, #F3C9C4 60%, #D99A93); border: 3px solid #D9534F;' : 'background: radial-gradient(circle at 35% 28%, #F4F6F4, #D6DCD7 60%, #AEB6B0); border: 3px solid #E9EDEA;')
-      };
-    });
-    return { vine, nodes };
-  }
+  renderVals() { return {}; }
 }
 </script>
 </body>
