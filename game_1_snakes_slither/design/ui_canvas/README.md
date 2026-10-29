@@ -13,6 +13,7 @@ Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 | Row | Screens |
 |---|---|
 | 0 · Game flow map | Flow (every box links to its screen) — static copy: `flow-map.png` |
+| 0b · Screen flow | ScreenFlow: the 32 real screens, scaled down and connected in game order (click any to open) |
 | 1 · Launch, hub & daily | Main (5.1 Jungle Dawn), Home (5.3), Starter, LevelMap (5.4), LevelStart, Daily (5.13), Saver, DailyPlay, DailyResult, Wheel (5.14) |
 | 2 · Gameplay loop | Tutorial (5.7), Intro (5.7 card), Play (5.5), Preview, Hint, Hammer, Pause (5.6), MiniShop, Stuck, LevelUnavailable |
 | 3 · Win & rewards | Complete (5.10), Gift (5.11), RushIntro, Rush (5.12), RushResults, Chest (L500), PhaseComplete (5.18) |
