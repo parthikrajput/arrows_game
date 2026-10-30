@@ -27,4 +27,4 @@ Final store name is still pending (trademark search). The old name "Snake Out!" 
 This game is one of four games that share one puzzle engine and one rule book. See ./SHARED_CORE_STANDARD.md and ../README.md.
 
 ## Current state
-This folder holds design and technical documents only. There is no code yet. The tech plan is Flutter with a shared engine package called puzzle_core.
+This folder holds the design and technical documents and the Flutter app, built in Flutter with a shared engine package called puzzle_core (packages/puzzle_core). The app runs the core loop, Shop, Lucky Lily Wheel and Gift Basket on 5 test boards; the 500 levels are not built yet.

@@ -1,21 +1,24 @@
 # Snakes Slither (working title)
 
 ## What This Is
-Design and technical documentation for the mobile puzzle game "Snakes Slither (working title)". It is one of four games built on one shared puzzle engine. Full product context: PRODUCT_OVERVIEW.md. This folder has docs only, no code yet.
+Design and technical documentation for the mobile puzzle game "Snakes Slither (working title)". It is one of four games built on one shared puzzle engine. Full product context: PRODUCT_OVERVIEW.md. This folder holds the docs and the Flutter app (puzzle gameplay per the Phase 1 docs). Work split between Claude (logic) and Antigravity (UI): AGENTS.md.
 
-## Stack (planned)
+## Stack
 - Flutter 3.x, Dart 3, Impeller, CustomPainter plus Ticker game loop
 - flutter_bloc, hive_ce, shared pure-Dart engine packages/puzzle_core
 - AdMob plus UMP, in_app_purchase, Firebase (Analytics, Crashlytics, Remote Config), games_services
 
 ## Key Commands
-None. These are markdown documents.
+flutter pub get · flutter analyze · flutter test · cd packages/puzzle_core && dart test · flutter run
 
 ## Folder Map
 - README.md: overview, key numbers, coverage matrix
 - SCALING_TO_10000_LEVELS.md: plan from 500 to 10,000 levels
 - phases/: all 20 phase folders (phase_1/ to phase_20/)
 - specs/: SDD specs (WORKFLOW, TEMPLATE, INDEX, and group folders)
+- design/: UI canvas, brand and app icon
+- lib/, packages/puzzle_core/, test/, android/, ios/, web/: Flutter app code
+- handoff/: Antigravity task briefs, change requests, contract log
 - This folder also holds the shared standards as game-wise copies: SHARED_CORE_STANDARD.md and the other cross-game standards
 
 ## Undocumented Architecture

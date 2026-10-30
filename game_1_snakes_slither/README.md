@@ -58,6 +58,11 @@ Android + iOS · Flutter 3.x (Dart 3, Impeller) · `CustomPainter` + `Ticker` ga
 game_1_snakes_slither/
 ├── README.md                                  ← આ file (overview + coverage matrix)
 ├── SCALING_TO_10000_LEVELS.md                 ← 500 → 10,000 levels plan (generator, phases 3–20)
+├── AGENTS.md                                  ← Flutter app: કયો agent (Claude / Antigravity) કઈ files બદલે
+├── pubspec.yaml, lib/, packages/, test/       ← Flutter app code (puzzle_core engine = packages/puzzle_core)
+├── android/, ios/, web/                       ← Flutter platform folders
+├── handoff/                                   ← Antigravity tasks, change requests, contract log
+├── design/                                    ← UI canvas, brand, app icon
 ├── phases/                                    ← All 20 Phase Documentation Folders (Phases 1 to 20)
 │   ├── phase_1/                               ← Launch scope: Levels 1–500
 │   │   ├── README.md                          ← Phase 1 scope + doc index

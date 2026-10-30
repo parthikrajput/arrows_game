@@ -2,8 +2,8 @@
 
 Do **A1 first**, because everything else uses its theme. After that, A2–A6 touch different files and can run in any order.
 
-**Look vs. content.** The game is the Phase 1 **puzzle**. Take the *look* from the UI canvas (`../design/`) and the *content and behaviour* from the Phase 1 docs. AGENTS.md rule 5 has the details.
-Paste one task at a time into Antigravity, with the repo folder `game_1_snakes_slither/app` open.
+**Look vs. content.** The game is the Phase 1 **puzzle**. Take the *look* from the UI canvas (`design/`) and the *content and behaviour* from the Phase 1 docs. AGENTS.md rule 5 has the details.
+Paste one task at a time into Antigravity, with the repo folder `game_1_snakes_slither` open.
 
 ---
 
@@ -13,21 +13,21 @@ Paste one task at a time into Antigravity, with the repo folder `game_1_snakes_s
 Read AGENTS.md first and follow it strictly.
 
 Task: build the Snakes Slither design system for this Flutter app.
-Source of truth: ../phases/phase_1/06_UI_UX_SCREENS.md sections 1–4 (principles,
+Source of truth: phases/phase_1/06_UI_UX_SCREENS.md sections 1–4 (principles,
 tokens, accessibility, responsive rules).
 
 Edit only: lib/ui/theme/**, new lib/ui/widgets/**, assets/fonts/**, and the
 font/asset entries in pubspec.yaml.
 
-0. Brand palette from ../design/ui_canvas/README.md: Forest #075B35 (primary),
+0. Brand palette from design/ui_canvas/README.md: Forest #075B35 (primary),
    Emerald #13864D, Leaf #A8D94F, Gold #F4B72F, Cream #F7F4E8 (background),
    Card #FFFEF8, Text #163B28. Map them onto the existing AppColors names
    (primary, primaryLight, bgSage→cream background, bgCream→card, coinGold,
    textPrimary). Keep the 8 snake colours and the preview red/green from doc
-   06 §2.2 unchanged. Match the canvas look (../design/ui_canvas/screens/
+   06 §2.2 unchanged. Match the canvas look (design/ui_canvas/screens/
    Home.png, Complete.png): cream background with soft leaf decorations,
    deep-green 3D buttons, cream cards with soft shadows, gold coin pill.
-   Copy the logo and Pip renders you need (../design/brand/
+   Copy the logo and Pip renders you need (design/brand/
    snake_slither_logo.png, renders/home_platform.png, sad.png, sleep.png)
    into assets/images/.
 1. Bundle fonts offline: Fredoka (display/headings/buttons/HUD numbers with
@@ -65,10 +65,10 @@ its tokens.
 
 Task: replace the placeholder in lib/ui/board/board_canvas.dart with the real
 board look and animations. You may add files under lib/ui/board/.
-Sources: ../phases/phase_1/01_GAME_CONCEPT_AND_RULES.md §2 (art direction) and
+Sources: phases/phase_1/01_GAME_CONCEPT_AND_RULES.md §2 (art direction) and
 §5.1, 5.2, 5.5, 5.8 (exit, bump, locked, preview feel);
 06_UI_UX_SCREENS.md §2.2 (snake colours + patterns) and §3 (accessibility);
-../VFX_IMPLEMENTATION.md.
+VFX_IMPLEMENTATION.md.
 
 Keep the BoardCanvas constructor (data, geometry, onMotionDone) unchanged.
 Rules:
@@ -120,8 +120,8 @@ on test boards 1–5 at 360×640 and 412×915.
 Read AGENTS.md first and follow it strictly. Use the A1 design system widgets.
 
 Task: redesign lib/ui/screens/gameplay_screen.dart per
-../phases/phase_1/06_UI_UX_SCREENS.md §5.5 and
-../phases/phase_1/04_BOOSTERS_COINS_SHOP.md §3.
+phases/phase_1/06_UI_UX_SCREENS.md §5.5 and
+phases/phase_1/04_BOOSTERS_COINS_SHOP.md §3.
 
 Keep the GameplayScreen constructor unchanged. Keep keys gameplayScreen,
 pauseButton, booster(name), hammerCancel (lib/contracts/app_keys.dart).
@@ -158,7 +158,7 @@ Read AGENTS.md first and follow it strictly. Use the A1 design system widgets
 Task: redesign every widget in lib/ui/popups/popups.dart (you may split it into
 one file per popup and re-export from popups.dart). Keep every constructor and
 every key unchanged.
-Sources: ../phases/phase_1/06_UI_UX_SCREENS.md §5.6, 5.8, 5.9, 5.10;
+Sources: phases/phase_1/06_UI_UX_SCREENS.md §5.6, 5.8, 5.9, 5.10;
 04_BOOSTERS_COINS_SHOP.md §3 (mini shop).
 
 - PausePopup (§5.6): "⏸ Paused", Resume (primary), Restart, Map, Home, then
@@ -195,12 +195,12 @@ Read AGENTS.md first and follow it strictly. Use the A1 design system.
 Task: redesign lib/ui/screens/home_screen.dart and level_map_screen.dart.
 Keep constructors and keys (homeScreen, homePlay, homeMap, homeSettings,
 homeShop, homeWheel, mapScreen, mapNode(n)) unchanged.
-Look: ../design/ui_canvas/screens/Home.png and LevelMap.png (Pip on the
+Look: design/ui_canvas/screens/Home.png and LevelMap.png (Pip on the
 platform, big green Play, cream cards, leaves). Leave out gems, the profile
 avatar and the "Awards" tab; those aren't in Phase 1. A bottom nav is fine if it
 holds Shop (onOpenShop), Spin (onOpenWheel, only when data.wheelUnlocked,
 badge when data.freeSpinReady) and Settings (onOpenSettings).
-Source: ../phases/phase_1/06_UI_UX_SCREENS.md §5.3, §5.4; biomes in
+Source: phases/phase_1/06_UI_UX_SCREENS.md §5.3, §5.4; biomes in
 01_GAME_CONCEPT_AND_RULES.md §2.3.
 
 - Home (§5.3): coin pill + settings button; Pip; big primary "▶ LEVEL N"
@@ -226,10 +226,10 @@ Task: redesign lib/ui/screens/shop_screen.dart, lib/ui/screens/wheel_screen.dart
 and GiftBasketPopup in lib/ui/popups/. Keep constructors and keys unchanged
 (shopScreen, shopTile(booster, qty), shopFreeCoins, wheelScreen,
 wheelSpinFree, wheelSpinAd, giftBasket, giftCollect).
-Sources: ../phases/phase_1/06_UI_UX_SCREENS.md §5.11, §5.14, §5.15;
-04_BOOSTERS_COINS_SHOP.md §6, §8, §10. Look: ../design/ui_canvas/screens/Shop.png
+Sources: phases/phase_1/06_UI_UX_SCREENS.md §5.11, §5.14, §5.15;
+04_BOOSTERS_COINS_SHOP.md §6, §8, §10. Look: design/ui_canvas/screens/Shop.png
 (card grid and tabs) plus the archive Wheel / Gift / Chest boards in
-../design/ui_canvas/. In the Shop, replace the canvas's Skins, Food and Themes
+design/ui_canvas/. In the Shop, replace the canvas's Skins, Food and Themes
 tabs with Phase 1's Boosters · Coins · Offers.
 
 - Shop: header with back + coin balance. Tabs Boosters · Coins · Offers.
