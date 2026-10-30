@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app/app.dart';
+import 'data/level_repository.dart';
 import 'data/save_store.dart';
 
 Future<void> main() async {
@@ -9,5 +10,6 @@ Future<void> main() async {
   // Phones are portrait-only; tablets may rotate (decided per device later).
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final store = await SaveStore.open();
-  runApp(SnakesSlitherApp(store: store));
+  final levels = await LevelRepository.loadAsset();
+  runApp(SnakesSlitherApp(store: store, levels: levels));
 }

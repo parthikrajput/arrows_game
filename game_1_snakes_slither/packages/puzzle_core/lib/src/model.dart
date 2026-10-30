@@ -58,9 +58,13 @@ class Snake {
     required this.dir,
     required this.color,
     this.skin = SnakeSkin.snake,
+    this.ref = '',
   });
 
   final int id;
+
+  /// Id from the level file ("p1"); used in solutions and messages.
+  final String ref;
 
   /// `body[0]` is the head.
   final List<Cell> body;
@@ -74,9 +78,12 @@ class Snake {
 
 /// Static blocker (Garden Rock). Removable with the Hammer.
 class Rock {
-  const Rock({required this.id, required this.cell});
+  const Rock({required this.id, required this.cell, this.ref = ''});
   final int id;
   final Cell cell;
+
+  /// Id from the level file ("o1").
+  final String ref;
 }
 
 class BoardState {
@@ -122,9 +129,32 @@ class BoardState {
 /// Difficulty tag of a level; decides first-clear coins.
 enum LevelTag { easy, normal, hard, finale }
 
+/// Role of a level inside its 10-level block.
+enum LevelSlot { intro, practice, breather, ramp, hard, milestone, finale }
+
 class Level {
-  const Level({required this.number, required this.tag, required this.board});
+  const Level({
+    required this.number,
+    required this.tag,
+    required this.board,
+    this.slot = LevelSlot.practice,
+    this.parMoves = 0,
+    this.difficulty = 0,
+    this.solution = const [],
+    this.mechanicTypes = const [],
+  });
   final int number;
   final LevelTag tag;
   final BoardState board;
+  final LevelSlot slot;
+
+  /// Values written by the designer; the validator recomputes and compares.
+  final int parMoves;
+  final double difficulty;
+
+  /// Path/obstacle ids in tap order, as written in the file.
+  final List<String> solution;
+
+  /// Mechanic type of every obstacle instance in the file, e.g. ["M001", "M001"].
+  final List<String> mechanicTypes;
 }

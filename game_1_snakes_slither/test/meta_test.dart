@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:puzzle_core/puzzle_core.dart';
-import 'package:snakes_slither/data/level_repository.dart';
 import 'package:snakes_slither/data/save_store.dart';
 import 'package:snakes_slither/features/gameplay/game_bloc.dart';
 import 'package:snakes_slither/services/ads_service.dart';
@@ -13,6 +12,8 @@ import 'package:snakes_slither/state/rewards.dart';
 import 'package:snakes_slither/state/shop_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
 import 'package:snakes_slither/state/wheel_cubit.dart';
+
+import 'helpers.dart';
 
 class FakeClock implements Clock {
   FakeClock(this.t);
@@ -85,7 +86,7 @@ void main() {
 
     test('a level-10 first clear grants the basket once, replay grants nothing', () async {
       // Level 1's board stands in for level 10 (the real L10 isn't built yet).
-      final l10 = Level(number: 10, tag: LevelTag.normal, board: LevelRepository().load(1).board);
+      final l10 = Level(number: 10, tag: LevelTag.normal, board: testLevels().load(1).board);
       Future<GameBloc> win() async {
         final b = GameBloc(
           level: l10,

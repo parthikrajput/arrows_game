@@ -184,14 +184,11 @@ class GameState extends Equatable {
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc({
     required Level level,
-    required WalletCubit wallet,
-    required ProgressCubit progress,
-    required AdsCubit ads,
+    required this._wallet,
+    required this._progress,
+    required this._ads,
     required bool hasNextLevel,
   }) : _hasNext = hasNextLevel,
-       _wallet = wallet,
-       _progress = progress,
-       _ads = ads,
        super(
          GameState(level: level, attempt: Attempt.start(level.board), status: GameStatus.playing),
        ) {

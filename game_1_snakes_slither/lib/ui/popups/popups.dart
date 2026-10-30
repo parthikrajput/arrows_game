@@ -1,4 +1,4 @@
-// OWNER: Antigravity (UI). PLACEHOLDERS for every in-game popup. Keep each
+// OWNER: UI agent. PLACEHOLDERS for every in-game popup. Keep each
 // widget's constructor; redesign freely (you may split into one file each and
 // re-export from here). Logic shows/hides them; widgets only call callbacks.
 import 'dart:async';

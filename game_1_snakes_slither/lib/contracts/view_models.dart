@@ -1,4 +1,4 @@
-// SHARED CONTRACT between logic (Claude) and UI (Antigravity).
+// SHARED CONTRACT between the logic agent and the UI agent (see AGENTS.md).
 // Screens receive these plain, read-only objects plus callbacks, and never
 // talk to blocs or services directly. Owner: Claude. UI side requests changes
 // through handoff/CHANGE_REQUESTS.md instead of editing this file.

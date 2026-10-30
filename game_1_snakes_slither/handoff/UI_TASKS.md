@@ -1,9 +1,9 @@
-# Antigravity tasks — Milestone 1 (core playable loop)
+# UI tasks (UI agent: Claude in VS Code)
 
 Do **A1 first**, because everything else uses its theme. After that, A2–A6 touch different files and can run in any order.
 
 **Look vs. content.** The game is the Phase 1 **puzzle**. Take the *look* from the UI canvas (`design/`) and the *content and behaviour* from the Phase 1 docs. AGENTS.md rule 5 has the details.
-Paste one task at a time into Antigravity, with the repo folder `game_1_snakes_slither` open.
+Give one task at a time to the UI agent, with the repo folder `game_1_snakes_slither` open.
 
 ---
 

@@ -16,8 +16,15 @@ import '../ui/theme/tokens.dart';
 import 'router.dart';
 
 class SnakesSlitherApp extends StatefulWidget {
-  const SnakesSlitherApp({super.key, required this.store, this.ads, this.clock});
+  const SnakesSlitherApp({
+    super.key,
+    required this.store,
+    required this.levels,
+    this.ads,
+    this.clock,
+  });
   final SaveStore store;
+  final LevelRepository levels;
   final AdsService? ads;
 
   /// Tests pass a fake clock to cross midnight or wind time back.
@@ -33,7 +40,7 @@ class _SnakesSlitherAppState extends State<SnakesSlitherApp> {
   @override
   Widget build(BuildContext context) => MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(create: (_) => LevelRepository()),
+      RepositoryProvider.value(value: widget.levels),
       RepositoryProvider<AdsService>(create: (_) => widget.ads ?? FakeAdsService()),
       RepositoryProvider(create: (_) => TimeGuard(widget.store, widget.clock ?? SystemClock())),
     ],

@@ -1,4 +1,4 @@
-// OWNER: Antigravity (UI). PLACEHOLDER. Keep the constructor; redesign the
+// OWNER: UI agent. PLACEHOLDER. Keep the constructor; redesign the
 // HUD (64 dp) and booster bar (88 dp). [board] is a ready-made widget:
 // place it in the remaining space, don't wrap it in gesture detectors.
 import 'package:flutter/material.dart';

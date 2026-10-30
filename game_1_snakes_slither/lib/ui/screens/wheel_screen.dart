@@ -1,4 +1,4 @@
-// OWNER: Antigravity (UI). PLACEHOLDER. Keep the constructor; redesign the rest.
+// OWNER: UI agent. PLACEHOLDER. Keep the constructor; redesign the rest.
 import 'package:flutter/material.dart';
 
 import '../../contracts/app_keys.dart';

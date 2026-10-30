@@ -1,4 +1,4 @@
-// OWNER: Antigravity (UI). PLACEHOLDER by Claude: plain shapes so the game is
+// OWNER: UI agent. PLACEHOLDER by Claude: plain shapes so the game is
 // testable. Replace the look and animations freely, but keep:
 //  - the constructor (data, geometry, onMotionDone),
 //  - drawing cells via geometry.rectOf / centerOf (taps are mapped the same way),

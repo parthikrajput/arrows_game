@@ -1,4 +1,4 @@
-// OWNER: Antigravity (UI). Seeded with the doc 06 token values so the
+// OWNER: UI agent. Seeded with the doc 06 token values so the
 // placeholders compile; extend freely, but keep names stable once used.
 import 'package:flutter/material.dart';
 

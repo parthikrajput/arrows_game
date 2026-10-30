@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:puzzle_core/puzzle_core.dart';
-import 'package:snakes_slither/data/level_repository.dart';
 import 'package:snakes_slither/data/save_store.dart';
 import 'package:snakes_slither/features/gameplay/game_bloc.dart';
 import 'package:snakes_slither/services/ads_service.dart';
@@ -10,6 +9,8 @@ import 'package:snakes_slither/services/time_guard.dart';
 import 'package:snakes_slither/state/ads_cubit.dart';
 import 'package:snakes_slither/state/progress_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
+
+import 'helpers.dart';
 
 class InstantAds implements AdsService {
   InstantAds({this.reward = true});
@@ -33,7 +34,7 @@ late WalletCubit wallet;
 late ProgressCubit progress;
 
 GameBloc start(int level, {AdsService? ads}) => GameBloc(
-  level: LevelRepository().load(level),
+  level: testLevels().load(level),
   wallet: wallet,
   progress: progress,
   ads: AdsCubit(store, ads ?? InstantAds(), TimeGuard(store, SystemClock())),
@@ -51,7 +52,7 @@ Future<void> tap(GameBloc b, int snake) async {
   }
 }
 
-/// Level 2: snake 0 (red) is blocked by snake 1 (yellow) until it leaves.
+/// Level 2: snake 0 (red p1) is blocked by snake 1 (blue p2) until it leaves.
 Future<void> bump(GameBloc b) => tap(b, 0);
 
 void main() {
@@ -63,7 +64,7 @@ void main() {
   });
 
   test('all test boards load and are solvable', () {
-    final repo = LevelRepository();
+    final repo = testLevels();
     for (var n = 1; n <= repo.count; n++) {
       expect(Solver.isSolvable(repo.load(n).board), isTrue, reason: 'L$n');
     }
@@ -99,7 +100,7 @@ void main() {
     await tap(b, 1);
     expect(b.state.status, GameStatus.won);
     expect(b.state.result!.stars, 3);
-    expect(wallet.state.coins, before + 15 + 20);
+    expect(wallet.state.coins, before + 20 + 20);
     expect(progress.state.highestCleared, 1);
 
     b = start(1); // replay pays nothing
@@ -117,7 +118,7 @@ void main() {
     final coins = wallet.state.coins;
     b.add(const DoubleCoinsRequested());
     await pumpEventQueue();
-    expect(wallet.state.coins, coins + 15);
+    expect(wallet.state.coins, coins + 20);
     expect(b.state.result!.doubled, isTrue);
   });
 

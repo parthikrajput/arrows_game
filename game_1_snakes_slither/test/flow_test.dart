@@ -14,6 +14,8 @@ import 'package:snakes_slither/state/progress_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
 import 'package:snakes_slither/ui/board/board_canvas.dart';
 
+import 'helpers.dart';
+
 // These tests only use contract keys and real state, never on-screen text,
 // so they keep passing whatever the UI looks like.
 
@@ -60,7 +62,7 @@ void main() {
     t.view.physicalSize = const Size(412 * 3, 915 * 3); // phone, portrait
     t.view.devicePixelRatio = 3;
     addTearDown(t.view.reset);
-    await t.pumpWidget(SnakesSlitherApp(store: store, ads: InstantAds()));
+    await t.pumpWidget(SnakesSlitherApp(store: store, levels: testLevels(), ads: InstantAds()));
     await t.pumpAndSettle();
   }
 
@@ -70,17 +72,17 @@ void main() {
     await go(t, AppKeys.homePlay);
     expect(read<GameBloc>(t, AppKeys.gameplayScreen).state.level.number, 1);
 
-    // L1 (4x4): green tail at (0,1) heads right; blue head at (2,3) heads down.
+    // L1 (4x4): green tail at (0,1) heads right; yellow caterpillar head at (1,3) heads down.
     await tapCell(t, 0, 1, 4);
     expect(read<GameBloc>(t, AppKeys.gameplayScreen).state.attempt.moves, 1);
-    await tapCell(t, 2, 3, 4);
+    await tapCell(t, 1, 3, 4);
 
     expect(find.byKey(AppKeys.completePopup), findsOneWidget);
     expect(read<GameBloc>(t, AppKeys.gameplayScreen).state.result!.stars, 3);
-    expect(read<WalletCubit>(t, AppKeys.gameplayScreen).state.coins, 200 + 15 + 20);
+    expect(read<WalletCubit>(t, AppKeys.gameplayScreen).state.coins, 200 + 20 + 20);
 
     await go(t, AppKeys.claimDouble);
-    expect(read<WalletCubit>(t, AppKeys.gameplayScreen).state.coins, 200 + 30 + 20);
+    expect(read<WalletCubit>(t, AppKeys.gameplayScreen).state.coins, 200 + 40 + 20);
     expect(find.byKey(AppKeys.claimDouble), findsNothing);
 
     await go(t, AppKeys.next);
@@ -93,9 +95,9 @@ void main() {
     GoRouter.of(t.element(find.byKey(AppKeys.homeScreen))).go('/play/2');
     await t.pumpAndSettle();
 
-    // L2 (5x5): red head at (1,2) faces right into yellow at (3,2).
+    // L2 (4x4): red head at (1,0) faces right into blue at (3,0).
     for (var i = 0; i < 3; i++) {
-      await tapCell(t, 1, 2, 5);
+      await tapCell(t, 1, 0, 4);
     }
     expect(find.byKey(AppKeys.secondChancePopup), findsOneWidget);
     await go(t, AppKeys.noThanks);
@@ -128,12 +130,12 @@ void main() {
     await boot(t);
     await go(t, AppKeys.homePlay);
     await tapCell(t, 0, 1, 4);
-    await tapCell(t, 2, 3, 4);
+    await tapCell(t, 1, 3, 4);
     await t.pumpWidget(const SizedBox());
-    await t.pumpWidget(SnakesSlitherApp(store: store, ads: InstantAds()));
+    await t.pumpWidget(SnakesSlitherApp(store: store, levels: testLevels(), ads: InstantAds()));
     await t.pumpAndSettle();
     expect(read<ProgressCubit>(t, AppKeys.homeScreen).state.nextLevel, 2);
-    expect(read<WalletCubit>(t, AppKeys.homeScreen).state.coins, 235);
+    expect(read<WalletCubit>(t, AppKeys.homeScreen).state.coins, 240);
   });
 
   testWidgets('Home → Shop → buy 1 Hint → back home', (t) async {

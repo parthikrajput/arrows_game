@@ -4,41 +4,73 @@ import 'package:test/test.dart';
 /// 5x5. Snake 0 at row 0 heads right (clear). Snake 1 at (0,2)-(1,2) heads
 /// right into snake 2, which heads up and is blocked by nothing (clear).
 /// Rock at (4,4).
-Level sample() => LevelCodec.decode({
-  'n': 1,
-  'tag': 'easy',
-  'w': 5,
-  'h': 5,
-  'snakes': [
-    {
-      'body': [
-        [1, 0],
-        [0, 0],
-      ],
-      'dir': 'R',
-      'color': 'green',
-    },
-    {
-      'body': [
-        [1, 2],
-        [0, 2],
-      ],
-      'dir': 'R',
-      'color': 'red',
-    },
-    {
-      'body': [
-        [3, 2],
-        [3, 3],
-      ],
-      'dir': 'U',
-      'color': 'blue',
-    },
+Level sample() => LevelCodec.decode(
+  v3({
+    'n': 1,
+    'tag': 'easy',
+    'w': 5,
+    'h': 5,
+    'snakes': [
+      {
+        'body': [
+          [1, 0],
+          [0, 0],
+        ],
+        'dir': 'R',
+        'color': 'green',
+      },
+      {
+        'body': [
+          [1, 2],
+          [0, 2],
+        ],
+        'dir': 'R',
+        'color': 'red',
+      },
+      {
+        'body': [
+          [3, 2],
+          [3, 3],
+        ],
+        'dir': 'U',
+        'color': 'blue',
+      },
+    ],
+    'rocks': [
+      [4, 4],
+    ],
+  }),
+);
+
+/// Test boards are written in a short form; this turns them into schema v3.
+Map<String, dynamic> v3(Map<String, dynamic> m) => {
+  'schema': 3,
+  'level': m['n'],
+  'slot': 'practice',
+  'tag': m['tag'] ?? 'normal',
+  'grid': [m['w'], m['h']],
+  'paths': [
+    for (final (i, p) in (m['snakes'] as List).indexed)
+      {
+        'id': 'p${i + 1}',
+        'color': p['color'],
+        'dir': p['dir'],
+        'body': p['body'],
+        'layer': 0,
+        'mods': p['skin'] == null ? {} : {'skin': p['skin']},
+      },
   ],
-  'rocks': [
-    [4, 4],
+  'mechanics': [
+    for (final (i, c) in ((m['rocks'] as List?) ?? []).indexed)
+      {
+        'id': 'o${i + 1}',
+        'type': 'M001',
+        'cells': [c],
+        'params': {},
+        'hammerable': true,
+      },
   ],
-});
+};
 
 void main() {
   group('Engine', () {
@@ -155,29 +187,31 @@ void main() {
   group('LevelCodec', () {
     test('rejects unsolvable boards', () {
       expect(
-        () => LevelCodec.decode({
-          'n': 9,
-          'w': 4,
-          'h': 4,
-          'snakes': [
-            {
-              'body': [
-                [0, 0],
-                [0, 1],
-              ],
-              'dir': 'R',
-              'color': 'red',
-            },
-            {
-              'body': [
-                [3, 0],
-                [3, 1],
-              ],
-              'dir': 'L',
-              'color': 'blue',
-            },
-          ],
-        }),
+        () => LevelCodec.decode(
+          v3({
+            'n': 9,
+            'w': 4,
+            'h': 4,
+            'snakes': [
+              {
+                'body': [
+                  [0, 0],
+                  [0, 1],
+                ],
+                'dir': 'R',
+                'color': 'red',
+              },
+              {
+                'body': [
+                  [3, 0],
+                  [3, 1],
+                ],
+                'dir': 'L',
+                'color': 'blue',
+              },
+            ],
+          }),
+        ),
         throwsA(isA<LevelFormatException>()),
       );
     });
@@ -193,19 +227,23 @@ void main() {
       };
       expect(
         () => LevelCodec.decode(
-          one([
-            [1, 1],
-            [1, 1],
-          ]),
+          v3(
+            one([
+              [1, 1],
+              [1, 1],
+            ]),
+          ),
         ),
         throwsA(isA<LevelFormatException>()),
       );
       expect(
         () => LevelCodec.decode(
-          one([
-            [1, 1],
-            [3, 3],
-          ]),
+          v3(
+            one([
+              [1, 1],
+              [3, 3],
+            ]),
+          ),
         ),
         throwsA(isA<LevelFormatException>()),
       );
