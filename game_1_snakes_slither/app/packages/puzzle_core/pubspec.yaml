@@ -1,0 +1,16 @@
+name: puzzle_core
+description: Shared pure-Dart puzzle engine (rules, solver, level codec).
+version: 0.1.0
+publish_to: none
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.13.7
+
+# Add regular dependencies here.
+dependencies:
+  # path: ^1.9.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
