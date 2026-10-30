@@ -254,3 +254,42 @@ class MiniShopSheet extends StatelessWidget {
     ],
   );
 }
+
+class GiftBasketPopup extends StatefulWidget {
+  const GiftBasketPopup({super.key, required this.data, required this.onCollect});
+
+  /// Rewards are already in the wallet; this is the reveal.
+  final GiftBasketData data;
+  final VoidCallback onCollect;
+
+  @override
+  State<GiftBasketPopup> createState() => _GiftBasketPopupState();
+}
+
+class _GiftBasketPopupState extends State<GiftBasketPopup> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final d = widget.data;
+    final boosters = d.boosters.entries.map((e) => '+${e.value} ${e.key.name}').join('  ');
+    return _Card(
+      key: AppKeys.giftBasket,
+      children: [
+        Text(d.isChest ? '🏆 Jungle Treasure Chest!' : '🧺 Jungle Gift Basket!'),
+        if (!_open)
+          TextButton(
+            onPressed: () => setState(() => _open = true),
+            child: const Text('tap to open'),
+          )
+        else
+          Text('+${d.coins} 🪙  $boosters'),
+        FilledButton(
+          key: AppKeys.giftCollect,
+          onPressed: widget.onCollect,
+          child: const Text('Collect'),
+        ),
+      ],
+    );
+  }
+}

@@ -5,9 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../contracts/view_models.dart';
 import '../data/level_repository.dart';
 import '../features/gameplay/gameplay_route.dart';
+import '../features/meta/shop_route.dart';
+import '../features/meta/wheel_route.dart';
+import '../state/ads_cubit.dart';
 import '../state/progress_cubit.dart';
 import '../state/settings_cubit.dart';
 import '../state/wallet_cubit.dart';
+import '../state/wheel_cubit.dart';
 import '../ui/popups/popups.dart';
 import '../ui/screens/home_screen.dart';
 import '../ui/screens/level_map_screen.dart';
@@ -17,6 +21,8 @@ GoRouter buildRouter() => GoRouter(
     GoRoute(path: '/', builder: (c, _) => const _HomeRoute()),
     GoRoute(path: '/map', builder: (c, _) => const _MapRoute()),
     GoRoute(path: '/settings', builder: (c, _) => const _SettingsRoute()),
+    GoRoute(path: '/shop', builder: (c, _) => const ShopRoute()),
+    GoRoute(path: '/wheel', builder: (c, _) => const WheelRoute()),
     GoRoute(
       path: '/play/:n',
       builder: (c, st) => GameplayRoute(levelNumber: int.tryParse(st.pathParameters['n']!) ?? 0),
@@ -32,11 +38,23 @@ class _HomeRoute extends StatelessWidget {
     final progress = context.watch<ProgressCubit>().state;
     final repo = context.read<LevelRepository>();
     final next = progress.nextLevel;
+    context.watch<WheelCubit>(); // rebuild on spins
+    final wheel = context.read<WheelCubit>();
+    final ads = context.watch<AdsCubit>();
     return HomeScreen(
-      data: HomeData(coins: coins, nextLevel: next, allCleared: !repo.exists(next)),
+      data: HomeData(
+        coins: coins,
+        nextLevel: next,
+        allCleared: !repo.exists(next),
+        wheelUnlocked: wheel.unlocked,
+        freeSpinReady: wheel.freeAvailable,
+        vipActive: ads.vipActive,
+      ),
       onPlay: () => context.go('/play/$next'),
       onOpenMap: () => context.go('/map'),
       onOpenSettings: () => context.go('/settings'),
+      onOpenShop: () => context.go('/shop'),
+      onOpenWheel: () => context.go('/wheel'),
     );
   }
 }

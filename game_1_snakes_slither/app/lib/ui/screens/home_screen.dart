@@ -11,12 +11,18 @@ class HomeScreen extends StatelessWidget {
     required this.onPlay,
     required this.onOpenMap,
     required this.onOpenSettings,
+    required this.onOpenShop,
+    required this.onOpenWheel,
   });
 
   final HomeData data;
   final VoidCallback onPlay;
   final VoidCallback onOpenMap;
   final VoidCallback onOpenSettings;
+  final VoidCallback onOpenShop;
+
+  /// Only shown when data.wheelUnlocked.
+  final VoidCallback onOpenWheel;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -41,6 +47,13 @@ class HomeScreen extends StatelessWidget {
             child: Text(data.allCleared ? 'More levels soon' : '▶  LEVEL ${data.nextLevel}'),
           ),
           TextButton(key: AppKeys.homeMap, onPressed: onOpenMap, child: const Text('Map')),
+          TextButton(key: AppKeys.homeShop, onPressed: onOpenShop, child: const Text('🛒 Shop')),
+          if (data.wheelUnlocked)
+            TextButton(
+              key: AppKeys.homeWheel,
+              onPressed: onOpenWheel,
+              child: Text('🌸 Spin${data.freeSpinReady ? ' (1)' : ''}'),
+            ),
         ],
       ),
     ),

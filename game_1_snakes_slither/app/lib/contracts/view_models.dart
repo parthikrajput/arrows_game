@@ -9,14 +9,37 @@ export 'package:puzzle_core/puzzle_core.dart'
     show Booster, BoardState, Cell, Dir, LaneTrace, Rock, Snake, SnakeColor, SnakeSkin;
 
 class HomeData extends Equatable {
-  const HomeData({required this.coins, required this.nextLevel, required this.allCleared});
+  const HomeData({
+    required this.coins,
+    required this.nextLevel,
+    required this.allCleared,
+    this.wheelUnlocked = false,
+    this.freeSpinReady = false,
+    this.vipActive = false,
+  });
   final int coins;
   final int nextLevel;
+
+  /// Show the Lucky Lily Wheel button (after clearing L10).
+  final bool wheelUnlocked;
+
+  /// Badge "1" on the wheel button.
+  final bool freeSpinReady;
+
+  /// Hide the VIP chip and banner space.
+  final bool vipActive;
 
   /// Every available level is cleared (show "More levels soon").
   final bool allCleared;
   @override
-  List<Object?> get props => [coins, nextLevel, allCleared];
+  List<Object?> get props => [
+    coins,
+    nextLevel,
+    allCleared,
+    wheelUnlocked,
+    freeSpinReady,
+    vipActive,
+  ];
 }
 
 enum NodeState { locked, current, cleared }
@@ -183,9 +206,14 @@ class LevelCompleteData extends Equatable {
     required this.canDouble,
     required this.doubled,
     required this.hasNext,
+    this.gift,
   });
   final int level;
   final int stars;
+
+  /// Jungle Gift Basket / Treasure Chest earned by this win (already granted).
+  /// Shown after Next, before the next level.
+  final GiftBasketData? gift;
 
   /// 0 on replay.
   final int clearCoins;
@@ -199,7 +227,16 @@ class LevelCompleteData extends Equatable {
   final bool hasNext;
   int get totalCoins => clearCoins * (doubled ? 2 : 1) + starBonus;
   @override
-  List<Object?> get props => [level, stars, clearCoins, starBonus, canDouble, doubled, hasNext];
+  List<Object?> get props => [
+    level,
+    stars,
+    clearCoins,
+    starBonus,
+    canDouble,
+    doubled,
+    hasNext,
+    gift,
+  ];
 }
 
 class MiniShopData extends Equatable {
@@ -237,3 +274,138 @@ class SettingsData extends Equatable {
 }
 
 enum SettingKey { sound, music, haptics, colourBlind, reducedMotion }
+
+class GiftBasketData extends Equatable {
+  const GiftBasketData({
+    required this.level,
+    required this.coins,
+    required this.boosters,
+    required this.isChest,
+  });
+  final int level;
+  final int coins;
+  final Map<Booster, int> boosters;
+
+  /// L500 Jungle Treasure Chest instead of a basket (bigger, with a badge).
+  final bool isChest;
+  @override
+  List<Object?> get props => [level, coins, boosters, isChest];
+}
+
+class ShopTileData extends Equatable {
+  const ShopTileData({
+    required this.booster,
+    required this.quantity,
+    required this.price,
+    required this.locked,
+    required this.unlockLevel,
+    required this.affordable,
+  });
+  final Booster booster;
+
+  /// 1 or 3.
+  final int quantity;
+  final int price;
+
+  /// Show "Unlocks at L{unlockLevel}", not buyable.
+  final bool locked;
+  final int unlockLevel;
+  final bool affordable;
+  @override
+  List<Object?> get props => [booster, quantity, price, locked, unlockLevel, affordable];
+}
+
+class ShopData extends Equatable {
+  const ShopData({
+    required this.coins,
+    required this.tiles,
+    required this.freeCoinsLeft,
+    required this.freeCoinsAmount,
+    required this.adAvailable,
+    required this.busy,
+    required this.vipActive,
+    required this.storeAvailable,
+  });
+  final int coins;
+
+  /// Boosters tab: Hint ×1, ×3, Shield ×1, ×3, Hammer ×1, ×3.
+  final List<ShopTileData> tiles;
+  final int freeCoinsLeft;
+  final int freeCoinsAmount;
+  final bool adAvailable;
+
+  /// A rewarded ad is showing.
+  final bool busy;
+  final bool vipActive;
+
+  /// False until store purchases ship: Coins and Offers tabs show "Store unavailable".
+  final bool storeAvailable;
+  @override
+  List<Object?> get props => [
+    coins,
+    tiles,
+    freeCoinsLeft,
+    freeCoinsAmount,
+    adAvailable,
+    busy,
+    vipActive,
+    storeAvailable,
+  ];
+}
+
+class WheelSegmentData extends Equatable {
+  const WheelSegmentData({required this.label, required this.odds, this.booster, this.coins = 0});
+  final String label;
+
+  /// 0..1, shown in the odds sheet (store policy).
+  final double odds;
+  final Booster? booster;
+  final int coins;
+  @override
+  List<Object?> get props => [label, odds, booster, coins];
+}
+
+class WheelData extends Equatable {
+  const WheelData({
+    required this.segments,
+    required this.freeAvailable,
+    required this.adAvailable,
+    required this.freeUsed,
+    required this.adUsed,
+    required this.timeLocked,
+    required this.busy,
+    required this.prizeIndex,
+    required this.spinSeq,
+  });
+
+  /// 8 equal-size segments, in wheel order.
+  final List<WheelSegmentData> segments;
+  final bool freeAvailable;
+
+  /// "🎬 Spin again (1 left)".
+  final bool adAvailable;
+  final bool freeUsed;
+  final bool adUsed;
+
+  /// Device clock went backwards: show "Your clock seems off — jungle time will return soon".
+  final bool timeLocked;
+  final bool busy;
+
+  /// Segment to land on after a spin (prize already granted). Null before any spin.
+  final int? prizeIndex;
+
+  /// Changes on every spin; animate when it changes.
+  final int spinSeq;
+  @override
+  List<Object?> get props => [
+    segments,
+    freeAvailable,
+    adAvailable,
+    freeUsed,
+    adUsed,
+    timeLocked,
+    busy,
+    prizeIndex,
+    spinSeq,
+  ];
+}

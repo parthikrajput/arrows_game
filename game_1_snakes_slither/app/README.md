@@ -1,6 +1,6 @@
 # Snakes Slither — Flutter app
 
-Milestone 1: the core playable loop on 5 test boards (the real 500 levels come later).
+Puzzle game per the Phase 1 docs, with the look from the UI canvas in `../design/`. Built so far: the core playable loop, Shop (coin side), Lucky Lily Wheel, Jungle Gift Basket and ad timing rules. It runs on 5 test boards; the real 500 levels come later.
 
 - How the work is split between agents: [AGENTS.md](AGENTS.md)
 - Design tasks for Antigravity: [handoff/ANTIGRAVITY_TASKS.md](handoff/ANTIGRAVITY_TASKS.md)

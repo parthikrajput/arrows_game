@@ -17,7 +17,12 @@ Two agents build this Flutter app. Each owns separate folders, so work never ove
 2. Every screen and popup gets its data and callbacks through its constructor. **Keep each constructor exactly as it is.** Don't import anything from `lib/features`, `lib/state` or `lib/services`, and don't read blocs.
 3. Put every key from `lib/contracts/app_keys.dart` on the matching widget. The tests find widgets by these keys.
 4. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
-5. Visual source of truth: `../phases/phase_1/06_UI_UX_SCREENS.md` (tokens, wireframes, accessibility) and `../VFX_IMPLEMENTATION.md`.
+5. **The game is the Phase 1 puzzle** (tap snakes out of a tangle), not classic snake.
+   - **Look:** follow the brand on the UI canvas: `../design/ui_canvas/screens/*.png`, `../design/brand/` (logo, 3D Pip renders) and the colour and type table in `../design/ui_canvas/README.md`.
+   - **What's on each screen, its states and accessibility:** follow `../phases/phase_1/06_UI_UX_SCREENS.md`.
+   - **Ignore the canvas's classic-snake parts:** fruit, score and best score, D-pad or swipe, gems, skins, food, themes, Rewards and Profile.
+   - **Reuse the canvas's "Archive" puzzle screens** (Hint, Hammer, Rush, Wheel, Board, Booster and others in `../design/ui_canvas/*.dc.html`) as layout references.
+   - Copy any art you use into `assets/images/`.
 6. Before you finish any task, run `flutter analyze` (no errors or warnings) and `flutter test`, which must stay green.
 7. Need a new field, callback or key? Don't add it yourself. Write it in `handoff/CHANGE_REQUESTS.md`, then use a placeholder or skip that piece.
 8. Use only the 3 Phase 1 boosters: Glow Firefly Hint 🪲✨, Safety Shell Shield 🐚, Magic Stone Hammer 🔨. The 🌀 icon in the doc 06 wireframes is outdated, so ignore it.

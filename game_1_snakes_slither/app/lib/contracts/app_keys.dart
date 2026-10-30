@@ -31,4 +31,17 @@ class AppKeys {
   static const claimDouble = Key('popup.complete.double');
   static const next = Key('popup.complete.next');
   static const miniShop = Key('popup.miniShop');
+  static const giftBasket = Key('popup.gift');
+  static const giftCollect = Key('popup.gift.collect');
+  // Home extras
+  static const homeShop = Key('home.shop');
+  static const homeWheel = Key('home.wheel');
+  // Shop
+  static const shopScreen = Key('shop.screen');
+  static Key shopTile(String booster, int qty) => Key('shop.tile.$booster.$qty');
+  static const shopFreeCoins = Key('shop.freeCoins');
+  // Wheel
+  static const wheelScreen = Key('wheel.screen');
+  static const wheelSpinFree = Key('wheel.spin.free');
+  static const wheelSpinAd = Key('wheel.spin.ad');
 }

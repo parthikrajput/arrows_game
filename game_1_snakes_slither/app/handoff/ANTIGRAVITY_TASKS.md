@@ -1,6 +1,8 @@
 # Antigravity tasks — Milestone 1 (core playable loop)
 
-Do **A1 first**, because everything else uses its theme. After that, A2–A5 touch different files and can run in any order.
+Do **A1 first**, because everything else uses its theme. After that, A2–A6 touch different files and can run in any order.
+
+**Look vs. content.** The game is the Phase 1 **puzzle**. Take the *look* from the UI canvas (`../design/`) and the *content and behaviour* from the Phase 1 docs. AGENTS.md rule 5 has the details.
 Paste one task at a time into Antigravity, with the repo folder `game_1_snakes_slither/app` open.
 
 ---
@@ -17,6 +19,17 @@ tokens, accessibility, responsive rules).
 Edit only: lib/ui/theme/**, new lib/ui/widgets/**, assets/fonts/**, and the
 font/asset entries in pubspec.yaml.
 
+0. Brand palette from ../design/ui_canvas/README.md: Forest #075B35 (primary),
+   Emerald #13864D, Leaf #A8D94F, Gold #F4B72F, Cream #F7F4E8 (background),
+   Card #FFFEF8, Text #163B28. Map them onto the existing AppColors names
+   (primary, primaryLight, bgSage→cream background, bgCream→card, coinGold,
+   textPrimary). Keep the 8 snake colours and the preview red/green from doc
+   06 §2.2 unchanged. Match the canvas look (../design/ui_canvas/screens/
+   Home.png, Complete.png): cream background with soft leaf decorations,
+   deep-green 3D buttons, cream cards with soft shadows, gold coin pill.
+   Copy the logo and Pip renders you need (../design/brand/
+   snake_slither_logo.png, renders/home_platform.png, sad.png, sleep.png)
+   into assets/images/.
 1. Bundle fonts offline: Fredoka (display/headings/buttons/HUD numbers with
    tabular figures), Nunito (body/caption). Also Baloo Bhai 2 (Gujarati) and
    Baloo 2 (Hindi) as fallbacks, line height +10%.
@@ -181,19 +194,62 @@ Read AGENTS.md first and follow it strictly. Use the A1 design system.
 
 Task: redesign lib/ui/screens/home_screen.dart and level_map_screen.dart.
 Keep constructors and keys (homeScreen, homePlay, homeMap, homeSettings,
-mapScreen, mapNode(n)) unchanged.
+homeShop, homeWheel, mapScreen, mapNode(n)) unchanged.
+Look: ../design/ui_canvas/screens/Home.png and LevelMap.png (Pip on the
+platform, big green Play, cream cards, leaves). Leave out gems, the profile
+avatar and the "Awards" tab; those aren't in Phase 1. A bottom nav is fine if it
+holds Shop (onOpenShop), Spin (onOpenWheel, only when data.wheelUnlocked,
+badge when data.freeSpinReady) and Settings (onOpenSettings).
 Source: ../phases/phase_1/06_UI_UX_SCREENS.md §5.3, §5.4; biomes in
 01_GAME_CONCEPT_AND_RULES.md §2.3.
 
-- Home (§5.3), Milestone 1 version: top bar with coin pill + settings
-  button; Pip in the garden; big primary "▶ LEVEL N" button (when
-  data.allCleared, show "More levels soon", disabled); Map button. Leave
-  space for the Daily card, Spin/Shop/Ranks row and VIP chip, but don't
-  build them yet (milestone 2).
+- Home (§5.3): coin pill + settings button; Pip; big primary "▶ LEVEL N"
+  button (when data.allCleared, show "More levels soon", disabled); Map;
+  Shop; Spin (rules above). Hide the VIP chip when data.vipActive. Leave a
+  slot for the Daily card (coming next) but don't build it yet.
 - Level Map (§5.4): winding vine path, virtualized list. Node states: locked
   🔒, current ◉ pulsing with Pip, cleared with 1–3 stars, Hard 🐾 in red.
   Biome header "Pip's Backyard" for levels 1–10. Jump-to-current button.
   Only call onLevelTap for unlocked nodes.
+
+Done when: analyze is clean and flutter test passes.
+```
+
+---
+
+## A6 — Shop, Lucky Lily Wheel, Gift Basket
+
+```
+Read AGENTS.md first and follow it strictly. Use the A1 design system.
+
+Task: redesign lib/ui/screens/shop_screen.dart, lib/ui/screens/wheel_screen.dart
+and GiftBasketPopup in lib/ui/popups/. Keep constructors and keys unchanged
+(shopScreen, shopTile(booster, qty), shopFreeCoins, wheelScreen,
+wheelSpinFree, wheelSpinAd, giftBasket, giftCollect).
+Sources: ../phases/phase_1/06_UI_UX_SCREENS.md §5.11, §5.14, §5.15;
+04_BOOSTERS_COINS_SHOP.md §6, §8, §10. Look: ../design/ui_canvas/screens/Shop.png
+(card grid and tabs) plus the archive Wheel / Gift / Chest boards in
+../design/ui_canvas/. In the Shop, replace the canvas's Skins, Food and Themes
+tabs with Phase 1's Boosters · Coins · Offers.
+
+- Shop: header with back + coin balance. Tabs Boosters · Coins · Offers.
+  Boosters tab = data.tiles as a grid (icon, ×1/×3, price; locked → "Unlocks
+  at L15/L25"; unaffordable → dimmed; tap → onBuy, optional confirm).
+  "🎬 Free +50 🪙 (n left)" tile → onFreeCoins (disabled when 0 left, ad
+  unavailable, or busy). Coins and Offers tabs: when !data.storeAvailable,
+  show disabled tiles with "Store unavailable". Footer: "Restore purchases ·
+  Terms" (no-op for now).
+- Wheel: 8 EQUAL-size segments in data.segments order, pointer on top,
+  "ⓘ" opens an odds sheet listing every segment's odds in % (required by
+  store policy). "Spin free" → onSpinFree; "🎬 Spin again (1 left)" →
+  onSpinAd. When data.spinSeq changes, spin 2.5 s with a decelerate curve
+  and land on data.prizeIndex, then show the prize popup. The prize is
+  already granted, so the animation is decoration only. data.timeLocked →
+  show "Your clock seems off — jungle time will return soon" and disable
+  both buttons. Reduced motion → no long spin, just reveal.
+- GiftBasketPopup: basket shakes in a loop, tap to open (burst), reward chips
+  (coins + boosters) fly toward the coin pill, then Collect → onCollect.
+  data.isChest → bigger Treasure Chest variant with the "Garden Hero" badge.
 
 Done when: analyze is clean and flutter test passes.
 ```

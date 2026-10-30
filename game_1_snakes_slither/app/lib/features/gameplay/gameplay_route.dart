@@ -6,7 +6,7 @@ import 'package:puzzle_core/puzzle_core.dart';
 
 import '../../contracts/view_models.dart';
 import '../../data/level_repository.dart';
-import '../../services/ads_service.dart';
+import '../../state/ads_cubit.dart';
 import '../../state/economy.dart';
 import '../../state/progress_cubit.dart';
 import '../../state/settings_cubit.dart';
@@ -47,7 +47,7 @@ class GameplayRoute extends StatelessWidget {
         level: level,
         wallet: c.read<WalletCubit>(),
         progress: c.read<ProgressCubit>(),
-        ads: c.read<AdsService>(),
+        ads: c.read<AdsCubit>(),
         hasNextLevel: repo.exists(levelNumber + 1),
       ),
       child: const _GameplayView(),
@@ -76,6 +76,22 @@ class _GameplayViewState extends State<_GameplayView> {
   void dispose() {
     _life.dispose();
     super.dispose();
+  }
+
+  bool _showGift = false;
+  bool _winRecorded = false;
+
+  WinContext _winContext(LevelCompleteData r) => WinContext(
+    level: r.level,
+    hasGiftBasket: r.gift != null && !r.gift!.isChest,
+    hasChest: r.gift?.isChest ?? false,
+  );
+
+  Future<void> _afterRewards(BuildContext context, LevelCompleteData r) async {
+    final router = GoRouter.of(context);
+    await context.read<AdsCubit>().maybeShowInterstitial(_winContext(r));
+    if (!mounted) return;
+    router.go(r.hasNext ? '/play/${r.level + 1}' : '/map');
   }
 
   void _onCue(BuildContext context, GameState s) {
@@ -120,6 +136,8 @@ class _GameplayViewState extends State<_GameplayView> {
       );
       if (ok != true) return;
     }
+    _winRecorded = false;
+    _showGift = false;
     bloc.add(const Restarted());
   }
 
@@ -129,11 +147,18 @@ class _GameplayViewState extends State<_GameplayView> {
     final wallet = context.watch<WalletCubit>().state;
     final settings = context.watch<SettingsCubit>().state;
     final progress = context.watch<ProgressCubit>().state;
-    final ads = context.read<AdsService>();
+    final ads = context.read<AdsCubit>();
 
     return BlocConsumer<GameBloc, GameState>(
-      listenWhen: (a, b) => a.cueSeq != b.cueSeq,
-      listener: _onCue,
+      listenWhen: (a, b) =>
+          a.cueSeq != b.cueSeq || (a.status != GameStatus.won && b.status == GameStatus.won),
+      listener: (context, s) {
+        if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
+          _winRecorded = true;
+          context.read<AdsCubit>().recordWin(_winContext(s.result!));
+        }
+        _onCue(context, s);
+      },
       builder: (context, s) {
         final lv = s.level.number;
         final a = s.attempt;
@@ -203,7 +228,7 @@ class _GameplayViewState extends State<_GameplayView> {
     WalletState wallet,
     SettingsData settings,
     ProgressState progress,
-    AdsService ads,
+    AdsCubit ads,
   ) {
     final bloc = context.read<GameBloc>();
     final lv = s.level.number;
@@ -256,11 +281,17 @@ class _GameplayViewState extends State<_GameplayView> {
           onHome: () => context.go('/'),
         );
       case GameStatus.won:
+        final r = s.result!;
+        if (_showGift && r.gift != null) {
+          return GiftBasketPopup(data: r.gift!, onCollect: () => _afterRewards(context, r));
+        }
         return LevelCompletePopup(
-          data: s.result!,
+          data: r,
           adBusy: s.adBusy,
           onDouble: () => bloc.add(const DoubleCoinsRequested()),
-          onNext: () => context.go('/play/${lv + 1}'),
+          // Win sequence: Gift Basket (if any) ⇒ interstitial check ⇒ next level.
+          onNext: () =>
+              r.gift != null ? setState(() => _showGift = true) : _afterRewards(context, r),
           onMap: () => context.go('/map'),
         );
       default:

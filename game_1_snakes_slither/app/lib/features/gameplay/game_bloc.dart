@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:puzzle_core/puzzle_core.dart';
 
 import '../../contracts/view_models.dart';
-import '../../services/ads_service.dart';
+import '../../state/ads_cubit.dart';
 import '../../state/economy.dart';
 import '../../state/progress_cubit.dart';
+import '../../state/rewards.dart';
 import '../../state/wallet_cubit.dart';
 
 enum GameStatus { playing, animating, hammerTarget, paused, secondChance, won, failed }
@@ -185,7 +186,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required Level level,
     required WalletCubit wallet,
     required ProgressCubit progress,
-    required AdsService ads,
+    required AdsCubit ads,
     required bool hasNextLevel,
   }) : _hasNext = hasNextLevel,
        _wallet = wallet,
@@ -220,7 +221,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   final WalletCubit _wallet;
   final ProgressCubit _progress;
-  final AdsService _ads;
+  final AdsCubit _ads;
   final bool _hasNext;
   int _motionSeq = 0;
 
@@ -318,6 +319,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final clear = rec.firstClear ? Economy.clearCoins(lv.tag) : 0;
     final bonus = rec.firstThreeStar ? Economy.threeStarBonus : 0;
     _wallet.earn(clear + bonus);
+    // Baskets come with the first clear only, so a replay can't pay twice.
+    final basket = rec.firstClear ? Rewards.basketFor(lv.number) : null;
+    if (basket != null) {
+      _wallet.earn(basket.coins);
+      basket.boosters.forEach(_wallet.grantBooster);
+    }
     emit(
       state.copyWith(
         status: GameStatus.won,
@@ -330,6 +337,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           canDouble: clear > 0,
           doubled: false,
           hasNext: _hasNext,
+          gift: basket == null
+              ? null
+              : GiftBasketData(
+                  level: basket.level,
+                  coins: basket.coins,
+                  boosters: basket.boosters,
+                  isChest: basket.isChest,
+                ),
         ),
       ),
     );
@@ -459,6 +474,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
                 canDouble: false,
                 doubled: true,
                 hasNext: r.hasNext,
+                gift: r.gift,
               )
             : r,
       ),

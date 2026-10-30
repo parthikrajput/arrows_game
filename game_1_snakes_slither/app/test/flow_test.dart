@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:puzzle_core/puzzle_core.dart';
 import 'package:snakes_slither/app/app.dart';
 import 'package:snakes_slither/contracts/app_keys.dart';
 import 'package:snakes_slither/data/save_store.dart';
@@ -17,10 +18,20 @@ import 'package:snakes_slither/ui/board/board_canvas.dart';
 // so they keep passing whatever the UI looks like.
 
 class InstantAds implements AdsService {
+  InstantAds({this.reward = true});
+  bool reward;
+  int interstitials = 0;
   @override
   bool get rewardedReady => true;
   @override
-  Future<bool> showRewarded(String placement) async => true;
+  bool get interstitialReady => true;
+  @override
+  Future<bool> showRewarded(String placement) async => reward;
+  @override
+  Future<bool> showInterstitial() async {
+    interstitials++;
+    return true;
+  }
 }
 
 Future<void> tapCell(WidgetTester t, int x, int y, int columns) async {
@@ -123,5 +134,14 @@ void main() {
     await t.pumpAndSettle();
     expect(read<ProgressCubit>(t, AppKeys.homeScreen).state.nextLevel, 2);
     expect(read<WalletCubit>(t, AppKeys.homeScreen).state.coins, 235);
+  });
+
+  testWidgets('Home → Shop → buy 1 Hint → back home', (t) async {
+    await boot(t);
+    await go(t, AppKeys.homeShop);
+    expect(find.byKey(AppKeys.shopScreen), findsOneWidget);
+    await go(t, AppKeys.shopTile('hint', 1));
+    final w = read<WalletCubit>(t, AppKeys.shopScreen).state;
+    expect((w.coins, w.count(Booster.hint)), (140, 1));
   });
 }

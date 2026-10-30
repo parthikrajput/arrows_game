@@ -6,16 +6,26 @@ import 'package:snakes_slither/data/level_repository.dart';
 import 'package:snakes_slither/data/save_store.dart';
 import 'package:snakes_slither/features/gameplay/game_bloc.dart';
 import 'package:snakes_slither/services/ads_service.dart';
+import 'package:snakes_slither/services/time_guard.dart';
+import 'package:snakes_slither/state/ads_cubit.dart';
 import 'package:snakes_slither/state/progress_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
 
 class InstantAds implements AdsService {
   InstantAds({this.reward = true});
   bool reward;
+  int interstitials = 0;
   @override
   bool get rewardedReady => true;
   @override
+  bool get interstitialReady => true;
+  @override
   Future<bool> showRewarded(String placement) async => reward;
+  @override
+  Future<bool> showInterstitial() async {
+    interstitials++;
+    return true;
+  }
 }
 
 late SaveStore store;
@@ -26,7 +36,7 @@ GameBloc start(int level, {AdsService? ads}) => GameBloc(
   level: LevelRepository().load(level),
   wallet: wallet,
   progress: progress,
-  ads: ads ?? InstantAds(),
+  ads: AdsCubit(store, ads ?? InstantAds(), TimeGuard(store, SystemClock())),
   hasNextLevel: true,
 );
 
