@@ -1,0 +1,21 @@
+{
+  "theme": "snakes_slither_jungle",
+  "version": 1,
+  "events": {
+    "path_tap": "audio/sfx/path_tap.wav",
+    "path_exit": "audio/sfx/path_exit.wav",
+    "bump": "audio/sfx/bump.wav",
+    "locked_tap": "audio/sfx/locked_tap.wav",
+    "heart_lost": "audio/sfx/heart_lost.wav",
+    "shield_absorb": "audio/sfx/shield_absorb.wav",
+    "preview_start": "audio/sfx/preview_start.wav",
+    "booster_hint": "audio/sfx/booster_hint.wav",
+    "booster_hammer": "audio/sfx/booster_hammer.wav",
+    "win_stinger": "audio/sfx/win_stinger.wav",
+    "coins_fly": "audio/sfx/coins_fly.wav"
+  },
+  "music": {
+    "home": "audio/music/music_home.m4a",
+    "gameplay": "audio/music/music_gameplay.m4a"
+  }
+}

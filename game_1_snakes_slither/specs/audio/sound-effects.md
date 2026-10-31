@@ -3,7 +3,7 @@ Source docs: ../../SOUND_EFFECTS_IMPLEMENTATION.md, phase_1/07_FRONTEND_IMPLEMEN
 # Spec: Audio Engine and Sound Effects
 
 ## Status
-Draft
+Implemented
 
 ## Type
 New Feature

@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/level_repository.dart';
-import '../data/save_store.dart';
 import '../contracts/ui_feedback.dart';
 import '../contracts/view_models.dart';
+import '../data/level_repository.dart';
+import '../data/save_store.dart';
+import '../logging/tap_logger.dart';
 import '../services/ads_service.dart';
 import '../services/audio_service.dart';
 import '../services/time_guard.dart';
 import '../state/ads_cubit.dart';
+import '../state/daily_cubit.dart';
 import '../state/progress_cubit.dart';
 import '../state/settings_cubit.dart';
 import '../state/shop_cubit.dart';
+import '../state/streak_cubit.dart';
 import '../state/wallet_cubit.dart';
 import '../state/wheel_cubit.dart';
 import '../ui/theme/tokens.dart';
@@ -45,9 +48,17 @@ class _SnakesSlitherAppState extends State<SnakesSlitherApp> {
   final GoRouter _router = buildRouter();
   late final AudioService _audio = widget.audio ?? (AudioService()..init());
 
-  void _syncAudio(SettingsData s) => _audio
-    ..soundOn = s.sound
-    ..hapticsOn = s.haptics;
+  void _syncAudio(SettingsData s) {
+    _audio.soundEnabled = s.sound;
+    _audio.musicEnabled = s.music;
+    _audio.haptics.enabled = s.haptics;
+  }
+
+  @override
+  void dispose() {
+    _audio.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => MultiRepositoryProvider(
@@ -83,6 +94,23 @@ class _SnakesSlitherAppState extends State<SnakesSlitherApp> {
             c.read<AdsCubit>(),
           ),
         ),
+        BlocProvider(
+          create: (c) => StreakCubit(
+            widget.store,
+            c.read<TimeGuard>(),
+            c.read<WalletCubit>(),
+            c.read<AdsCubit>(),
+          ),
+        ),
+        BlocProvider(
+          create: (c) => DailyCubit(
+            widget.store,
+            c.read<TimeGuard>(),
+            c.read<ProgressCubit>(),
+            c.read<WalletCubit>(),
+            c.read<StreakCubit>(),
+          ),
+        ),
       ],
       child: BlocListener<SettingsCubit, SettingsData>(
         // Saved settings apply from the first frame, then on every change.
@@ -92,11 +120,13 @@ class _SnakesSlitherAppState extends State<SnakesSlitherApp> {
           onReady: _syncAudio,
           child: UiFeedbackScope(
             feedback: _audio,
-            child: MaterialApp.router(
-              title: 'Snakes Slither',
-              debugShowCheckedModeBanner: false,
-              theme: buildAppTheme(),
-              routerConfig: _router,
+            child: TapLoggerScope(
+              child: MaterialApp.router(
+                title: 'Snakes Slither',
+                debugShowCheckedModeBanner: false,
+                theme: buildAppTheme(),
+                routerConfig: _router,
+              ),
             ),
           ),
         ),

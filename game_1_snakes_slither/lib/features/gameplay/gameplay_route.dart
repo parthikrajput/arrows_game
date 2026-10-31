@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:puzzle_core/puzzle_core.dart';
@@ -101,7 +100,6 @@ class _GameplayViewState extends State<_GameplayView> {
   /// Sound, haptics and toasts for what just happened. Runs once per cue.
   void _onCue(BuildContext context, GameState s) {
     final audio = context.read<AudioService>();
-    final haptics = context.read<SettingsCubit>().state.haptics;
     if (s.status != _lastStatus) {
       _lastStatus = s.status;
       if (s.status == GameStatus.won) audio.play(Sfx.winStinger);
@@ -109,25 +107,10 @@ class _GameplayViewState extends State<_GameplayView> {
     }
     if (s.cueSeq == _lastCueSeq) return;
     _lastCueSeq = s.cueSeq;
-    switch (s.cue) {
-      case GameCue.exit:
-        audio.play(Sfx.pathExit);
-        if (haptics) HapticFeedback.lightImpact();
-      case GameCue.bump:
-        audio.play(Sfx.bump);
-        audio.play(Sfx.heartLost);
-        if (haptics) HapticFeedback.mediumImpact();
-      case GameCue.shieldCrack:
-        audio.play(Sfx.shieldAbsorb);
-        if (haptics) HapticFeedback.mediumImpact();
-      case GameCue.hammerHit:
-        audio.play(Sfx.boosterHammer);
-        if (haptics) HapticFeedback.mediumImpact();
-      case GameCue.locked:
-        audio.play(Sfx.lockedTap);
-        if (haptics) HapticFeedback.selectionClick();
-      default:
-        break;
+    if (s.cue != null) {
+      try {
+        audio.playCue(s.cue!);
+      } catch (_) {}
     }
     final msg = switch (s.cue) {
       GameCue.hintNoSolution => 'No way out from here. Try Restart.',
