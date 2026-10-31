@@ -15,16 +15,16 @@ Group | File Path | Description | Status
 
 | Group | File Path | Description | Status |
 |---|---|---|---|
-| gameplay | specs/gameplay/core-concept-and-rules.md | Core puzzle rules, board/snake models, turn resolution pipeline, and win/fail/stars logic | Implemented |
+| gameplay | specs/gameplay/core-concept-and-rules.md | Core puzzle rules, board/snake models, turn resolution pipeline, and win/fail/stars logic | Approved |
 | gameplay | specs/gameplay/level-progression-0001-0500.md | 500-level progression architecture, tiers, 10-level block patterns, FTUE onboarding, and L500 Finale | Approved |
 | gameplay | specs/gameplay/obstacle-catalog-phase-1.md | Catalog of 49 jungle mechanics (M001–M049) and Phase 1 Finale with collision, hammer, and solver rules | Approved |
 | economy | specs/economy/boosters-coins-shop.md | Boosters, coins inflow/outflow, Gift Baskets, Golden Slither Rush, Lucky Lily Wheel, Shop, ads, and VIP | Approved |
 | meta | specs/meta/daily-challenge-and-streak.md | Daily Jungle Puzzle, 7 weekday modifiers, silhouettes, 7-day streak ladder, Saver Leaf, and leaderboards | Implemented |
-| ui | specs/ui/ui-ux-screens.md | Design tokens, color-blind palette, responsive layout rules, and wireframes for all 18 screens and dialogs | Implemented |
+| ui | specs/ui/ui-ux-screens.md | Design tokens, color-blind palette, responsive layout rules, and wireframes for all 18 screens and dialogs | Approved |
 | tech | specs/tech/frontend-implementation-and-qa.md | Flutter architecture, pure-Dart puzzle_core engine, BLoCs, CustomPainter renderer, persistence, and QA matrix | Approved |
 | audio | specs/audio/sound-effects.md | Audio engine, audioplayers setup, jungle ASMR sound effects, music loops, ducking, and audio QA checklist | Implemented |
 | tech | specs/tech/logging-and-error-tracking.md | AppLogger ring buffer and file sink, Crashlytics, tap tracing, deterministic replay, and problem reporting | Implemented |
-| tech | specs/tech/performance-optimization.md | 60 fps low-tier performance budgets, on-demand Ticker, static layer caching, device tiers, and perf monitor | Implemented |
+| tech | specs/tech/performance-optimization.md | 60 fps low-tier performance budgets, on-demand Ticker, static layer caching, device tiers, and perf monitor | Approved |
 | tech | specs/tech/splash-and-instant-launch.md | Instant launch pipeline with zero loading screens, native Android/iOS splash, and Jungle Dawn intro | Approved |
 | ui | specs/ui/vfx-and-juice.md | Particle, shake, flash and trail effects with tier limits, per-event effect catalog, and VFX QA checklist | Approved |
 | gameplay | specs/gameplay/phase-2-scope-and-rules.md | Pinch-zoom and pan, diagonal snakes, 3 layers, push physics, sunbeams, and Remote Config rollout | Draft |

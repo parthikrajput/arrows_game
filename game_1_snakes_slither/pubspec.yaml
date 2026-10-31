@@ -42,6 +42,7 @@ dependencies:
   puzzle_core:
     path: packages/puzzle_core
   audioplayers: ^6.8.1
+  flutter_svg: ^2.3.2
 
 dev_dependencies:
   flutter_test:

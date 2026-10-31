@@ -48,7 +48,9 @@ class AudioService implements UiFeedback {
     bool soundEnabled = true,
     bool musicEnabled = true,
   })  : _haptics = haptics ?? HapticsService(),
+        // ignore: prefer_initializing_formals
         _soundEnabled = soundEnabled,
+        // ignore: prefer_initializing_formals
         _musicEnabled = musicEnabled {
     if (enabled) {
       _initPlayers();

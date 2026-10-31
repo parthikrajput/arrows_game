@@ -173,6 +173,18 @@ class StreakCubit extends Cubit<StreakState> {
     return true;
   }
 
+  /// Decline the Streak Saver offer, resetting the cycle to Day 1.
+  void declineSaver() {
+    if (!state.hasSaverOffer) return;
+    final next = state.copyWith(
+      currentDay: 1,
+      hasSaverOffer: false,
+      cycleSaverUsed: false,
+    );
+    emit(next);
+    _persist(next);
+  }
+
   /// Called upon completing today's Daily Jungle Challenge
   StreakReward? onDailyCompleted() {
     final todayKey = _time.dayKey();

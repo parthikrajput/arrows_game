@@ -3,7 +3,7 @@ Source docs: phase_1/02_LEVEL_PROGRESSION_0001_0500.md, ../../SHARED_CORE_STANDA
 # Spec: Level Progression (Levels 1–500)
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Specify the Phase 1 progression system covering 500 levels, tier structures, 10-
 
 ## Current State
 Design documented in phase_1/02_LEVEL_PROGRESSION_0001_0500.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
+- State on 2026-10-31: All 500 levels are in assets/levels/phase_1.json (plain JSON, not .gz yet); L1–L20 fully checked, L21–L500 drafts. Checker: packages/puzzle_core/bin/validate_levels.dart; generator: tools/levelgen.
 - 500 levels delivered via pre-generated, CI-validated asset pack `assets/levels/phase_1.json.gz`.
 - Introduces one new mechanic every 10 levels on the x1 slot (M001 at L11 up to M049 at L491).
 - 6 Tiers: FTUE (L1-10), T1 (L11-100), T2 (L101-200), T3 (L201-300), T4 (L301-400), T5 (L401-500).
@@ -113,8 +114,8 @@ Zero obstacles on board. Deterministic optimal move limits: L1–3 optimal moves
 ## Affected Files
 - `packages/puzzle_core/lib/src/difficulty.dart` (to be created)
 - `packages/puzzle_core/lib/src/level_codec.dart` (to be created)
-- `apps/snakes_slither/assets/levels/phase_1.json.gz` (to be created)
-- `apps/snakes_slither/lib/data/repositories/level_repository.dart` (to be created)
+- `assets/levels/phase_1.json.gz` (to be created)
+- `lib/data/repositories/level_repository.dart` (to be created)
 - `tools/validator/bin/validator.dart` (to be created)
 
 ## Risks
@@ -123,3 +124,10 @@ Zero obstacles on board. Deterministic optimal move limits: L1–3 optimal moves
 
 ## Open Questions
 - None. All tier ranges, formula coefficients, and mechanic intro slots match SHARED_CORE_STANDARD §9.
+
+## Implementation Notes
+- 2026-10-31: All 500 levels built (tools/levelgen) and fully played by packages/puzzle_core/bin/validate_levels.dart under the full rules. Still open: the .json.gz asset and the app loading past L20 (needs the game screen mechanics).
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

@@ -36,6 +36,7 @@ class AppKeys {
   // Home extras
   static const homeShop = Key('home.shop');
   static const homeWheel = Key('home.wheel');
+  static const homeDaily = Key('home.daily');
   // Shop
   static const shopScreen = Key('shop.screen');
   static Key shopTile(String booster, int qty) => Key('shop.tile.$booster.$qty');
@@ -44,4 +45,14 @@ class AppKeys {
   static const wheelScreen = Key('wheel.screen');
   static const wheelSpinFree = Key('wheel.spin.free');
   static const wheelSpinAd = Key('wheel.spin.ad');
+  // Daily & Streak
+  static const dailyScreen = Key('daily.screen');
+  static const dailyPlay = Key('daily.play');
+  static const dailySaver = Key('daily.saver');
+  static const dailyResultPopup = Key('popup.dailyResult');
+  static const dailyResultCollect = Key('popup.dailyResult.collect');
+  static const saverPopup = Key('popup.saver');
+  static const saverWatchAd = Key('popup.saver.ad');
+  static const saverCoins = Key('popup.saver.coins');
+  static const saverDecline = Key('popup.saver.decline');
 }

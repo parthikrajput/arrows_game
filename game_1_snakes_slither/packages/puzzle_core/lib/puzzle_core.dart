@@ -9,4 +9,5 @@ export 'src/solver.dart';
 export 'src/prng.dart';
 export 'src/level_validator.dart';
 export 'src/level_draft_check.dart';
+export 'src/full_rules/rules_check.dart';
 export 'src/logging/codes.dart';

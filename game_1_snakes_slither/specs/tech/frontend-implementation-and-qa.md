@@ -3,7 +3,7 @@ Source docs: phase_1/07_FRONTEND_IMPLEMENTATION_AND_QA.md, ../../SHARED_CORE_STA
 # Spec: Frontend Implementation Architecture and QA
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the Flutter 3.x client application, pure-Dart `packages/puzzle_core` e
 
 ## Current State
 Design documented in phase_1/07_FRONTEND_IMPLEMENTATION_AND_QA.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
+- State on 2026-10-31: App lives at the game root (lib/, test/, packages/puzzle_core), not apps/snakes_slither (old, read-only). BLoCs/cubits, hive_ce save, go_router and board painters exist; static Picture cache and Firebase are not built.
 - Pure-Dart engine package `packages/puzzle_core` shared across 4 games (no Flutter dependencies).
 - Rendering uses `CustomPainter` with an on-demand `Ticker` game loop (Flame is strictly excluded).
 - State management uses `flutter_bloc` (Riverpod is excluded).
@@ -88,15 +89,15 @@ Initial status for all items is **"Not run"**:
 - **Finale & End-to-End:** QA-FIN-01 (Level 500 Mongoose King Finale resolution).
 
 ## Affected Files
-- `apps/snakes_slither/lib/main.dart` (to be created)
-- `apps/snakes_slither/lib/app/app.dart` (to be created)
-- `apps/snakes_slither/lib/app/router.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/render/board_painter.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/render/snake_renderer.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/render/game_scene.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/input/board_view.dart` (to be created)
-- `apps/snakes_slither/lib/data/save/save_data.dart` (to be created)
-- `apps/snakes_slither/lib/data/save/migrations.dart` (to be created)
+- `lib/main.dart` (to be created)
+- `lib/app/app.dart` (to be created)
+- `lib/app/router.dart` (to be created)
+- `lib/features/gameplay/render/board_painter.dart` (to be created)
+- `lib/features/gameplay/render/snake_renderer.dart` (to be created)
+- `lib/features/gameplay/render/game_scene.dart` (to be created)
+- `lib/features/gameplay/input/board_view.dart` (to be created)
+- `lib/data/save/save_data.dart` (to be created)
+- `lib/data/save/migrations.dart` (to be created)
 - `packages/puzzle_core/lib/puzzle_core.dart` (to be created)
 
 ## Risks
@@ -105,3 +106,7 @@ Initial status for all items is **"Not run"**:
 
 ## Open Questions
 - None. The stack, BLoC hierarchy, rendering architecture, and QA checklist align with SHARED_CORE_STANDARD §13–§15.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

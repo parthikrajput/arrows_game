@@ -3,7 +3,7 @@ Source docs: ../../PERFORMANCE_OPTIMIZATION.md, phase_1/07_FRONTEND_IMPLEMENTATI
 # Spec: Performance Optimization and Device Budgets
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the performance architecture, on-demand Ticker loop, static layer cach
 
 ## Current State
 Design documented in ../../PERFORMANCE_OPTIMIZATION.md and phase_1/07, not yet implemented.
+- State on 2026-10-31: Board repaints use a Ticker in lib/ui/board/board_canvas.dart; no static Picture cache, device tier or frame monitor yet.
 - Turn-based logic: when snakes are stationary, the game loop produces 0 frames (~0% CPU load).
 - Target device matrix: Low tier (Redmi 9A, 2 GB RAM), Mid tier (Galaxy A14 / Redmi Note 12), High tier (Pixel 8, Galaxy S23, iPhone 15 Pro).
 - Target budgets: 60 fps on low-tier, raster p95 < 8 ms on mid-tier, peak memory <= 250 MB on low-tier, level load <= 150 ms.
@@ -115,10 +116,10 @@ All items initialized with status **"Not run"**:
 - PERF-26: Automated CI performance benchmark blocks PR if raster p90 regresses by > 10%.
 
 ## Affected Files
-- `apps/snakes_slither/lib/features/gameplay/render/board_animator.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/render/static_layer_cache.dart` (to be created)
-- `apps/snakes_slither/lib/services/perf/frame_monitor.dart` (to be created)
-- `apps/snakes_slither/lib/services/perf/device_tier.dart` (to be created)
+- `lib/features/gameplay/render/board_animator.dart` (to be created)
+- `lib/features/gameplay/render/static_layer_cache.dart` (to be created)
+- `lib/services/perf/frame_monitor.dart` (to be created)
+- `lib/services/perf/device_tier.dart` (to be created)
 
 ## Risks
 - Thermal throttling during extended sessions: device demotion logic must handle hardware down-clocking gracefully.
@@ -126,3 +127,7 @@ All items initialized with status **"Not run"**:
 
 ## Open Questions
 - None. Performance budgets and device thresholds are governed directly by SHARED_CORE_STANDARD §13 and PERFORMANCE_OPTIMIZATION.md.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

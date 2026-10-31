@@ -3,7 +3,7 @@ Source docs: ../../PERFORMANCE_OPTIMIZATION.md, ../../SPLASH_AND_INSTANT_LAUNCH.
 # Spec: VFX and Game Feel (Snakes Slither)
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Collect and implement all visual effects and game feel (particles, shake, flashe
 
 ## Current State
 VFX rules exist only as scattered notes. There is no VFX catalog yet. Nothing is implemented.
+- State on 2026-10-31: Not built: no particle pool or VFX catalog in lib/.
 - Shared tier limits: ../../PERFORMANCE_OPTIMIZATION.md section 3.3 (quality profile) and the particle rules (object pool, one `drawAtlas` call).
 - Bump rule: SHARED_CORE_STANDARD.md says a blocked path hits the blocker with "shake + haptic + sound" and returns (-1 Heart).
 - Haptic mapping per event: ../../SOUND_EFFECTS_IMPLEMENTATION.md section 5 (SFX and haptic fire on the same frame; no haptic call when Settings Haptics is off).
@@ -73,10 +74,10 @@ leafBurst (12/24/40 particles, life 300 ms, from the Play button), dawn light ra
 - VFX-10: Effects work for colour-blind players (never colour only; the red flash is always paired with shake or an icon).
 
 ## Affected Files
-- `apps/snakes_slither/lib/features/gameplay/render/vfx/particle_pool.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/render/vfx/vfx_catalog.dart` (to be created)
-- `apps/snakes_slither/assets/vfx/atlas.webp` (to be created)
-- `apps/snakes_slither/assets/theme.json` (VFX parameters, to be extended)
+- `lib/features/gameplay/render/vfx/particle_pool.dart` (to be created)
+- `lib/features/gameplay/render/vfx/vfx_catalog.dart` (to be created)
+- `assets/vfx/atlas.webp` (to be created)
+- `assets/theme.json` (VFX parameters, to be extended)
 
 ## Risks
 - Too many particles on Low tier cause jank; the cap must be enforced in the pool, not in each effect.
@@ -86,3 +87,7 @@ leafBurst (12/24/40 particles, life 300 ms, from the Play button), dawn light ra
 - The effect for each event marked "VFX still to define" is not designed yet. It needs art direction for Snakes Slither.
 - Whether win confetti and exit sparkle share one pool or use two.
 - The Phase 3 to 20 signature systems (Cycles, Multi-floor, Light and Beams, Rotation, Growth, Gravity, Mirror and others) need their own effects. They are covered in each phase spec, not here.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

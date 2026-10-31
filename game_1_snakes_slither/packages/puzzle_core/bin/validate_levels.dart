@@ -2,8 +2,9 @@
 // Usage (from game_1_snakes_slither/):
 //   dart run packages/puzzle_core/bin/validate_levels.dart [file] [--from N] [--to N]
 // Result per level:
-//   ✓  fully checked (the engine played the solution)
-//   ⏳ draft OK — structure passes; full check runs once the engine supports its mechanics
+//   ✓ app    the game screen's engine played the solution
+//   ✓ rules  the full Phase 1 rules played the solution; the game screen
+//            does not support every mechanic of the level yet
 //   ✗  problem, with the reason
 // Exit code 0 = no ✗, 1 = at least one ✗.
 import 'dart:convert';
@@ -42,6 +43,7 @@ void main(List<String> args) {
     final problems = <String>[];
     if (n != i + 1) problems.add('levels must be numbered 1..N in order (position ${i + 1})');
     problems.addAll(LevelDraftCheck.check(raw));
+    if (problems.isEmpty) problems.addAll(RulesCheck.check(raw));
     final missing = LevelCodec.unsupportedMechanics(raw);
     var dText = '${raw['difficulty'] ?? '?'}';
     if (problems.isEmpty && missing.isEmpty) {
@@ -57,8 +59,8 @@ void main(List<String> args) {
     final result = problems.isNotEmpty
         ? '✗ ${problems.join('; ')}'
         : missing.isNotEmpty
-        ? '⏳ draft OK, waiting for engine: ${(missing.toList()..sort()).join(', ')}'
-        : '✓';
+        ? '✓ rules (game screen waits for ${(missing.toList()..sort()).join(', ')})'
+        : '✓ app';
     if (problems.isNotEmpty) {
       bad++;
     } else if (missing.isNotEmpty) {
@@ -73,7 +75,7 @@ void main(List<String> args) {
     );
   }
   stdout.writeln(
-    '\n✓ $ok fully checked · ⏳ $draft drafts waiting for engine · ✗ $bad with problems',
+    '\n✓ ${ok + draft} fully checked ($ok playable in the game screen today) · ✗ $bad with problems',
   );
   exit(bad == 0 ? 0 : 1);
 }

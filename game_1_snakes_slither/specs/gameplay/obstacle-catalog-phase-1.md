@@ -3,7 +3,7 @@ Source docs: phase_1/03_OBSTACLE_CATALOG_PHASE_1.md, ../../SHARED_CORE_STANDARD.
 # Spec: Phase 1 Obstacle Catalog (Mechanics M001–M049 and Finale)
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the 49 jungle-themed mechanics (M001 to M049) and the Level 500 Phase 
 
 ## Current State
 Design documented in phase_1/03_OBSTACLE_CATALOG_PHASE_1.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
+- State on 2026-10-31: Only M001 Garden Rock is in the engine (LevelCodec.supportedMechanics). A full rules simulator for M001–M049 exists in tools/levelgen/core.dart and is the reference for porting.
 - 49 mechanics categorized as: B (Static Blocker), K (Key/Lock), C (Move-based Counter), T (Toggle/Interactive), P (Path-variant), D (Direction changer), L (Layer), G (Goal/Helper), X (Boss).
 - Strict Hammerable rules: defaults are true for M001, M002, M016, M025, M027 (single cell), and broken M042; false for gates, tiles, interactive devices, locks, edges, and Guardians.
 - Turn-based tick sequence: moveCount increment occurs *after* action resolve and non-lane exit triggers, followed by counter ticks in fixed order.
@@ -101,10 +102,14 @@ At the conclusion of each Move action:
 50. **Phase 1 Finale — Mongoose King's Garden (L500):** Mongoose King (HP 6) surrounded by 9 Phase 1 mechanics (Bamboo Cage, Twig Gates, Jungle Mist, Lilypad, Termite Mound, Home Burrow, 3 Gems, Hatch Order, Chameleon).
 
 ### 5. Validator Ban Rules
-The CI validator enforces strict mechanic combination bans:
-- M024 (Wide Path) cannot be placed on diagonal lanes or boards with M013/M034 rotors.
-- M010 (Jungle Mist) cannot conceal M049 (Guardian).
-- M046 (Tail-Biter Loop) cannot be enclosed within M034 (Whirl Stump).
+The CI validator enforces the combo rules of phase_1/03 §4:
+- Banned: M010 Jungle Mist + M040 Jungle Night on one board (double hidden info).
+- Banned in Phase 1: M024 Giant Anaconda with any lane redirect (M014, M008, M044, M018).
+- Banned: an M013 lilypad orientation facing its own neck inside `solution`.
+- Banned: M033 cage colour equal to the caged snake's colour.
+- Banned: M011 / M039 / M048 group lanes crossing each other.
+- Banned: lane loops (the same cell + direction visited twice).
+- Recommended: M041 Chameleon with M005 / M030 / M033; M019 Plate with M037 Mud; M049 with M026 and M020.
 
 ## Affected Files
 - `packages/puzzle_core/lib/src/mechanics/mechanic.dart` (to be created)
@@ -119,3 +124,11 @@ The CI validator enforces strict mechanic combination bans:
 
 ## Open Questions
 - None. All 49 mechanic definitions, category designations, and hammerable statuses directly match SHARED_CORE_STANDARD §10.
+
+## Implementation Notes
+- 2026-10-31: Rules for all 49 mechanics are in packages/puzzle_core/lib/src/full_rules/ (library full_rules.dart), with RulesCheck for the checker and one test per mechanic in test/full_rules_test.dart. Not yet done: the game screen (GameBloc, board drawing) still plays only M001.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user
+- 2026-10-31 | §5 ban rules replaced with the combo table of phase_1/03 §4 (the old list did not match the source doc) | Review | user

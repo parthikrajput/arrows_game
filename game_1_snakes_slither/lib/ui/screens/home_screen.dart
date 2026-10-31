@@ -20,6 +20,7 @@ class HomeScreen extends StatelessWidget {
     required this.onOpenSettings,
     required this.onOpenShop,
     required this.onOpenWheel,
+    this.onOpenDaily,
   });
 
   final HomeData data;
@@ -30,6 +31,9 @@ class HomeScreen extends StatelessWidget {
 
   /// Only shown when data.wheelUnlocked.
   final VoidCallback onOpenWheel;
+
+  /// Daily Puzzle navigation callback.
+  final VoidCallback? onOpenDaily;
 
   @override
   Widget build(BuildContext context) {
@@ -101,18 +105,38 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
-                                  child: _HomeCard(
-                                    icon: const LineIconView(LineIcon.lock, size: 20, color: Color(0xFFD9822B)),
-                                    iconBg: AppColors.goldWash,
-                                    title: 'Daily Puzzle',
-                                    left: data.nextLevel <= _dailyUnlockLevel
-                                        ? 'Unlocks at L$_dailyUnlockLevel'
-                                        : 'Coming soon',
-                                    right: '',
-                                    progress: 0,
-                                    gold: true,
-                                    dim: true,
-                                  ),
+                                  child: data.dailyUnlocked
+                                      ? Pressable(
+                                          key: AppKeys.homeDaily,
+                                          onTap: onOpenDaily,
+                                          semanticLabel: 'Daily Puzzle, ${data.dailyModifier}',
+                                          child: _HomeCard(
+                                            icon: const LineIconView(LineIcon.star, size: 20, color: Color(0xFFD9822B)),
+                                            iconBg: AppColors.goldWash,
+                                            title: 'Daily Puzzle',
+                                            left: data.dailyCompleted
+                                                ? 'Completed ✓'
+                                                : (data.dailyModifier.isNotEmpty
+                                                    ? data.dailyModifier
+                                                    : 'Today\'s puzzle'),
+                                            right: data.dailyStreak > 0 ? '🔥 ${data.dailyStreak}' : '+100 🪙',
+                                            progress: data.dailyCompleted ? 1.0 : 0.0,
+                                            gold: true,
+                                            dim: false,
+                                          ),
+                                        )
+                                      : _HomeCard(
+                                          icon: const LineIconView(LineIcon.lock, size: 20, color: Color(0xFFD9822B)),
+                                          iconBg: AppColors.goldWash,
+                                          title: 'Daily Puzzle',
+                                          left: data.nextLevel <= _dailyUnlockLevel
+                                              ? 'Unlocks at L$_dailyUnlockLevel'
+                                              : 'Coming soon',
+                                          right: '',
+                                          progress: 0,
+                                          gold: true,
+                                          dim: true,
+                                        ),
                                 ),
                               ],
                             ),

@@ -8,10 +8,13 @@ import 'package:puzzle_core/puzzle_core.dart';
 import '../../contracts/view_models.dart';
 import '../../data/level_repository.dart';
 import '../../services/audio_service.dart';
+import '../../services/time_guard.dart';
 import '../../state/ads_cubit.dart';
+import '../../state/daily_cubit.dart';
 import '../../state/economy.dart';
 import '../../state/progress_cubit.dart';
 import '../../state/settings_cubit.dart';
+import '../../state/streak_cubit.dart';
 import '../../state/wallet_cubit.dart';
 import '../../ui/popups/popups.dart';
 import '../../ui/screens/gameplay_screen.dart';
@@ -21,45 +24,59 @@ import 'game_bloc.dart';
 
 /// Loads a level and connects GameBloc to the gameplay screen and popups.
 class GameplayRoute extends StatelessWidget {
-  const GameplayRoute({super.key, required this.levelNumber});
+  const GameplayRoute({
+    super.key,
+    required this.levelNumber,
+    this.customLevel,
+    this.isDaily = false,
+  });
+
   final int levelNumber;
+  final Level? customLevel;
+  final bool isDaily;
 
   @override
   Widget build(BuildContext context) {
     final repo = context.read<LevelRepository>();
     final Level level;
-    try {
-      level = repo.load(levelNumber);
-    } catch (_) {
-      // Never skip or auto-clear a broken level; offer a way out instead.
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Level unavailable'),
-              TextButton(onPressed: () => context.go('/'), child: const Text('Home')),
-            ],
+    if (customLevel != null) {
+      level = customLevel!;
+    } else {
+      try {
+        level = repo.load(levelNumber);
+      } catch (_) {
+        // Never skip or auto-clear a broken level; offer a way out instead.
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Level unavailable'),
+                TextButton(onPressed: () => context.go('/'), child: const Text('Home')),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
     return BlocProvider(
-      key: ValueKey(levelNumber),
+      key: ValueKey(isDaily ? 'daily' : levelNumber),
       create: (c) => GameBloc(
         level: level,
         wallet: c.read<WalletCubit>(),
         progress: c.read<ProgressCubit>(),
         ads: c.read<AdsCubit>(),
-        hasNextLevel: repo.exists(levelNumber + 1),
+        hasNextLevel: isDaily ? false : repo.exists(levelNumber + 1),
       ),
-      child: const _GameplayView(),
+      child: _GameplayView(isDaily: isDaily),
     );
   }
 }
 
 class _GameplayView extends StatefulWidget {
-  const _GameplayView();
+  const _GameplayView({this.isDaily = false});
+  final bool isDaily;
+
   @override
   State<_GameplayView> createState() => _GameplayViewState();
 }
@@ -160,7 +177,11 @@ class _GameplayViewState extends State<_GameplayView> {
       listener: (context, s) {
         if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
           _winRecorded = true;
-          context.read<AdsCubit>().recordWin(_winContext(s.result!));
+          if (widget.isDaily) {
+            context.read<DailyCubit>().completeDaily();
+          } else {
+            context.read<AdsCubit>().recordWin(_winContext(s.result!));
+          }
         }
         _onCue(context, s);
       },
@@ -264,7 +285,7 @@ class _GameplayViewState extends State<_GameplayView> {
           settings: settings,
           onResume: () => bloc.add(const Resumed()),
           onRestart: () => _restart(context, s),
-          onMap: () => context.go('/map'),
+          onMap: () => context.go(widget.isDaily ? '/daily' : '/map'),
           onHome: () => context.go('/'),
           onToggle: context.read<SettingsCubit>().toggle,
         );
@@ -286,9 +307,47 @@ class _GameplayViewState extends State<_GameplayView> {
       case GameStatus.failed:
         return LevelFailedPopup(
           onRetry: () => bloc.add(const Restarted()),
-          onHome: () => context.go('/'),
+          onHome: () => context.go(widget.isDaily ? '/daily' : '/'),
         );
       case GameStatus.won:
+        if (widget.isDaily) {
+          final time = context.read<TimeGuard>();
+          final now = time.clock.now();
+          final dailyState = context.read<DailyCubit>().state;
+          final streakState = context.read<StreakCubit>().state;
+          const months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+          ];
+          final stamped = '${now.day} ${months[now.month - 1]}';
+          final reward = streakState.todayReward;
+          final r = s.result!;
+
+          final tomorrow = DateTime(now.year, now.month, now.day + 1);
+          final diff = tomorrow.difference(now);
+          final nextTime = '${diff.inHours} h ${diff.inMinutes % 60} m';
+
+          final nextDay = streakState.currentDay >= 7 ? 1 : streakState.currentDay + 1;
+          final nextReward = StreakState.ladder[(nextDay - 1).clamp(0, 6)];
+          final nextBooster = nextReward.booster != null ? ' + 1 ${boosterName(nextReward.booster!)}' : '';
+          final tomorrowRewardText = 'Tomorrow: Day $nextDay · ${nextReward.coins} coins$nextBooster';
+
+          return DailyResultPopup(
+            data: DailyResultData(
+              dayTitle: '${dailyState.dayKey} · ${dailyState.modifier.label}',
+              stampedDate: stamped,
+              stars: r.stars,
+              moves: s.attempt.moves,
+              parMoves: s.level.parMoves,
+              clearCoins: 100,
+              streakDay: streakState.currentDay,
+              streakCoins: reward.coins,
+              tomorrowRewardText: tomorrowRewardText,
+              nextDailyTimeLeft: nextTime,
+            ),
+            onCollect: () => context.go('/daily'),
+          );
+        }
         final r = s.result!;
         if (_showGift && r.gift != null) {
           return GiftBasketPopup(data: r.gift!, onCollect: () => _afterRewards(context, r));

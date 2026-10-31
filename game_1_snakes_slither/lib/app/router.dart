@@ -3,13 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../contracts/view_models.dart';
+import '../data/daily_level_factory.dart';
 import '../data/level_repository.dart';
 import '../features/gameplay/gameplay_route.dart';
+import '../features/meta/daily_route.dart';
 import '../features/meta/shop_route.dart';
 import '../features/meta/wheel_route.dart';
+import '../services/time_guard.dart';
 import '../state/ads_cubit.dart';
+import '../state/daily_cubit.dart';
 import '../state/progress_cubit.dart';
 import '../state/settings_cubit.dart';
+import '../state/streak_cubit.dart';
 import '../state/wallet_cubit.dart';
 import '../state/wheel_cubit.dart';
 import '../ui/screens/home_screen.dart';
@@ -23,6 +28,27 @@ GoRouter buildRouter() => GoRouter(
     GoRoute(path: '/settings', builder: (c, _) => const _SettingsRoute()),
     GoRoute(path: '/shop', builder: (c, _) => const ShopRoute()),
     GoRoute(path: '/wheel', builder: (c, _) => const WheelRoute()),
+    GoRoute(path: '/daily', builder: (c, _) => const DailyRoute()),
+    GoRoute(
+      path: '/daily/play',
+      builder: (c, _) {
+        final daily = c.read<DailyCubit>();
+        final time = c.read<TimeGuard>();
+        final progress = c.read<ProgressCubit>();
+        final date = time.clock.now();
+        final level = DailyLevelFactory.buildDailyLevel(
+          dayKey: daily.state.dayKey,
+          date: date,
+          modifier: daily.state.modifier,
+          highestCleared: progress.state.highestCleared,
+        );
+        return GameplayRoute(
+          levelNumber: 0,
+          customLevel: level,
+          isDaily: true,
+        );
+      },
+    ),
     GoRoute(
       path: '/play/:n',
       builder: (c, st) => GameplayRoute(levelNumber: int.tryParse(st.pathParameters['n']!) ?? 0),
@@ -41,6 +67,9 @@ class _HomeRoute extends StatelessWidget {
     context.watch<WheelCubit>(); // rebuild on spins
     final wheel = context.read<WheelCubit>();
     final ads = context.watch<AdsCubit>();
+    final daily = context.watch<DailyCubit>().state;
+    final streak = context.watch<StreakCubit>().state;
+
     return HomeScreen(
       data: HomeData(
         coins: coins,
@@ -49,12 +78,18 @@ class _HomeRoute extends StatelessWidget {
         wheelUnlocked: wheel.unlocked,
         freeSpinReady: wheel.freeAvailable,
         vipActive: ads.vipActive,
+        dailyUnlocked: daily.unlocked,
+        dailyTitle: daily.dayKey,
+        dailyModifier: daily.modifier.label,
+        dailyStreak: streak.totalStreakDays,
+        dailyCompleted: daily.completed,
       ),
       onPlay: () => context.go('/play/$next'),
       onOpenMap: () => context.go('/map'),
       onOpenSettings: () => context.go('/settings'),
       onOpenShop: () => context.go('/shop'),
       onOpenWheel: () => context.go('/wheel'),
+      onOpenDaily: () => context.go('/daily'),
     );
   }
 }

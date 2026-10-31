@@ -3,7 +3,7 @@ Source docs: ../../SPLASH_AND_INSTANT_LAUNCH.md, phase_1/06_UI_UX_SCREENS.md, ph
 # Spec: Splash and Instant Launch ("Jungle Dawn")
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement instant application startup for Snakes Slither with zero loading scree
 
 ## Current State
 Design documented in ../../SPLASH_AND_INSTANT_LAUNCH.md, phase_1/06, and phase_1/07, not yet implemented.
+- State on 2026-10-31: Not built: no native splash setup and no Jungle Dawn intro in lib/.
 - Old pattern of a Flutter loading route with a progress bar is abolished.
 - System draws initial pixels immediately via Android 12 SplashScreen API and iOS `LaunchScreen.storyboard`.
 - Flutter first frame IS Home (or Age Gate on fresh install).
@@ -128,14 +129,14 @@ All items initialized with status **"Not run"**:
 - SPL-24: Intro painter is disposed after 1,200 ms; idle Home produces 0 extra frames.
 
 ## Affected Files
-- `apps/snakes_slither/android/app/src/main/kotlin/com/studio/snakesslither/GameApp.kt` (to be created)
-- `apps/snakes_slither/android/app/src/main/kotlin/com/studio/snakesslither/MainActivity.kt` (to be created)
-- `apps/snakes_slither/android/app/src/main/kotlin/com/studio/snakesslither/SplashExit.kt` (to be created)
-- `apps/snakes_slither/android/app/src/main/res/drawable-v31/splash_mark.xml` (to be created)
-- `apps/snakes_slither/lib/intro/intro_controller.dart` (to be created)
-- `apps/snakes_slither/lib/intro/intro_timeline.dart` (to be created)
-- `apps/snakes_slither/lib/intro/game_intro_painter.dart` (to be created)
-- `apps/snakes_slither/lib/intro/intro_tap_catcher.dart` (to be created)
+- `android/app/src/main/kotlin/com/studio/snakesslither/GameApp.kt` (to be created)
+- `android/app/src/main/kotlin/com/studio/snakesslither/MainActivity.kt` (to be created)
+- `android/app/src/main/kotlin/com/studio/snakesslither/SplashExit.kt` (to be created)
+- `android/app/src/main/res/drawable-v31/splash_mark.xml` (to be created)
+- `lib/intro/intro_controller.dart` (to be created)
+- `lib/intro/intro_timeline.dart` (to be created)
+- `lib/intro/game_intro_painter.dart` (to be created)
+- `lib/intro/intro_tap_catcher.dart` (to be created)
 - `tools/intro/svg_to_dart.dart` (to be created)
 
 ## Risks
@@ -144,3 +145,7 @@ All items initialized with status **"Not run"**:
 
 ## Open Questions
 - None. Launch architecture, Android Kotlin integration, and "Jungle Dawn" timeline are defined in SPLASH_AND_INSTANT_LAUNCH.md.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

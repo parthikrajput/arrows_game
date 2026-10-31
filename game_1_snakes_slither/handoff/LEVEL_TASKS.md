@@ -19,6 +19,8 @@ Each task adds levels to the end of `assets/levels/phase_1.json`.
 | LV12 | 451–499 | 46–50 | M045–M049 | ⏳ draft |
 | LV13 | 500 | Finale | Mongoose King's Garden | ⏳ draft |
 
+**Status (2026-10-31): LV1–LV13 done, all 500 levels in the file, ✗ 0.** L41–L500 were built with [tools/levelgen](../tools/levelgen/README.md): every solution was played in its rules simulator (0 bonks, 0 boosters) and the block's new mechanic is used in every level. L41–L60 were rebuilt (stated D did not match the checker; in L52–L60 no lane passed the Flower Gate). Open engine questions: CHANGE_REQUESTS.md, "Levels → logic".
+
 **What ✓ and ⏳ mean.** Right now the engine can play clean boards and Garden Rock. For those levels the checker plays the solution and confirms the whole level (✓). For later mechanics it checks everything it can without playing: format, sizes, counts, ids, slot and tag, mechanic rules, references, par, and the D band (⏳). When the logic agent adds a mechanic to the engine, those drafts get the full check automatically. If one turns out unsolvable or its D is off, it shows ✗ and goes back to Antigravity to fix.
 
 ---

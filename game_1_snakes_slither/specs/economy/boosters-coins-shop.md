@@ -3,7 +3,7 @@ Source docs: phase_1/04_BOOSTERS_COINS_SHOP.md, ../../SHARED_CORE_STANDARD.md
 # Spec: Boosters, Coins Economy, Shop and Monetization
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the Phase 1 economy, power-ups, coin sources and sinks, milestone gift
 
 ## Current State
 Design documented in phase_1/04_BOOSTERS_COINS_SHOP.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
+- State on 2026-10-31: Wallet, shop, ads cadence, wheel and rewards cubits exist in lib/state/ with shop and wheel screens; no AdMob, in_app_purchase or Firebase package is wired yet; Golden Slither Rush is not built.
 - 3 standard boosters: Glow Firefly Hint, Safety Shell Shield, Magic Stone Hammer, plus free Tongue-Flick Preview.
 - Single soft currency: gold leaf Coins. Starting balance is 200 coins.
 - Heart Berry Refill available exclusively inside Second Chance popup for 120 coins (max 2/attempt).
@@ -109,12 +110,12 @@ Implement the wallet, shop, boosters, ads, and IAP services:
 - UMP consent form presented in EEA/UK regions prior to loading ads.
 
 ## Affected Files
-- `apps/snakes_slither/lib/features/shop/bloc/shop_bloc.dart` (to be created)
-- `apps/snakes_slither/lib/features/shop/view/shop_page.dart` (to be created)
-- `apps/snakes_slither/lib/features/spin/cubit/spin_cubit.dart` (to be created)
-- `apps/snakes_slither/lib/features/rush/bloc/rush_bloc.dart` (to be created)
-- `apps/snakes_slither/lib/services/ads_service.dart` (to be created)
-- `apps/snakes_slither/lib/services/iap_service.dart` (to be created)
+- `lib/features/shop/bloc/shop_bloc.dart` (to be created)
+- `lib/features/shop/view/shop_page.dart` (to be created)
+- `lib/features/spin/cubit/spin_cubit.dart` (to be created)
+- `lib/features/rush/bloc/rush_bloc.dart` (to be created)
+- `lib/services/ads_service.dart` (to be created)
+- `lib/services/iap_service.dart` (to be created)
 - `functions/src/verify_purchase.ts` (to be created)
 
 ## Risks
@@ -124,3 +125,7 @@ Implement the wallet, shop, boosters, ads, and IAP services:
 ## Open Questions
 - In `phase_1/04 §8.2`, an older draft table and wireframe referenced an obsolete 4th booster ("Snake Charmer Flute" at 40/100 coins). SHARED_CORE_STANDARD §5 governs: exactly 3 boosters (Hint 60/150, Shield 80/200, Hammer 100/250) + free preview.
 - Net revenue from ₹20/month subscription after GST and 15% Play Store cut is ~₹14; pricing will be monitored via Remote Config.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

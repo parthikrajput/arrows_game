@@ -3,7 +3,7 @@ Source docs: phase_1/06_UI_UX_SCREENS.md, ../../SPLASH_AND_INSTANT_LAUNCH.md
 # Spec: UI/UX Screens, Design Tokens and Navigation Flows
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the design tokens, accessibility standards, responsive layout engine, 
 
 ## Current State
 Design documented in phase_1/06_UI_UX_SCREENS.md and ../../SPLASH_AND_INSTANT_LAUNCH.md, not yet implemented.
+- State on 2026-10-31: Home, Level Map, Gameplay, Shop, Wheel, Settings and popups exist in lib/ui/; lib/ui currently fails to compile (flutter_svg missing from pubspec, missing theme tokens Radii/Space and some AppColors).
 - Visual style: soft 3D minimal / claymorphism, pastel garden colors, pre-baked shadows, bevel 3D buttons.
 - Minimum cell size: 29 dp on 360 dp width phone screens with 11x11 maximum grid.
 - Accessibility: Persistent color-blind patterns on all snake skins; text scaler support up to 2.0; reduced motion support.
@@ -91,16 +92,16 @@ Implement the design system and screen widgets in Flutter:
 - **Platform Differences:** Portrait orientation locked on mobile phones; adaptive centered board with side-docked controls on tablets; platform-specific back button behavior.
 
 ## Affected Files
-- `apps/snakes_slither/lib/app/theme/tokens.dart` (to be created)
-- `apps/snakes_slither/lib/app/theme/text_styles.dart` (to be created)
-- `apps/snakes_slither/lib/features/home/view/home_page.dart` (to be created)
-- `apps/snakes_slither/lib/features/level_map/view/level_map_page.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/view/gameplay_page.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/view/hud.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/view/booster_bar.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/view/second_chance_dialog.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/view/level_complete_dialog.dart` (to be created)
-- `apps/snakes_slither/lib/features/settings/view/settings_page.dart` (to be created)
+- `lib/app/theme/tokens.dart` (to be created)
+- `lib/app/theme/text_styles.dart` (to be created)
+- `lib/features/home/view/home_page.dart` (to be created)
+- `lib/features/level_map/view/level_map_page.dart` (to be created)
+- `lib/features/gameplay/view/gameplay_page.dart` (to be created)
+- `lib/features/gameplay/view/hud.dart` (to be created)
+- `lib/features/gameplay/view/booster_bar.dart` (to be created)
+- `lib/features/gameplay/view/second_chance_dialog.dart` (to be created)
+- `lib/features/gameplay/view/level_complete_dialog.dart` (to be created)
+- `lib/features/settings/view/settings_page.dart` (to be created)
 
 ## Risks
 - Banner ads in gameplay: layout height must be rigidly pre-reserved to prevent jumping when AdMob loads.
@@ -108,3 +109,10 @@ Implement the design system and screen widgets in Flutter:
 
 ## Open Questions
 - In `phase_1/06 §5.5`, the gameplay wireframe sketch showed 4 booster buttons ("🪲✨2  🌀2  🐚1  🔨1") from an earlier draft that included a 4th booster (Flute); the actual gameplay specification uses exactly 3 booster buttons (Hint, Shield, Hammer) plus free long-press preview.
+
+## Implementation Notes
+- 2026-10-31: lib/ui compiles again: flutter_svg restored and 7 orphan widget files from an old branch removed (bevel_button, coin_pill, heart_berries, popup_card, round_icon_button, star_row, widgets).
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

@@ -1,3 +1,6 @@
+export 'daily_result_popup.dart';
+export 'streak_saver_dialog.dart';
+
 // OWNER: UI agent. Canvas: Pause, SecondChance, Failed, Complete, MiniShop,
 // Gift, Chest. Logic shows/hides them over a scrim; widgets only call callbacks.
 import 'dart:async';

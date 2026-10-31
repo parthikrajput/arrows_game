@@ -3,7 +3,7 @@ Source docs: phase_1/01_GAME_CONCEPT_AND_RULES.md, ../../SHARED_CORE_STANDARD.md
 # Spec: Core Concept and Gameplay Rules
 
 ## Status
-Draft
+Approved
 
 ## Type
 New Feature
@@ -13,6 +13,7 @@ Implement the core turn-based puzzle rules, board representation, snake movement
 
 ## Current State
 Design documented in phase_1/01_GAME_CONCEPT_AND_RULES.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
+- State on 2026-10-31: Engine models, exit/bump rules and solver exist in packages/puzzle_core; GameBloc is lib/features/gameplay/game_bloc.dart. The engine plays only M001 so far.
 - Turn-based logic puzzle without wall-clock pressure in the puzzle itself.
 - Board grid from 4x4 up to 11x11 square cells; snakes occupy ordered cells where head is body[0].
 - 3 hearts per attempt; bonking costs 1 heart; 0 hearts triggers Second Chance popup.
@@ -93,9 +94,9 @@ Every Move must execute through this exact 9-step pipeline:
 - `packages/puzzle_core/lib/src/rules/engine.dart` (to be created)
 - `packages/puzzle_core/lib/src/rules/move_resolver.dart` (to be created)
 - `packages/puzzle_core/test/rules/engine_test.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/bloc/game_bloc.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/bloc/game_event.dart` (to be created)
-- `apps/snakes_slither/lib/features/gameplay/bloc/game_state.dart` (to be created)
+- `lib/features/gameplay/bloc/game_bloc.dart` (to be created)
+- `lib/features/gameplay/bloc/game_event.dart` (to be created)
+- `lib/features/gameplay/bloc/game_state.dart` (to be created)
 
 ## Risks
 - Gesture ambiguity between short tap and long-press (>= 350 ms) preview must be cleanly resolved in the gesture arena so releasing a long press never executes a tap.
@@ -103,3 +104,10 @@ Every Move must execute through this exact 9-step pipeline:
 
 ## Open Questions
 - Working title "Snakes Slither" is pending trademark search; package id `com.<studio>.snakesslither` will be finalized once studio identifier is confirmed. The old name "Snake Out!" must not be used anywhere.
+
+## Implementation Notes
+- 2026-10-31: The full rules model (full_rules/rules.dart) follows the 9-step move order, locks and counters; a play mode for the game screen (bump as a Move, hearts, Shield, Hammer) is still to do.
+
+## Change Request History
+
+- 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

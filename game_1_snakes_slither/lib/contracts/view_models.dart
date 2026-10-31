@@ -16,6 +16,11 @@ class HomeData extends Equatable {
     this.wheelUnlocked = false,
     this.freeSpinReady = false,
     this.vipActive = false,
+    this.dailyUnlocked = false,
+    this.dailyTitle = '',
+    this.dailyModifier = '',
+    this.dailyStreak = 0,
+    this.dailyCompleted = false,
   });
   final int coins;
   final int nextLevel;
@@ -31,6 +36,14 @@ class HomeData extends Equatable {
 
   /// Every available level is cleared (show "More levels soon").
   final bool allCleared;
+
+  /// Daily Challenge unlocked (after clearing L15).
+  final bool dailyUnlocked;
+  final String dailyTitle;
+  final String dailyModifier;
+  final int dailyStreak;
+  final bool dailyCompleted;
+
   @override
   List<Object?> get props => [
     coins,
@@ -39,6 +52,11 @@ class HomeData extends Equatable {
     wheelUnlocked,
     freeSpinReady,
     vipActive,
+    dailyUnlocked,
+    dailyTitle,
+    dailyModifier,
+    dailyStreak,
+    dailyCompleted,
   ];
 }
 
@@ -407,5 +425,123 @@ class WheelData extends Equatable {
     busy,
     prizeIndex,
     spinSeq,
+  ];
+}
+
+// ------------------------------------------------------------- Daily & Streak
+class DailyData extends Equatable {
+  const DailyData({
+    required this.dayTitle,
+    required this.modifierLabel,
+    required this.modifierDescription,
+    required this.currentStreakDays,
+    required this.currentCycleDay,
+    this.clearCoinsReward = 100,
+    required this.completedToday,
+    required this.saverAvailable,
+    required this.saverStatus,
+    required this.trophyTierLabel,
+    required this.timeLeft,
+    required this.ladderCoins,
+  });
+
+  final String dayTitle;
+  final String modifierLabel;
+  final String modifierDescription;
+  final int currentStreakDays;
+  final int currentCycleDay; // 1..7
+  final int clearCoinsReward; // 100
+  final bool completedToday;
+  final bool saverAvailable;
+  final String saverStatus;
+  final String trophyTierLabel;
+  final String timeLeft;
+  final List<int> ladderCoins;
+
+  @override
+  List<Object?> get props => [
+    dayTitle,
+    modifierLabel,
+    modifierDescription,
+    currentStreakDays,
+    currentCycleDay,
+    clearCoinsReward,
+    completedToday,
+    saverAvailable,
+    saverStatus,
+    trophyTierLabel,
+    timeLeft,
+    ladderCoins,
+  ];
+}
+
+class DailyResultData extends Equatable {
+  const DailyResultData({
+    required this.dayTitle,
+    required this.stars,
+    required this.moves,
+    required this.parMoves,
+    this.clearCoins = 100,
+    required this.streakDay,
+    required this.streakCoins,
+    required this.stampedDate,
+    required this.tomorrowRewardText,
+    required this.nextDailyTimeLeft,
+  });
+
+  final String dayTitle;
+  final int stars;
+  final int moves;
+  final int parMoves;
+  final int clearCoins;
+  final int streakDay;
+  final int streakCoins;
+  final String stampedDate;
+  final String tomorrowRewardText;
+  final String nextDailyTimeLeft;
+
+  @override
+  List<Object?> get props => [
+    dayTitle,
+    stars,
+    moves,
+    parMoves,
+    clearCoins,
+    streakDay,
+    streakCoins,
+    stampedDate,
+    tomorrowRewardText,
+    nextDailyTimeLeft,
+  ];
+}
+
+class StreakSaverData extends Equatable {
+  const StreakSaverData({
+    required this.currentStreakDays,
+    required this.nextDayNumber,
+    required this.nextDayCoins,
+    required this.nextDayBoosterText,
+    this.coinCost = 200,
+    required this.canAffordCoins,
+    required this.adAvailable,
+  });
+
+  final int currentStreakDays;
+  final int nextDayNumber;
+  final int nextDayCoins;
+  final String nextDayBoosterText;
+  final int coinCost;
+  final bool canAffordCoins;
+  final bool adAvailable;
+
+  @override
+  List<Object?> get props => [
+    currentStreakDays,
+    nextDayNumber,
+    nextDayCoins,
+    nextDayBoosterText,
+    coinCost,
+    canAffordCoins,
+    adAvailable,
   ];
 }
