@@ -6,6 +6,10 @@ Related docs: [README](../../README.md) · [Brand assets](../brand/README.md) ·
 
 Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
 
+## Status (2026-10-31)
+
+This canvas is the official design for the app. The code follows it exactly, phase by phase (`handoff/UI_TASKS.md`), while gameplay rules stay the Phase 1 puzzle.
+
 ## Important: the design now differs from the Phase 1 docs
 
 The new screens follow the reference image, not the Phase 1 docs:

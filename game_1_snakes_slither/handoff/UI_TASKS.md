@@ -1,136 +1,135 @@
-# UI tasks: merge port (UI agent: Claude in VS Code)
+# UI tasks, phase by phase (UI agent: Claude in VS Code)
 
-**Decision (2026-10-31):** one app. Keep the root app's logic (engine, state, level checker, tests) and bring in the finished UI from `apps/snakes_slither/` (the "old app").
-The old app is now a **read-only reference**. Port its screens into `lib/ui/` so they run on the contract in `lib/contracts/`. When every screen is ported, `apps/` gets deleted (the user confirms first).
+**The design (2026-10-31):** the UI canvas "Snake Slither Game UI" is the design, to be matched exactly.
+- Repo copy: `design/ui_canvas/<Screen>.dc.html` (HTML with exact colours, gradients, shadows, radii, fonts and animations).
+- Screenshots: `design/ui_canvas/screens/`.
+- Palette and type: `design/ui_canvas/README.md`.
+- Art: `design/brand/` (logo, 3D Pip renders, app icon, board and map backgrounds).
 
-**Look (2026-10-31): premium "Jungle at dusk".** The old app is only a reference for layout, flow and animation. Every screen gets the new look in `design/premium/`: `BRAND_BOOK.md` is the rules, `tokens.json` the values, `icons/` the custom icons and `components/` the specs. The six key screens are designed in "Snakes Slither · Premium UI" (link in `design/premium/README.md`). Match them closely. Screens not drawn there follow the same system.
+Each task says which canvas screens to build. Copy their look 1:1: the same cream backgrounds, green gradient buttons with the 4px lip and the shine, cream cards, leaf decorations, bob/pop/glow/shine animations, Fredoka + Nunito.
 
-Give one task at a time, in order: **P1 first**, then P2–P6 in any order. Folder: `game_1_snakes_slither`.
+**One rule overrides the canvas:** gameplay is the Phase 1 puzzle (tap snakes out of a tangle). Where the canvas shows classic snake (score/best, D-pad, fruit, length), build the puzzle's board, hearts, moves and boosters instead, in the same visual style.
 
-## Rules for every port task
+Do the tasks in order. Folder: `game_1_snakes_slither`.
+
+## Rules for every task
 
 ```
 Read AGENTS.md first ("UI agent" rules).
-Port, don't redesign: keep the old app's look, layout and animations, but
-make each widget run on our contract.
-
-- Source: apps/snakes_slither/lib/… (read-only, never edit it).
-- Target: lib/ui/… only. Keep every existing constructor in lib/ui exactly
-  as it is, and put every key from lib/contracts/app_keys.dart on the
-  matching widget.
-- Old widgets read blocs and services (context.read<WalletCubit>,
-  AppServices, AudioService, AppLogger, routes). In lib/ui that is not
-  allowed. Instead:
-    · data → take it from the constructor's view-model (lib/contracts/view_models.dart)
-    · actions → call the constructor's callbacks
-    · sounds/haptics → UiFeedback.of(context).sound(UiSound.tap) / .haptic()
-      (lib/contracts/ui_feedback.dart). Gameplay sounds are played by logic.
-    · navigation → only through callbacks (no routes in lib/ui)
-    · logging → drop it
-- Engine types: use ours from lib/contracts/view_models.dart (Snake has an
-  int id, SnakeSkin.caterpillar, Cell, Dir, SnakeColor, Booster). Don't
-  import package:puzzle_core/slither_engine.dart.
-- Fonts must be bundled for offline play: put Fredoka and Nunito (+ Baloo
-  Bhai 2, Baloo 2) .ttf files in assets/fonts/ and declare them in
-  pubspec.yaml. Don't use google_fonts runtime downloads.
-- Need data or a callback the contract lacks? Add a row to
+Match the named canvas screens exactly. Read their .dc.html for exact values
+(colours, gradients, shadows, radii, font sizes, spacing, animation timings).
+- Edit only lib/ui/** and assets/fonts|images/**. Keep every existing
+  constructor in lib/ui and every key from lib/contracts/app_keys.dart.
+- Data comes from the constructor's view-model; actions go through its
+  callbacks; sounds use UiFeedback.of(context). No blocs, services or routes
+  in lib/ui.
+- Bundle Fredoka and Nunito (.ttf in assets/fonts/, declared in pubspec.yaml).
+  No runtime font downloads.
+- Respect reduce-motion (MediaQuery.disableAnimations): no bobbing, shine or
+  confetti; keep functional motion.
+- Phones 360–430 wide: no overflow; tablets: centre a max 600 wide column.
+- A screen needs data or a callback the contract lacks? Add a row to
   handoff/CHANGE_REQUESTS.md and use a placeholder meanwhile.
+- The old app in apps/snakes_slither/ is only a code reference
+  (read-only).
 - Done = flutter analyze clean + flutter test green.
 ```
 
-## P1: premium design system and shared widgets
+---
 
+## Phase 1: launch (levels 1–500)
+
+### U1: theme and shared widgets
 ```
-Follow the port rules above.
-Build lib/ui/theme/ from design/premium/tokens.json + BRAND_BOOK.md
-("Jungle at dusk", dark grounds night → dusk → canopy → moss, emerald
-actions, gold rewards). Keep our existing names (AppColors incl.
-AppColors.snake(SnakeColor), AppMotion, buildAppTheme) and map them onto the
-new tokens; add text styles, spacing, radii and shadows as named constants.
-Icons: copy design/premium/icons/** into assets/images/icons/ and render them
-with flutter_svg (UI-only package, allowed). Glyphs are single-ink and may be
-tinted; game icons are never recoloured.
-Widgets in lib/ui/widgets/ follow design/premium/components/*.md exactly:
-SsButton (primary/gold/secondary/ghost, 4px lip, sinks 3px on press),
-SsIconButton, CoinPill, HeartBerries (+ shield tag), Chip, BoosterButton
-(states: ready/active/zero/capped/locked/busy), SsCard, SsPopup (popupIn
-300 ms ease-out-back, scrim), LevelNode. Use the old app's
-apps/snakes_slither/lib/core/widgets/* only for behaviour ideas
-(press animation, confetti), restyled.
-Port apps/snakes_slither/lib/core/widgets/{bevel_button,popup,confetti,
-garden_background,pip,game_icons,common}.dart into lib/ui/widgets/.
-common.dart reads WalletCubit/AdsCubit, so turn those parts into widgets
-that take values (e.g. CoinPill(coins: …, onTap: …)).
-Bundle the fonts (rules above). Apply the theme app-wide via buildAppTheme().
+Follow the rules above.
+From design/ui_canvas/README.md and Brand.dc.html, build lib/ui/theme/:
+Forest #075B35, Emerald #13864D, Leaf #A8D94F, Gold #F4B72F, Cream #F7F4E8,
+Card #FFFEF8, Text #163B28, plus the exact gradients and shadows the screens
+use (button gradient #23A766 → #13864D → #075B35, lip #03432A; card border
+#ECE5CF; secondary button #EFE9D6 / #E2D9BE / lip #D6CBAA). Keep our names
+(AppColors incl. AppColors.snake, AppMotion, buildAppTheme).
+Widgets in lib/ui/widgets/ copied from the canvas: primary button (gradient,
+lip, shine sweep, press-down), secondary button, cream card, coin pill with
+"+", round icon button, progress bar, bottom nav, leaf decoration, popup card
+with the green level badge, star (pop animation), confetti.
 ```
 
-## P2: board and snakes
-
+### U2: Splash and Home
 ```
-Follow the port rules above.
-Port apps/snakes_slither/lib/features/gameplay/render/{board_painter,
-game_scene}.dart into lib/ui/board/, behind our BoardCanvas(data, geometry,
-onMotionDone).
-- Positions: use geometry.rectOf / centerOf / cell (BoardGeometry). Taps are
-  mapped with the same geometry, so drawings must line up with it.
-- Animations come from data.motion (exit / bump / locked, with lane cells
-  and blocker). Call onMotionDone(motion.id) exactly once per motion.
-- Overlays: data.preview (dotted lane, green/red, ✕ on blocker),
-  data.hintSnakeId (firefly glow), data.hammerMode, data.colourBlind,
-  data.reducedMotion. Rocks = data.board.rocks (Garden Rock).
-- No gesture detectors on the board (input is ours).
+Follow the rules above.
+Canvas: Main.dc.html (Splash), Home.dc.html.
+- Splash → Home fade, as in the canvas.
+- Home: coin pill, Pip on the platform (bobbing), the big green Play button
+  (glow pulse + shine) going to the next level, the Levels card (progress
+  from HomeData), the Daily card (locked until L15), and bottom nav. Phase 1
+  has no gems, profile or Awards: leave those out, and use the nav slots for
+  Home, Map, Shop, Ranks, Settings.
+- Spin button when HomeData.wheelUnlocked (badge when freeSpinReady).
 ```
 
-## P3: gameplay screen
-
+### U3: Level Map
 ```
-Follow the port rules above.
-Port apps/snakes_slither/lib/features/gameplay/view/{hud,booster_bar}.dart
-and the layout of gameplay_page.dart into lib/ui/screens/gameplay_screen.dart
-(GameplayScreen(hud, boosters, board, hammerMode, onPause, onBooster,
-onCancelHammer)). `board` is a ready widget; place it, don't wrap it in
-gestures. Booster states come from BoosterButtonData (locked, capReached,
-enabled, active, count).
+Follow the rules above.
+Canvas: LevelMap.dc.html (+ LevelStart.dc.html for the start sheet).
+Winding path, node states from LevelNodeData (cleared + stars, current with
+Pip, locked, Hard in red, Gift Basket on every 10th), biome header.
 ```
 
-## P4: in-game popups
-
+### U4: Gameplay (puzzle board in the canvas style)
 ```
-Follow the port rules above.
-Port into lib/ui/popups/ (you may split popups.dart into one file per popup
-and re-export from popups.dart):
-- popups/pause_sheet.dart + features/settings/settings_panel.dart → PausePopup, SettingsList
-- popups/second_chance.dart → SecondChancePopup (keep our countdown rules:
-  pause while `paused`, call onDecline at 0)
-- popups/results.dart → LevelCompletePopup, LevelFailedPopup
-- popups/mini_shop.dart → MiniShopSheet
-- features/rewards/gift_basket_page.dart → GiftBasketPopup (rewards are
-  already granted; this is the reveal, then onCollect)
-```
-
-## P5: Home and Level Map
-
-```
-Follow the port rules above.
-Port features/home/home_page.dart → lib/ui/screens/home_screen.dart and
-features/level_map/level_map_page.dart → lib/ui/screens/level_map_screen.dart.
-Home: show only what HomeData supports today (coins, Play, Map, Shop, Spin
-when wheelUnlocked, VIP chip hidden when vipActive). Leave slots for the
-Daily card, Ranks and VIP buttons; they arrive with later contracts.
-Map: nodes from LevelNodeData (locked / current / cleared + stars, Hard).
+Follow the rules above.
+Canvas: Play.dc.html for the look (grass background, dark translucent HUD
+pills with white text, top gradient), Board.dc.html + Booster.dc.html +
+Hint/Hammer/Preview.dc.html for the puzzle parts.
+- HUD: pause, Level N, Moves, hearts (+ shield charges), coins.
+- Board: BoardCanvas(data, geometry, onMotionDone). Draw cells with
+  geometry.rectOf/centerOf, snakes in the 8 palette colours with patterns,
+  Garden Rock, animations from data.motion (exit / bump / locked), preview
+  lane, hint glow, hammer mode. Call onMotionDone(motion.id) once per motion.
+- Booster bar: Hint, Shield, Hammer from BoosterButtonData (ready, active,
+  0 = buy, capped, locked).
+- No score, best, D-pad, fruit or length.
 ```
 
-## P6: Shop and Lucky Lily Wheel
-
+### U5: In-game popups
 ```
-Follow the port rules above.
-Port features/shop/shop_page.dart → lib/ui/screens/shop_screen.dart and
-features/spin/spin_page.dart → lib/ui/screens/wheel_screen.dart.
-Shop: Boosters tab from ShopData.tiles + free-coins tile; Coins/Offers tabs
-show "Store unavailable" while !data.storeAvailable.
-Wheel: segments, odds sheet, spin animation that lands on data.prizeIndex
-when data.spinSeq changes, timeLocked message.
+Follow the rules above.
+Canvas: Pause.dc.html, Complete.dc.html, Failed.dc.html,
+SecondChance.dc.html, MiniShop.dc.html, Gift.dc.html, Chest.dc.html,
+Stuck.dc.html, LevelUnavailable.dc.html.
+Map to PausePopup (+ SettingsList), LevelCompletePopup (stars, coins,
+Claim 2X, Next, Map; no score/best/gems), LevelFailedPopup,
+SecondChancePopup (10 s ring), MiniShopSheet, GiftBasketPopup (basket or
+chest variant).
 ```
 
-## Coming next (logic first, then a port task here)
-Daily Jungle Puzzle and streak, Golden Slither Rush, VIP and store, age gate and consent, tutorial overlays, leaderboards, Phase Complete, Jungle Guide, Starter Pack. The logic agent ports each one's logic into our architecture, adds its contract and a placeholder, then adds a P-task here.
+### U6: Shop, Lucky Lily Wheel, VIP, Starter Pack
+```
+Follow the rules above.
+Canvas: Shop.dc.html (look only), Wheel.dc.html, Vip.dc.html,
+Starter.dc.html.
+Shop tabs in Phase 1: Boosters · Coins · Offers (ShopData). The canvas's
+Skins, Food and Themes tabs wait for Phase 2.
+```
+
+### U7: Settings and Leaderboards
+```
+Follow the rules above.
+Canvas: Settings.dc.html, Leaderboards.dc.html.
+```
+
+### U8: Daily Puzzle and Streak, Golden Slither Rush, Tutorials, Phase Complete
+```
+Follow the rules above. Starts when the logic agent has added these
+contracts (see handoff/CONTRACT_LOG.md).
+Canvas: Daily.dc.html, DailyResult.dc.html, Saver.dc.html, RushIntro.dc.html,
+Rush.dc.html, RushResults.dc.html, Tutorial.dc.html, Intro.dc.html,
+PhaseComplete.dc.html.
+```
+
+---
+
+## Phase 2 (later)
+Canvas: `SkinPreview.dc.html`, `Themes.dc.html`, and the Shop's Skins, Food and Themes tabs, matching Phase 2's cosmetic snake skins and board themes. Weekly Star Race and Sticker Album also come in Phase 2.
+
+**Not in any phase doc yet:** gems, food items, Rewards and Profile screens (canvas `Rewards.dc.html`, `Profile.dc.html`). They wait until the user adds them to a phase.
