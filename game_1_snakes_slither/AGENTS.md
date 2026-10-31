@@ -17,6 +17,8 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
 | `lib/ui/` | UI | All screens, popups, board art, animations, theme |
 | `assets/fonts/`, `assets/images/` | UI | Fonts, art |
 | `assets/levels/` | Level | The level file `phase_1.json` |
+| `apps/snakes_slither/` | Nobody (read-only) | The old second app. UI is being ported into `lib/ui/` (see `handoff/UI_TASKS.md`); deleted once the port is done |
+| `assets/audio/` | Logic | Sound effects (played via `AudioService` / `UiFeedback`) |
 | `phases/`, `specs/`, `design/`, all `*.md` standards | Nobody (read-only) | Docs and design references. Only change them when the user asks |
 | `pubspec.yaml` | Shared | UI may add UI-only packages and font/image assets. Don't remove or change anything else |
 
@@ -29,6 +31,7 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
 ## UI agent
 1. Every screen and popup gets its data and callbacks through its constructor. **Keep each constructor exactly as it is.** Don't import anything from `lib/features`, `lib/state` or `lib/services`, and don't read blocs.
 2. Put every key from `lib/contracts/app_keys.dart` on the matching widget. The tests find widgets by these keys.
+   For button and popup sounds use `UiFeedback.of(context)` (`lib/contracts/ui_feedback.dart`), never a service.
 3. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
 4. Look and content:
    - **Look:** follow the UI canvas brand: `design/ui_canvas/screens/*.png`, `design/brand/` (logo, 3D Pip renders) and the colour and type table in `design/ui_canvas/README.md`.
@@ -40,8 +43,12 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
 ## Level agent
 1. Edit only `assets/levels/phase_1.json`. It holds `{"schema": 3, "phase": 1, "levels": [ … ]}`, numbered 1, 2, 3 … with no gaps.
 2. Every level uses the schema v3 format from `SHARED_CORE_STANDARD.md` §12.
-3. Check your work with `dart run packages/puzzle_core/bin/validate_levels.dart`. Every level must show ✓. `flutter test` runs the same checks.
-4. Only use mechanics the engine supports. Right now that's **M001 Garden Rock** only. The checker rejects anything else. Ask for the next mechanic in `handoff/CHANGE_REQUESTS.md`.
+3. Check your work with `dart run packages/puzzle_core/bin/validate_levels.dart` (add `--from A --to B` for one task). No level may show ✗. `flutter test` runs the same checks.
+4. All Phase 1 mechanics (M001–M049) may be used.
+   - **✓** means the engine played the level and confirmed it.
+   - **⏳** means a draft whose structure passes. It gets the full check once the logic agent adds its mechanic to the engine. Until then the app stops at the last playable level.
+   - Drafts that later fail come back as ✗ to fix.
+5. Work through `handoff/LEVEL_TASKS.md` in order (LV1 → LV13).
 
 ## Logic agent
 - Don't restyle anything under `lib/ui/`. To change a screen's contract, update `lib/contracts/`, update the matching placeholder's constructor, and note it in `handoff/CONTRACT_LOG.md`.

@@ -10,6 +10,7 @@ import 'package:snakes_slither/contracts/app_keys.dart';
 import 'package:snakes_slither/data/save_store.dart';
 import 'package:snakes_slither/features/gameplay/game_bloc.dart';
 import 'package:snakes_slither/services/ads_service.dart';
+import 'package:snakes_slither/services/audio_service.dart';
 import 'package:snakes_slither/state/progress_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
 import 'package:snakes_slither/ui/board/board_canvas.dart';
@@ -62,7 +63,14 @@ void main() {
     t.view.physicalSize = const Size(412 * 3, 915 * 3); // phone, portrait
     t.view.devicePixelRatio = 3;
     addTearDown(t.view.reset);
-    await t.pumpWidget(SnakesSlitherApp(store: store, levels: testLevels(), ads: InstantAds()));
+    await t.pumpWidget(
+      SnakesSlitherApp(
+        store: store,
+        levels: testLevels(),
+        ads: InstantAds(),
+        audio: AudioService(enabled: false),
+      ),
+    );
     await t.pumpAndSettle();
   }
 
@@ -132,7 +140,14 @@ void main() {
     await tapCell(t, 0, 1, 4);
     await tapCell(t, 1, 3, 4);
     await t.pumpWidget(const SizedBox());
-    await t.pumpWidget(SnakesSlitherApp(store: store, levels: testLevels(), ads: InstantAds()));
+    await t.pumpWidget(
+      SnakesSlitherApp(
+        store: store,
+        levels: testLevels(),
+        ads: InstantAds(),
+        audio: AudioService(enabled: false),
+      ),
+    );
     await t.pumpAndSettle();
     expect(read<ProgressCubit>(t, AppKeys.homeScreen).state.nextLevel, 2);
     expect(read<WalletCubit>(t, AppKeys.homeScreen).state.coins, 240);

@@ -22,6 +22,12 @@ class LevelCodec {
   /// Mechanics the engine can play today. Others are rejected on load.
   static const supportedMechanics = {'M001'};
 
+  /// Mechanic types in [raw] the engine can't play yet (empty = playable).
+  static Set<String> unsupportedMechanics(Map<String, dynamic> raw) => {
+    for (final m in ((raw['mechanics'] as List?) ?? const []))
+      if (!supportedMechanics.contains((m as Map)['type'])) m['type'] as String,
+  };
+
   /// Decodes and checks that the level is playable (structure + solvable).
   /// Design rules (tiers, D band, slots) are LevelValidator's job.
   static Level decode(Map<String, dynamic> j) {
@@ -93,19 +99,19 @@ class LevelCodec {
     }
   }
 
-  /// Decodes a whole level file: {"schema":3,"phase":1,"levels":[...]}.
-  /// Levels must be numbered 1..N with no gaps.
+  /// Decodes a level file ({"schema":3,"phase":1,"levels":[...]}) up to the
+  /// first level the engine can't play yet. Later levels are drafts.
   static List<Level> decodeFile(Map<String, dynamic> file) {
-    final levels = [
-      for (final raw in (file['levels'] as List)) decode(raw as Map<String, dynamic>),
-    ];
-    for (var i = 0; i < levels.length; i++) {
-      if (levels[i].number != i + 1) {
+    final levels = <Level>[];
+    for (final raw in (file['levels'] as List).cast<Map<String, dynamic>>()) {
+      if (unsupportedMechanics(raw).isNotEmpty) break;
+      final l = decode(raw);
+      if (l.number != levels.length + 1) {
         throw LevelFormatException(
-          'level list must be 1..N in order; found L${levels[i].number} '
-          'at position ${i + 1}',
+          'level list must be 1..N in order; found L${l.number} at position ${levels.length + 1}',
         );
       }
+      levels.add(l);
     }
     return levels;
   }

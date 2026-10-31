@@ -15,6 +15,7 @@ analyzer:
     - android/**
     - ios/**
     - web/**
+    - apps/**  # old second app, read-only until the UI port is done
 
 linter:
   # The lint rules applied to this project can be customized in the

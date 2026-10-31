@@ -102,6 +102,8 @@ class LevelTarget {
   /// FTUE only (L1–3 ≤ 4, L4–10 ≤ 8); null elsewhere.
   final int? maxMoves;
 
+  /// Limits for level [n], from the 50-row block table (doc 02 §7) and the
+  /// tier table (obstacle caps). FTUE splits into L1–3 and L4–10.
   static LevelTarget forLevel(int n) {
     if (n <= 3) {
       return const LevelTarget(
@@ -127,78 +129,98 @@ class LevelTarget {
         maxMoves: 8,
       );
     }
-    // Blocks 2–4 use the early-T1 sub-band; later blocks fall back to the tier.
-    if (n <= 40) {
-      return const LevelTarget(
-        minGrid: 6,
-        maxGrid: 7,
-        minSnakes: 6,
-        maxSnakes: 10,
-        maxObstacles: 4,
-        minD: 6,
-        maxD: 12,
+    final b = blocks[blockOf(n) - 1];
+    // The finale has its own target: band high × 1.2 ≈ 62, 30 snakes, 10 obstacles.
+    if (n == 500) {
+      return LevelTarget(
+        minGrid: 11,
+        maxGrid: 11,
+        minSnakes: 30,
+        maxSnakes: 30,
+        maxObstacles: 10,
+        minD: 62,
+        maxD: 62,
         maxMoves: null,
       );
     }
-    if (n <= 100) {
-      return const LevelTarget(
-        minGrid: 6,
-        maxGrid: 8,
-        minSnakes: 6,
-        maxSnakes: 14,
-        maxObstacles: 4,
-        minD: 6,
-        maxD: 18,
-        maxMoves: null,
-      );
-    }
-    if (n <= 200) {
-      return const LevelTarget(
-        minGrid: 7,
-        maxGrid: 9,
-        minSnakes: 10,
-        maxSnakes: 18,
-        maxObstacles: 6,
-        minD: 14,
-        maxD: 26,
-        maxMoves: null,
-      );
-    }
-    if (n <= 300) {
-      return const LevelTarget(
-        minGrid: 8,
-        maxGrid: 10,
-        minSnakes: 14,
-        maxSnakes: 22,
-        maxObstacles: 8,
-        minD: 22,
-        maxD: 36,
-        maxMoves: null,
-      );
-    }
-    if (n <= 400) {
-      return const LevelTarget(
-        minGrid: 9,
-        maxGrid: 10,
-        minSnakes: 18,
-        maxSnakes: 26,
-        maxObstacles: 9,
-        minD: 30,
-        maxD: 44,
-        maxMoves: null,
-      );
-    }
-    return const LevelTarget(
-      minGrid: 10,
-      maxGrid: 11,
-      minSnakes: 22,
-      maxSnakes: 30,
-      maxObstacles: 10,
-      minD: 38,
-      maxD: 52,
+    return LevelTarget(
+      minGrid: b.minGrid,
+      maxGrid: b.maxGrid,
+      minSnakes: b.minSnakes,
+      maxSnakes: b.maxSnakes,
+      maxObstacles: _tierMaxObstacles(n),
+      minD: b.minD.toDouble(),
+      maxD: b.maxD.toDouble(),
       maxMoves: null,
     );
   }
+
+  static int blockOf(int n) => (n - 1) ~/ 10 + 1;
+
+  static int _tierMaxObstacles(int n) => n <= 10
+      ? 0
+      : n <= 100
+      ? 4
+      : n <= 200
+      ? 6
+      : n <= 300
+      ? 8
+      : n <= 400
+      ? 9
+      : 10;
+
+  static const blocks = <BlockSpec>[
+    BlockSpec(1, 4, 6, 2, 8, 1, 8),
+    BlockSpec(2, 6, 7, 6, 10, 6, 12),
+    BlockSpec(3, 6, 7, 6, 10, 6, 12),
+    BlockSpec(4, 6, 7, 6, 10, 6, 12),
+    BlockSpec(5, 6, 8, 8, 12, 9, 15),
+    BlockSpec(6, 6, 8, 8, 12, 9, 15),
+    BlockSpec(7, 6, 8, 8, 12, 9, 15),
+    BlockSpec(8, 7, 8, 10, 14, 12, 18),
+    BlockSpec(9, 7, 8, 10, 14, 12, 18),
+    BlockSpec(10, 7, 8, 10, 14, 12, 18),
+    BlockSpec(11, 7, 8, 10, 14, 14, 20),
+    BlockSpec(12, 7, 8, 10, 14, 14, 20),
+    BlockSpec(13, 7, 8, 10, 14, 14, 20),
+    BlockSpec(14, 7, 9, 12, 16, 17, 23),
+    BlockSpec(15, 7, 9, 12, 16, 17, 23),
+    BlockSpec(16, 7, 9, 12, 16, 17, 23),
+    BlockSpec(17, 7, 9, 12, 16, 17, 23),
+    BlockSpec(18, 8, 9, 14, 18, 20, 26),
+    BlockSpec(19, 8, 9, 14, 18, 20, 26),
+    BlockSpec(20, 8, 9, 14, 18, 20, 26),
+    BlockSpec(21, 8, 9, 14, 18, 22, 29),
+    BlockSpec(22, 8, 9, 14, 18, 22, 29),
+    BlockSpec(23, 8, 9, 14, 18, 22, 29),
+    BlockSpec(24, 8, 10, 16, 20, 26, 32),
+    BlockSpec(25, 8, 10, 16, 20, 26, 32),
+    BlockSpec(26, 8, 10, 16, 20, 26, 32),
+    BlockSpec(27, 8, 10, 16, 20, 26, 32),
+    BlockSpec(28, 9, 10, 18, 22, 29, 36),
+    BlockSpec(29, 9, 10, 18, 22, 29, 36),
+    BlockSpec(30, 9, 10, 18, 22, 29, 36),
+    BlockSpec(31, 9, 9, 18, 22, 30, 37),
+    BlockSpec(32, 9, 9, 18, 22, 30, 37),
+    BlockSpec(33, 9, 9, 18, 22, 30, 37),
+    BlockSpec(34, 9, 10, 20, 24, 34, 40),
+    BlockSpec(35, 9, 10, 20, 24, 34, 40),
+    BlockSpec(36, 9, 10, 20, 24, 34, 40),
+    BlockSpec(37, 9, 10, 20, 24, 34, 40),
+    BlockSpec(38, 10, 10, 22, 26, 37, 44),
+    BlockSpec(39, 10, 10, 22, 26, 37, 44),
+    BlockSpec(40, 10, 10, 22, 26, 37, 44),
+    BlockSpec(41, 10, 10, 22, 26, 38, 45),
+    BlockSpec(42, 10, 10, 22, 26, 38, 45),
+    BlockSpec(43, 10, 10, 22, 26, 38, 45),
+    BlockSpec(44, 10, 11, 24, 28, 42, 48),
+    BlockSpec(45, 10, 11, 24, 28, 42, 48),
+    BlockSpec(46, 10, 11, 24, 28, 42, 48),
+    BlockSpec(47, 10, 11, 24, 28, 42, 48),
+    BlockSpec(48, 11, 11, 26, 30, 45, 52),
+    BlockSpec(49, 11, 11, 26, 30, 45, 52),
+    BlockSpec(50, 11, 11, 26, 30, 45, 52),
+  ];
 
   /// Expected slot from the 10-level block pattern.
   static LevelSlot slotFor(int n) {
@@ -229,6 +251,26 @@ class LevelTarget {
   }
 }
 
+/// One row of the Phase 1 block table.
+class BlockSpec {
+  const BlockSpec(
+    this.block,
+    this.minGrid,
+    this.maxGrid,
+    this.minSnakes,
+    this.maxSnakes,
+    this.minD,
+    this.maxD,
+  );
+  final int block;
+  final int minGrid;
+  final int maxGrid;
+  final int minSnakes;
+  final int maxSnakes;
+  final int minD;
+  final int maxD;
+}
+
 class LevelReport {
   LevelReport(this.level, this.difficulty, this.problems);
   final Level level;
@@ -246,6 +288,14 @@ class LevelValidator {
 
   /// Allowed distance between the computed D and the band edges.
   static const bandSlack = 3.0;
+
+  /// Allowed D range for a level: block band ± slack; Hard may reach max × 1.1;
+  /// the finale aims at 62 ± slack.
+  static (double, double) dBand(int n, LevelSlot slot) {
+    final t = LevelTarget.forLevel(n);
+    final max = slot == LevelSlot.hard ? t.maxD * 1.1 : t.maxD;
+    return (t.minD - bandSlack, max + bandSlack);
+  }
 
   static LevelReport check(Level l) {
     final p = <String>[];
@@ -275,8 +325,7 @@ class LevelValidator {
     if (diff.o > t.maxObstacles) p.add('${diff.o} obstacles, max ${t.maxObstacles}');
 
     // Difficulty band (Hard may reach max × 1.1).
-    final maxD = (slot == LevelSlot.hard ? t.maxD * 1.1 : t.maxD) + bandSlack;
-    final minD = t.minD - bandSlack;
+    final (minD, maxD) = dBand(n, slot);
     if (diff.d < minD || diff.d > maxD) {
       p.add('D ${diff.d} outside ${minD.toStringAsFixed(1)}–${maxD.toStringAsFixed(1)}');
     }
