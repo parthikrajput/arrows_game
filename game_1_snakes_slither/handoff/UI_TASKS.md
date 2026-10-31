@@ -3,6 +3,8 @@
 **Decision (2026-10-31):** one app. Keep the root app's logic (engine, state, level checker, tests) and bring in the finished UI from `apps/snakes_slither/` (the "old app").
 The old app is now a **read-only reference**. Port its screens into `lib/ui/` so they run on the contract in `lib/contracts/`. When every screen is ported, `apps/` gets deleted (the user confirms first).
 
+**Look (2026-10-31): premium "Jungle at dusk".** The old app is only a reference for layout, flow and animation. Every screen gets the new look in `design/premium/`: `BRAND_BOOK.md` is the rules, `tokens.json` the values, `icons/` the custom icons and `components/` the specs. The six key screens are designed in "Snakes Slither · Premium UI" (link in `design/premium/README.md`). Match them closely. Screens not drawn there follow the same system.
+
 Give one task at a time, in order: **P1 first**, then P2–P6 in any order. Folder: `game_1_snakes_slither`.
 
 ## Rules for every port task
@@ -36,14 +38,25 @@ make each widget run on our contract.
 - Done = flutter analyze clean + flutter test green.
 ```
 
-## P1: design system and shared widgets
+## P1: premium design system and shared widgets
 
 ```
 Follow the port rules above.
-Port apps/snakes_slither/lib/app/theme/{tokens,text_styles,app_theme}.dart
-into lib/ui/theme/ (keep our existing names: AppColors incl.
-AppColors.snake(SnakeColor), AppMotion, buildAppTheme; add text styles,
-spacing, radii, shadows).
+Build lib/ui/theme/ from design/premium/tokens.json + BRAND_BOOK.md
+("Jungle at dusk", dark grounds night → dusk → canopy → moss, emerald
+actions, gold rewards). Keep our existing names (AppColors incl.
+AppColors.snake(SnakeColor), AppMotion, buildAppTheme) and map them onto the
+new tokens; add text styles, spacing, radii and shadows as named constants.
+Icons: copy design/premium/icons/** into assets/images/icons/ and render them
+with flutter_svg (UI-only package, allowed). Glyphs are single-ink and may be
+tinted; game icons are never recoloured.
+Widgets in lib/ui/widgets/ follow design/premium/components/*.md exactly:
+SsButton (primary/gold/secondary/ghost, 4px lip, sinks 3px on press),
+SsIconButton, CoinPill, HeartBerries (+ shield tag), Chip, BoosterButton
+(states: ready/active/zero/capped/locked/busy), SsCard, SsPopup (popupIn
+300 ms ease-out-back, scrim), LevelNode. Use the old app's
+apps/snakes_slither/lib/core/widgets/* only for behaviour ideas
+(press animation, confetti), restyled.
 Port apps/snakes_slither/lib/core/widgets/{bevel_button,popup,confetti,
 garden_background,pip,game_icons,common}.dart into lib/ui/widgets/.
 common.dart reads WalletCubit/AdsCubit, so turn those parts into widgets

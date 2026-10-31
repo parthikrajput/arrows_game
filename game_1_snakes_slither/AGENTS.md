@@ -34,10 +34,10 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
    For button and popup sounds use `UiFeedback.of(context)` (`lib/contracts/ui_feedback.dart`), never a service.
 3. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
 4. Look and content:
-   - **Look:** follow the UI canvas brand: `design/ui_canvas/screens/*.png`, `design/brand/` (logo, 3D Pip renders) and the colour and type table in `design/ui_canvas/README.md`.
+   - **Look:** follow the premium "Jungle at dusk" system in `design/premium/` (`BRAND_BOOK.md`, `tokens.json`, `icons/`, `components/`) and its screen designs (links in `design/premium/README.md`). It replaces the light look of `design/ui_canvas/` and the old app. Logo and Pip renders: `design/brand/`.
    - **What's on each screen, its states and accessibility:** follow `phases/phase_1/06_UI_UX_SCREENS.md`.
    - **Ignore the canvas's classic-snake parts:** fruit, score and best score, D-pad or swipe, gems, skins, food, themes, Rewards and Profile.
-   - **Reuse the canvas's "Archive" puzzle screens** (Hint, Hammer, Rush, Wheel, Board, Booster and others in `design/ui_canvas/*.dc.html`) as layout references.
+   - The old app's screens and the canvas's "Archive" puzzle screens are layout and animation references only; restyle everything to the premium system.
    - Copy any art you use into `assets/images/`.
 
 ## Level agent
