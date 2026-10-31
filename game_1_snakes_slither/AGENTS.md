@@ -17,6 +17,8 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
 | `lib/ui/` | UI | All screens, popups, board art, animations, theme |
 | `assets/fonts/`, `assets/images/` | UI | Fonts, art |
 | `assets/levels/` | Level | The level file `phase_1.json` |
+| `apps/snakes_slither/` | Nobody (read-only) | The old second app. UI is being ported into `lib/ui/` (see `handoff/UI_TASKS.md`); deleted once the port is done |
+| `assets/audio/` | Logic | Sound effects (played via `AudioService` / `UiFeedback`) |
 | `phases/`, `specs/`, `design/`, all `*.md` standards | Nobody (read-only) | Docs and design references. Only change them when the user asks |
 | `pubspec.yaml` | Shared | UI may add UI-only packages and font/image assets. Don't remove or change anything else |
 
@@ -29,6 +31,7 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
 ## UI agent
 1. Every screen and popup gets its data and callbacks through its constructor. **Keep each constructor exactly as it is.** Don't import anything from `lib/features`, `lib/state` or `lib/services`, and don't read blocs.
 2. Put every key from `lib/contracts/app_keys.dart` on the matching widget. The tests find widgets by these keys.
+   For button and popup sounds use `UiFeedback.of(context)` (`lib/contracts/ui_feedback.dart`), never a service.
 3. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
 4. Look and content:
    - **Look:** follow the UI canvas brand: `design/ui_canvas/screens/*.png`, `design/brand/` (logo, 3D Pip renders) and the colour and type table in `design/ui_canvas/README.md`.

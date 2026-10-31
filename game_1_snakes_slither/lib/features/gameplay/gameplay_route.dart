@@ -6,6 +6,7 @@ import 'package:puzzle_core/puzzle_core.dart';
 
 import '../../contracts/view_models.dart';
 import '../../data/level_repository.dart';
+import '../../services/audio_service.dart';
 import '../../state/ads_cubit.dart';
 import '../../state/economy.dart';
 import '../../state/progress_cubit.dart';
@@ -94,20 +95,39 @@ class _GameplayViewState extends State<_GameplayView> {
     router.go(r.hasNext ? '/play/${r.level + 1}' : '/map');
   }
 
+  int _lastCueSeq = 0;
+  GameStatus? _lastStatus;
+
+  /// Sound, haptics and toasts for what just happened. Runs once per cue.
   void _onCue(BuildContext context, GameState s) {
-    if (!context.read<SettingsCubit>().state.haptics) {
-      // still show text feedback below
-    } else {
-      switch (s.cue) {
-        case GameCue.exit:
-          HapticFeedback.lightImpact();
-        case GameCue.bump || GameCue.shieldCrack || GameCue.hammerHit:
-          HapticFeedback.mediumImpact();
-        case GameCue.locked:
-          HapticFeedback.selectionClick();
-        default:
-          break;
-      }
+    final audio = context.read<AudioService>();
+    final haptics = context.read<SettingsCubit>().state.haptics;
+    if (s.status != _lastStatus) {
+      _lastStatus = s.status;
+      if (s.status == GameStatus.won) audio.play(Sfx.winStinger);
+      if (s.status == GameStatus.failed) audio.play(Sfx.fail);
+    }
+    if (s.cueSeq == _lastCueSeq) return;
+    _lastCueSeq = s.cueSeq;
+    switch (s.cue) {
+      case GameCue.exit:
+        audio.play(Sfx.pathExit);
+        if (haptics) HapticFeedback.lightImpact();
+      case GameCue.bump:
+        audio.play(Sfx.bump);
+        audio.play(Sfx.heartLost);
+        if (haptics) HapticFeedback.mediumImpact();
+      case GameCue.shieldCrack:
+        audio.play(Sfx.shieldAbsorb);
+        if (haptics) HapticFeedback.mediumImpact();
+      case GameCue.hammerHit:
+        audio.play(Sfx.boosterHammer);
+        if (haptics) HapticFeedback.mediumImpact();
+      case GameCue.locked:
+        audio.play(Sfx.lockedTap);
+        if (haptics) HapticFeedback.selectionClick();
+      default:
+        break;
     }
     final msg = switch (s.cue) {
       GameCue.hintNoSolution => 'No way out from here. Try Restart.',
@@ -150,8 +170,7 @@ class _GameplayViewState extends State<_GameplayView> {
     final ads = context.read<AdsCubit>();
 
     return BlocConsumer<GameBloc, GameState>(
-      listenWhen: (a, b) =>
-          a.cueSeq != b.cueSeq || (a.status != GameStatus.won && b.status == GameStatus.won),
+      listenWhen: (a, b) => a.cueSeq != b.cueSeq || a.status != b.status,
       listener: (context, s) {
         if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
           _winRecorded = true;
