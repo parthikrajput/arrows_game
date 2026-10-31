@@ -12,9 +12,9 @@ import '../state/progress_cubit.dart';
 import '../state/settings_cubit.dart';
 import '../state/wallet_cubit.dart';
 import '../state/wheel_cubit.dart';
-import '../ui/popups/popups.dart';
 import '../ui/screens/home_screen.dart';
 import '../ui/screens/level_map_screen.dart';
+import '../ui/screens/settings_screen.dart';
 
 GoRouter buildRouter() => GoRouter(
   routes: [
@@ -91,16 +91,9 @@ class _MapRoute extends StatelessWidget {
 class _SettingsRoute extends StatelessWidget {
   const _SettingsRoute();
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      leading: BackButton(onPressed: () => context.go('/')),
-      title: const Text('Settings'),
-    ),
-    body: SingleChildScrollView(
-      child: SettingsList(
-        settings: context.watch<SettingsCubit>().state,
-        onToggle: context.read<SettingsCubit>().toggle,
-      ),
-    ),
+  Widget build(BuildContext context) => SettingsScreen(
+    settings: context.watch<SettingsCubit>().state,
+    onToggle: context.read<SettingsCubit>().toggle,
+    onBack: () => context.go('/'),
   );
 }

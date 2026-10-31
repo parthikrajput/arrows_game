@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,7 @@ import '../../state/settings_cubit.dart';
 import '../../state/wallet_cubit.dart';
 import '../../ui/popups/popups.dart';
 import '../../ui/screens/gameplay_screen.dart';
+import '../../ui/theme/tokens.dart';
 import 'board_input.dart';
 import 'game_bloc.dart';
 
@@ -231,7 +234,10 @@ class _GameplayViewState extends State<_GameplayView> {
                 onCancelHammer: () => bloc.add(const HammerCancelled()),
               ),
               if (popup != null) ...[
-                const ModalBarrier(color: Color(0x73000000), dismissible: false),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                  child: const ModalBarrier(color: AppColors.scrim, dismissible: false),
+                ),
                 popup,
               ],
             ],

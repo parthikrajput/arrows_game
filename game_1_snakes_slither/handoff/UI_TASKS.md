@@ -38,6 +38,8 @@ Match the named canvas screens exactly. Read their .dc.html for exact values
 
 ## Phase 1: launch (levels 1–500)
 
+**Status (2026-10-31):** U1–U7 are built in `lib/ui/` (by the cloud Claude, at the user's request). Fonts are in `assets/fonts/`, art in `assets/images/`. Screens still waiting for logic contracts are listed in `handoff/CHANGE_REQUESTS.md`. To compare with the canvas, render every screen: `UI_SHOTS=/tmp/shots flutter test test/ui_screenshots_test.dart` (add `UI_SHOTS_WIDTH=360` for small phones). U8 is next, once its contracts exist.
+
 ### U1: theme and shared widgets
 ```
 Follow the rules above.

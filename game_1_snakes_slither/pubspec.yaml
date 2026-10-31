@@ -42,6 +42,7 @@ dependencies:
   puzzle_core:
     path: packages/puzzle_core
   audioplayers: ^6.8.1
+  flutter_svg: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,14 @@ flutter:
   assets:
     - assets/levels/
     - assets/audio/sfx/
+    - assets/images/
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
