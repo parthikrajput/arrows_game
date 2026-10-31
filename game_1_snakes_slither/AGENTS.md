@@ -34,7 +34,7 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
    For button and popup sounds use `UiFeedback.of(context)` (`lib/contracts/ui_feedback.dart`), never a service.
 3. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
 4. Look and content:
-   - **Look:** the UI canvas "Snake Slither Game UI" is the design, to be matched exactly. The repo copy is `design/ui_canvas/*.dc.html` (open in the canvas) with screenshots in `design/ui_canvas/screens/` and colours and type in `design/ui_canvas/README.md`. Logo, Pip and art are in `design/brand/`.
+   - **Look:** the UI canvas "Snake Slither Game UI" is the design, to be matched exactly. The repo copy is `design/ui_canvas/*.dc.html` (open in the canvas) with colours and type in `design/ui_canvas/README.md`. Logo, Pip and art are in `design/brand/`.
    - **Gameplay rules stay the Phase 1 puzzle** (tap snakes out of a tangle). Canvas parts that belong to classic snake (score/best, D-pad, fruit, length) are not built; the puzzle board, hearts, moves and boosters take their place in the same visual style.
    - **Phase by phase:** build only the screens of the current task in `handoff/UI_TASKS.md`. Features that appear in the canvas but belong to a later phase (snake skins, board themes and so on) wait for that phase.
    - Copy any art you use into `assets/images/`.

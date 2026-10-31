@@ -1,72 +1,44 @@
 # Snake Slither — UI design canvas
 
-Source files for the Snake Slither UI design canvas. It holds the new look from the reference image: 15 screens, a brand board and a screen flow board. The earlier puzzle version is kept in an archive section.
+Source files for the Snake Slither UI design canvas. It has only the screens the docs describe: every Phase 1 screen from [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md), in the new look, plus the two Phase 2 cosmetic screens.
 
-Related docs: [README](../../README.md) · [Brand assets](../brand/README.md) · [Phase 1 index](../../phases/phase_1/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md)
+Related docs: [README](../../README.md) · [Brand assets](../brand/README.md) · [Phase 1 index](../../phases/phase_1/README.md) · [06 UI/UX Screens](../../phases/phase_1/06_UI_UX_SCREENS.md) · [04 Boosters, Coins, Shop](../../phases/phase_1/04_BOOSTERS_COINS_SHOP.md)
 
-Live canvas: https://claude.ai/artifact/Uqpn19QTRpb7h3k9f1yvR9
+Live canvas: https://claude.ai/artifact/VKYgfZ62KZ2s9m9eoGufNe
 
 ## Status (2026-10-31)
 
-This canvas is the official design for the app. The code follows it exactly, phase by phase (`handoff/UI_TASKS.md`), while gameplay rules stay the Phase 1 puzzle.
+This canvas is the official design for the app. The code follows it exactly, phase by phase (`handoff/UI_TASKS.md`).
 
-## Important: the design now differs from the Phase 1 docs
-
-The new screens follow the reference image, not the Phase 1 docs:
-
-- Gameplay is classic snake: eat fruit, grow, score and best score, swipe or D-pad. The docs describe a puzzle (tap snakes out, moves and par, hearts, boosters).
-- New features that are not in the docs: gems, snake skins, food items, themes, a Rewards screen, a Profile screen and a Settings screen.
-
-The docs are not changed yet. Update them before any build work starts.
+Cleaned up to match the docs:
+- Gameplay is the Phase 1 puzzle: tap snakes out of the tangle. `Play` is the gameplay component (HUD with level, moves, hearts, coins; the garden board; the Hint, Shell and Hammer bar). Every popup draws it behind itself.
+- Removed (not in any doc): classic-snake gameplay (score, best, fruit, D-pad), gems, food, the Rewards and Profile screens, and the old screen-flow board.
+- Added from the docs: Age Gate (06 §5.2) and real puzzle levels L12 and L19, plus a blocked tap that costs a heart.
+- Changed to the docs: Home (settings, coins, free spin, Play next level, Levels x / 500, Daily Puzzle card, nav Home · Shop · Ranks · Map · Settings), Level Map card, Pause, Level Complete (stars, coins, Claim 2X, Next, Map), Level Failed, Daily Jungle Puzzle (7-day streak ladder, Saver, trophy), Shop (Boosters · Coins · Offers with the 04 §8 prices), Leaderboards (Highest Lv · Stars · Streak), Settings (06 §5.6 list).
+- Screenshots were removed because they showed the old classic screens. Open the canvas to see the screens.
 
 ## Layout
 
 `canvas.json` lists every artboard, its position and its title.
 
-| Section | Boards |
+| Row | Boards |
 |---|---|
-| Top | `Brand` (app icon, logo, palette, store banner, type and buttons) · `ScreenFlow` (all 15 screens, scaled down and connected in game order) |
-| 1 · Core loop | `Main` (Splash), `Home`, `LevelMap`, `Play` (Gameplay), `Pause`, `Complete`, `Failed`, `Daily` |
-| 2 · Meta | `Shop` (Skins, Food, Themes tabs), `SkinPreview`, `Themes`, `Rewards` (Daily, Milestones), `Leaderboards` (Global, Friends), `Profile`, `Settings` |
-| Archive | The earlier puzzle screens and components (`Starter`, `Hint`, `Hammer`, `Rush`, `Wheel`, `Board`, `Pip`, `Booster`, and others). Titles start with "Archive". |
-
-Screenshots of every new screen are in `screens/`.
+| Brand | `Brand`, `AppIcon`, `Flow` (Phase 1 flow, 06 §6) |
+| 1 · Start, home, map | `Main` (Splash), `AgeGate`, `Home`, `LevelMap`, `LevelStart`, `Tutorial`, `Intro` |
+| 2 · Gameplay | `LevelPlay` (L12), `LevelHard` (L19), `LevelBonk`, `Preview`, `Hint`, `Hammer`, `MiniShop`, `Stuck` |
+| 3 · Popups and results | `Pause`, `SecondChance`, `Failed`, `Complete`, `Gift`, `Chest`, `PhaseComplete`, `LevelUnavailable` |
+| 4 · Daily, Rush, Wheel | `Daily`, `DailyPlay`, `DailyResult`, `Saver`, `RushIntro`, `Rush`, `RushResults`, `Wheel` |
+| 5 · Shop and more | `Shop`, `Starter`, `Vip`, `Leaderboards`, `Settings` |
+| Phase 2 (later) | `SkinPreview`, `Themes` |
+| Components | `Play` (gameplay: props mode, level, hearts, moves, par, shield, label), `Board`, `Booster`, `Pip`, `Tortoise`, `Backdrop` |
 
 ## Clickable prototype
 
-Open the canvas in Play mode and start from Splash.
-
-- Splash → Home → Level Map → Gameplay → Level Complete → Next Level.
-- Gameplay → pause button → Pause → Resume, Restart, Home or Settings.
-- Prototype-only shortcuts on Gameplay: tap the board to finish the level; tap the Score box to reach Level Failed.
-- Level Failed → Retry or Home.
-- Home → Daily Challenge card → Play Now.
-- Home → gift button → Rewards. Home → avatar → Profile. Home → coin or gem pill → Shop.
-- Home bottom nav → Shop, Ranks (Leaderboard), Awards (Rewards), Settings.
-- Shop → tap a skin → Skin Preview. Shop → Themes tab → See all themes → Themes.
-
-Interactive parts that work inside a screen:
-
-- Tabs in Shop, Rewards and Leaderboard.
-- The Claim button in Rewards.
-- Left and right arrows in Skin Preview (cycles all 6 skins).
-- Theme cards in Themes (changes the big preview and the button).
-- Sound, Music, Vibration and Notifications toggles in Settings.
+Open the canvas in Play mode and start from Splash: Splash → Age Gate → Home → Play (Level 37) → tap the board → Level Complete → Next. Tap the hearts on the gameplay HUD to reach Level Failed. Home → Daily card → Play today → Daily Result.
 
 ## Values used on the screens
 
-| Item | Value |
-|---|---|
-| Wallet | 8,420 coins, 96 gems |
-| Skins | Classic (equipped), Red 200, Blue 200, Rainbow 300, Gold 500, Ninja 500 |
-| Themes | Forest (equipped), Desert 200, Snow 200, Space 300, Beach 300, Candy 300 |
-| Food | Apple (owned), Golden Apple 150, Berry Mix 200, Magic Melon 250 |
-| Coin packs | 500 for ₹49, 1,200 for ₹99, 3,000 for ₹199 (+25%) |
-| Daily login | 50, 75, 100 coins, 1 gem, 150, 200 coins, then 5 gems on day 7 |
-| Daily Challenge | Play 3 games (50), Collect 20 fruits (80), Reach 500 score (100), all three = +5 gems |
-| Level Complete | 3 stars, +120 coins, +3 gems |
-
-These are sample values for the design. Final numbers must come from the economy docs.
+Sample values taken from the Phase 1 docs: 1,250 coins, 3 hearts, boosters unlock at L3 / L15 / L25, booster prices 60 / 150, 80 / 200, 100 / 250, coin packs ₹49 / ₹149 / ₹299 / ₹699, Starter Pack ₹79, VIP ₹20 / month, streak rewards 50 / 75 / 100 / 125 / 150 / 200 / 450. `SHARED_CORE_STANDARD.md` wins if a number differs.
 
 ## Colors and type
 
@@ -90,5 +62,3 @@ Each `*.dc.html` file is one artboard: HTML and SVG inside `<x-dc>`, with these 
 - A `class Component extends DCLogic` script whose `renderVals()` supplies the values.
 
 Images are canvas assets (`/_blob/<id>`). The same images are in [brand](../brand/README.md). The canvas runtime provides `support.js`, which is not in this folder. Open the files in the canvas, not directly in a browser.
-
-The new screens are generated by the Python scripts in [`../brand/source`](../brand/source). `v2_common.py` holds the shared parts: status bar, buttons, cards, coin, gem and star icons, and animations.

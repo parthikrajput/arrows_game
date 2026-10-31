@@ -2,13 +2,12 @@
 
 **The design (2026-10-31):** the UI canvas "Snake Slither Game UI" is the design, to be matched exactly.
 - Repo copy: `design/ui_canvas/<Screen>.dc.html` (HTML with exact colours, gradients, shadows, radii, fonts and animations).
-- Screenshots: `design/ui_canvas/screens/`.
 - Palette and type: `design/ui_canvas/README.md`.
 - Art: `design/brand/` (logo, 3D Pip renders, app icon, board and map backgrounds).
 
 Each task says which canvas screens to build. Copy their look 1:1: the same cream backgrounds, green gradient buttons with the 4px lip and the shine, cream cards, leaf decorations, bob/pop/glow/shine animations, Fredoka + Nunito.
 
-**One rule overrides the canvas:** gameplay is the Phase 1 puzzle (tap snakes out of a tangle). Where the canvas shows classic snake (score/best, D-pad, fruit, length), build the puzzle's board, hearts, moves and boosters instead, in the same visual style.
+The canvas now has only the screens the docs describe, and gameplay is the Phase 1 puzzle (tap snakes out of a tangle). If a screen still seems to differ from the docs, the docs win; note it in handoff/CHANGE_REQUESTS.md.
 
 Do the tasks in order. Folder: `game_1_snakes_slither`.
 
@@ -57,7 +56,7 @@ with the green level badge, star (pop animation), confetti.
 ### U2: Splash and Home
 ```
 Follow the rules above.
-Canvas: Main.dc.html (Splash), Home.dc.html.
+Canvas: Main.dc.html (Splash), AgeGate.dc.html, Home.dc.html.
 - Splash → Home fade, as in the canvas.
 - Home: coin pill, Pip on the platform (bobbing), the big green Play button
   (glow pulse + shine) going to the next level, the Levels card (progress
@@ -78,9 +77,10 @@ Pip, locked, Hard in red, Gift Basket on every 10th), biome header.
 ### U4: Gameplay (puzzle board in the canvas style)
 ```
 Follow the rules above.
-Canvas: Play.dc.html for the look (grass background, dark translucent HUD
-pills with white text, top gradient), Board.dc.html + Booster.dc.html +
-Hint/Hammer/Preview.dc.html for the puzzle parts.
+Canvas: Play.dc.html (the puzzle gameplay component) shown in
+LevelPlay.dc.html (L12), LevelHard.dc.html (L19 Hard), LevelBonk.dc.html
+(blocked tap, -1 heart), Preview.dc.html, Hint.dc.html, Hammer.dc.html.
+Board.dc.html + Booster.dc.html are the board and booster art.
 - HUD: pause, Level N, Moves, hearts (+ shield charges), coins.
 - Board: BoardCanvas(data, geometry, onMotionDone). Draw cells with
   geometry.rectOf/centerOf, snakes in the 8 palette colours with patterns,
@@ -98,7 +98,7 @@ Canvas: Pause.dc.html, Complete.dc.html, Failed.dc.html,
 SecondChance.dc.html, MiniShop.dc.html, Gift.dc.html, Chest.dc.html,
 Stuck.dc.html, LevelUnavailable.dc.html.
 Map to PausePopup (+ SettingsList), LevelCompletePopup (stars, coins,
-Claim 2X, Next, Map; no score/best/gems), LevelFailedPopup,
+Claim 2X, Next, Map), LevelFailedPopup,
 SecondChancePopup (10 s ring), MiniShopSheet, GiftBasketPopup (basket or
 chest variant).
 ```
@@ -106,10 +106,8 @@ chest variant).
 ### U6: Shop, Lucky Lily Wheel, VIP, Starter Pack
 ```
 Follow the rules above.
-Canvas: Shop.dc.html (look only), Wheel.dc.html, Vip.dc.html,
-Starter.dc.html.
-Shop tabs in Phase 1: Boosters · Coins · Offers (ShopData). The canvas's
-Skins, Food and Themes tabs wait for Phase 2.
+Canvas: Shop.dc.html (Boosters · Coins · Offers), Wheel.dc.html,
+Vip.dc.html, Starter.dc.html.
 ```
 
 ### U7: Settings and Leaderboards
@@ -130,6 +128,5 @@ PhaseComplete.dc.html.
 ---
 
 ## Phase 2 (later)
-Canvas: `SkinPreview.dc.html`, `Themes.dc.html`, and the Shop's Skins, Food and Themes tabs, matching Phase 2's cosmetic snake skins and board themes. Weekly Star Race and Sticker Album also come in Phase 2.
+Canvas: `SkinPreview.dc.html`, `Themes.dc.html` (Phase 2 cosmetic snake skins and board themes; the Shop gets a Cosmetics tab then). Weekly Star Race and Sticker Album also come in Phase 2.
 
-**Not in any phase doc yet:** gems, food items, Rewards and Profile screens (canvas `Rewards.dc.html`, `Profile.dc.html`). They wait until the user adds them to a phase.
