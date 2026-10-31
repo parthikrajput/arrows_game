@@ -4903,6 +4903,5942 @@
     "p2",
     "p4"
    ]
+  },
+  {
+   "schema": 3,
+   "level": 31,
+   "phase": 1,
+   "seed": "0x000000000000001f",
+   "slot": "intro",
+   "tag": "normal",
+   "grid": [
+    6,
+    6
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       0
+      ],
+      [
+       4,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "U",
+     "body": [
+      [
+       4,
+       1
+      ],
+      [
+       4,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       0,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       5
+      ],
+      [
+       4,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p4",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 6,
+   "difficulty": 7.1,
+   "solution": [
+    "p1",
+    "p3",
+    "p4",
+    "p2",
+    "p5",
+    "p6"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 32,
+   "phase": 1,
+   "seed": "0x0000000000000020",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    6,
+    6
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       3
+      ],
+      [
+       4,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       4
+      ],
+      [
+       4,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p6",
+     "color": "red",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       0,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 6,
+   "difficulty": 8.6,
+   "solution": [
+    "p1",
+    "p4",
+    "p5",
+    "p6",
+    "p2",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 33,
+   "phase": 1,
+   "seed": "0x0000000000000021",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    6,
+    6
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       0
+      ],
+      [
+       4,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       4,
+       1
+      ],
+      [
+       4,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       3
+      ],
+      [
+       1,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       5
+      ],
+      [
+       4,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p5",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 7,
+   "difficulty": 9.2,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 34,
+   "phase": 1,
+   "seed": "0x0000000000000022",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    6,
+    6
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "pink",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       4,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       2
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       0,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       5
+      ],
+      [
+       4,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M001",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "variant": 1
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 7,
+   "difficulty": 11.2,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 35,
+   "phase": 1,
+   "seed": "0x0000000000000023",
+   "slot": "breather",
+   "tag": "easy",
+   "grid": [
+    6,
+    6
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       5,
+       0
+      ],
+      [
+       4,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       5,
+       5
+      ],
+      [
+       5,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p6",
+     "color": "purple",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       5
+      ],
+      [
+       2,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p2",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 6,
+   "difficulty": 7.1,
+   "solution": [
+    "p1",
+    "p3",
+    "p4",
+    "p5",
+    "p2",
+    "p6"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 36,
+   "phase": 1,
+   "seed": "0x0000000000000024",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "pink",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       5,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "blue",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       2
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "yellow",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "purple",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 7,
+   "difficulty": 9.2,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 37,
+   "phase": 1,
+   "seed": "0x0000000000000025",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       4
+      ],
+      [
+       5,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "orange",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 9.8,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 38,
+   "phase": 1,
+   "seed": "0x0000000000000026",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       3,
+       4
+      ]
+     ],
+     "params": {
+      "orient": "V"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 11.8,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 39,
+   "phase": 1,
+   "seed": "0x0000000000000027",
+   "slot": "hard",
+   "tag": "hard",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p3",
+      "k": 1
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M001",
+     "cells": [
+      [
+       2,
+       4
+      ]
+     ],
+     "params": {
+      "variant": 2
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 9,
+   "difficulty": 12.4,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 40,
+   "phase": 1,
+   "seed": "0x0000000000000028",
+   "slot": "milestone",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M003",
+     "cells": [],
+     "params": {
+      "path": "p4",
+      "k": 1
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "params": {
+      "orient": "H"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 10.3,
+   "solution": [
+    "p1",
+    "p3",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 41,
+   "phase": 1,
+   "seed": "0x0000000000000029",
+   "slot": "intro",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       4,
+       3
+      ],
+      [
+       4,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       4
+      ],
+      [
+       5,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "orange",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       2
+      ]
+     ],
+     "params": {
+      "keyPath": "p1",
+      "color": "blue"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 9.8,
+   "solution": [
+    "p1",
+    "p3",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 42,
+   "phase": 1,
+   "seed": "0x000000000000002a",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       2,
+       3
+      ]
+     ],
+     "params": {
+      "keyPath": "p4",
+      "color": "blue"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 10.3,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 43,
+   "phase": 1,
+   "seed": "0x000000000000002b",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "pink",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       5,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "blue",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       2
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "yellow",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "purple",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "keyPath": "p4",
+      "color": "green"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 10.3,
+   "solution": [
+    "p1",
+    "p4",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 44,
+   "phase": 1,
+   "seed": "0x000000000000002c",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "keyPath": "p4",
+      "color": "yellow"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 9,
+   "difficulty": 11.9,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 45,
+   "phase": 1,
+   "seed": "0x000000000000002d",
+   "slot": "breather",
+   "tag": "easy",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "keyPath": "p3",
+      "color": "yellow"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 9.8,
+   "solution": [
+    "p1",
+    "p3",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 46,
+   "phase": 1,
+   "seed": "0x000000000000002e",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "keyPath": "p1",
+      "color": "green"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 9,
+   "difficulty": 11.9,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 47,
+   "phase": 1,
+   "seed": "0x000000000000002f",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       7
+      ],
+      [
+       3,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "keyPath": "p4",
+      "color": "yellow"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 12.5,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 48,
+   "phase": 1,
+   "seed": "0x0000000000000030",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       7
+      ],
+      [
+       0,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "green",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       7
+      ],
+      [
+       2,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "keyPath": "p4",
+      "color": "blue"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       3,
+       4
+      ]
+     ],
+     "params": {
+      "orient": "V"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 14.5,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 49,
+   "phase": 1,
+   "seed": "0x0000000000000031",
+   "slot": "hard",
+   "tag": "hard",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       7
+      ],
+      [
+       3,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "purple",
+     "dir": "D",
+     "body": [
+      [
+       5,
+       7
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p11",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "keyPath": "p1",
+      "color": "green"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M001",
+     "cells": [
+      [
+       3,
+       4
+      ]
+     ],
+     "params": {
+      "variant": 1
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 11,
+   "difficulty": 15.1,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p11",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 50,
+   "phase": 1,
+   "seed": "0x0000000000000032",
+   "slot": "milestone",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       7
+      ],
+      [
+       2,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "D",
+     "body": [
+      [
+       5,
+       7
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M004",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "keyPath": "p3",
+      "color": "yellow"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       4,
+       3
+      ]
+     ],
+     "params": {
+      "orient": "H"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 13.0,
+   "solution": [
+    "p1",
+    "p3",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 51,
+   "phase": 1,
+   "seed": "0x0000000000000033",
+   "slot": "intro",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       4,
+       3
+      ],
+      [
+       4,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       4
+      ],
+      [
+       5,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "orange",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       2
+      ]
+     ],
+     "params": {
+      "color": "green"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 9.8,
+   "solution": [
+    "p1",
+    "p3",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 52,
+   "phase": 1,
+   "seed": "0x0000000000000034",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       2,
+       3
+      ]
+     ],
+     "params": {
+      "color": "green"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 10.3,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 53,
+   "phase": 1,
+   "seed": "0x0000000000000035",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "pink",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       5,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "blue",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       2
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "yellow",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       6
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "purple",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "color": "blue"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 10.3,
+   "solution": [
+    "p1",
+    "p4",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 54,
+   "phase": 1,
+   "seed": "0x0000000000000036",
+   "slot": "practice",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "color": "blue"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 9,
+   "difficulty": 11.9,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 55,
+   "phase": 1,
+   "seed": "0x0000000000000037",
+   "slot": "breather",
+   "tag": "easy",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       6
+      ],
+      [
+       2,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       3,
+       3
+      ]
+     ],
+     "params": {
+      "color": "pink"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 8,
+   "difficulty": 9.8,
+   "solution": [
+    "p1",
+    "p3",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p2",
+    "p4"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 56,
+   "phase": 1,
+   "seed": "0x0000000000000038",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    7,
+    7
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       0
+      ],
+      [
+       5,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       5,
+       1
+      ],
+      [
+       5,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       3
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       6
+      ],
+      [
+       3,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       6,
+       6
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "color": "red"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 9,
+   "difficulty": 11.9,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 57,
+   "phase": 1,
+   "seed": "0x0000000000000039",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       7
+      ],
+      [
+       3,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "color": "yellow"
+     },
+     "hammerable": false
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 12.5,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 58,
+   "phase": 1,
+   "seed": "0x000000000000003a",
+   "slot": "ramp",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "yellow",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "green",
+     "dir": "U",
+     "body": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "blue",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       0,
+       7
+      ],
+      [
+       0,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "green",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       7
+      ],
+      [
+       2,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "color": "blue"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       3,
+       4
+      ]
+     ],
+     "params": {
+      "orient": "V"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 14.5,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 59,
+   "phase": 1,
+   "seed": "0x000000000000003b",
+   "slot": "hard",
+   "tag": "hard",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "green",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "red",
+     "dir": "U",
+     "body": [
+      [
+       1,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "blue",
+     "dir": "L",
+     "body": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "orange",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p7",
+     "color": "teal",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p8",
+     "color": "pink",
+     "dir": "D",
+     "body": [
+      [
+       3,
+       7
+      ],
+      [
+       3,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "purple",
+     "dir": "D",
+     "body": [
+      [
+       5,
+       7
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p11",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "color": "green"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M001",
+     "cells": [
+      [
+       3,
+       4
+      ]
+     ],
+     "params": {
+      "variant": 1
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 11,
+   "difficulty": 15.1,
+   "solution": [
+    "p1",
+    "p4",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p11",
+    "p2",
+    "p5",
+    "p3"
+   ]
+  },
+  {
+   "schema": 3,
+   "level": 60,
+   "phase": 1,
+   "seed": "0x000000000000003c",
+   "slot": "milestone",
+   "tag": "normal",
+   "grid": [
+    8,
+    8
+   ],
+   "layers": 1,
+   "hearts": 3,
+   "paths": [
+    {
+     "id": "p1",
+     "color": "teal",
+     "dir": "U",
+     "body": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p2",
+     "color": "orange",
+     "dir": "L",
+     "body": [
+      [
+       1,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p3",
+     "color": "yellow",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       0
+      ],
+      [
+       6,
+       0
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p4",
+     "color": "purple",
+     "dir": "U",
+     "body": [
+      [
+       6,
+       1
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p5",
+     "color": "green",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p6",
+     "color": "pink",
+     "dir": "L",
+     "body": [
+      [
+       0,
+       4
+      ],
+      [
+       1,
+       4
+      ]
+     ],
+     "layer": 0,
+     "mods": {
+      "skin": "caterpillar"
+     }
+    },
+    {
+     "id": "p7",
+     "color": "blue",
+     "dir": "D",
+     "body": [
+      [
+       2,
+       7
+      ],
+      [
+       2,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p8",
+     "color": "red",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       5
+      ],
+      [
+       6,
+       5
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p9",
+     "color": "yellow",
+     "dir": "D",
+     "body": [
+      [
+       5,
+       7
+      ],
+      [
+       5,
+       6
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    },
+    {
+     "id": "p10",
+     "color": "teal",
+     "dir": "R",
+     "body": [
+      [
+       7,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "layer": 0,
+     "mods": {}
+    }
+   ],
+   "mechanics": [
+    {
+     "id": "o1",
+     "type": "M005",
+     "cells": [
+      [
+       4,
+       4
+      ]
+     ],
+     "params": {
+      "color": "yellow"
+     },
+     "hammerable": false
+    },
+    {
+     "id": "o2",
+     "type": "M002",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       4,
+       3
+      ]
+     ],
+     "params": {
+      "orient": "H"
+     },
+     "hammerable": true
+    }
+   ],
+   "goals": {
+    "gems": 0
+   },
+   "par_moves": 10,
+   "difficulty": 13.0,
+   "solution": [
+    "p1",
+    "p3",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10",
+    "p2",
+    "p4"
+   ]
   }
  ]
 }
