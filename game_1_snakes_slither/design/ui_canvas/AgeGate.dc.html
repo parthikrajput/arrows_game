@@ -11,53 +11,62 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@500;700;800&amp;display=swap">
 <style>
 body{margin:0}
-a{color:#2E7D32}a:hover{color:#1B5E20}
+a{color:inherit;text-decoration:none}
+.ss-press{transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s}
+.ss-press:hover{transform:translateY(-1px)}
+.ss-press:active{transform:translateY(2px) scale(.97)}
+@keyframes ssBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes ssPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes ssGlow{0%,100%{box-shadow:0 0 0 0 rgba(168,217,79,.55)}60%{box-shadow:0 0 0 14px rgba(168,217,79,0)}}
+@keyframes ssIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes ssPop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes ssFall{0%{transform:translate(0,-60px) rotate(0)}100%{transform:translate(60px,920px) rotate(260deg)}}
+@keyframes ssSway{0%,100%{transform:perspective(600px) rotateY(-10deg)}50%{transform:perspective(600px) rotateY(10deg)}}
+@keyframes ssFloatUp{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes ssConfetti{0%{transform:translateY(-40px) rotate(0)}100%{transform:translateY(860px) rotate(540deg)}}
+@keyframes ssShine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(220%) skewX(-20deg)}}
+.ss-in{animation:ssIn .5s cubic-bezier(.2,.9,.3,1) both}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(180deg, #E4F4E6 0%, #D3ECD4 100%); color: #1B2B1F; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 96px 24px 32px; gap: 18px; text-align: center;">
-  <h1 style="margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 30px;">When were you born?</h1>
-  <p style="margin: 0; max-width: 30ch; font-size: 15px; font-weight: 700; line-height: 1.45; color: #5B6B5F;">We ask once so the game shows the right kind of ads. Your answer stays on this phone.</p>
-
-  <div style="position: relative; width: 220px; height: 264px; border-radius: 24px; background: #FFFBF2; box-shadow: inset 0 1px 0 #FFFFFF, 0 3px 0 rgba(150,130,90,0.3), 0 12px 26px rgba(30,60,30,0.16); overflow: hidden;">
-    <div aria-hidden="true" style="position: absolute; left: 12px; right: 12px; top: 108px; height: 48px; border-radius: 14px; background: #E8F5E9; border: 2px solid #C8E6C9; box-sizing: border-box;"></div>
-    <div role="listbox" aria-label="Birth year" style="position: relative; height: 264px; overflow-y: auto; padding: 108px 12px; box-sizing: border-box; display: flex; flex-direction: column; scrollbar-width: none;">
-      <sc-for list="{{ years }}" as="y" hint-placeholder-count="12">
-        <button role="option" aria-selected="{{ y.on }}" onClick="{{ y.pick }}" style="{{ y.style }}">{{ y.y }}</button>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; isolation: isolate; background: radial-gradient(ellipse 120% 70% at 50% 0%, #FFFEF8 0%, #F7F4E8 55%, #EFE9D3 100%); color: #163B28; font-family: 'Nunito', system-ui, sans-serif;">
+  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: -1; pointer-events: none;"><dc-import name="Backdrop" hint-size="390px,844px"></dc-import></div>
+  <div aria-hidden="true" style="position: relative; z-index: 3; height: 44px; padding: 0 22px 0 26px; display: flex; align-items: center; justify-content: space-between; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; color: #163B28;"><span>9:41</span><span style="display: flex; gap: 6px; align-items: center;"><svg width="18" height="12" viewBox="0 0 18 12"><g fill="#163B28"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></g></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 L5.6 9 A3.4 3.4 0 0 1 10.4 9 Z M2.8 6.3 A7.4 7.4 0 0 1 13.2 6.3 L11.8 7.7 A5.4 5.4 0 0 0 4.2 7.7 Z M0 3.5 A11.4 11.4 0 0 1 16 3.5 L14.6 4.9 A9.4 9.4 0 0 0 1.4 4.9 Z" fill="#163B28"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="#163B28" opacity="0.45"/><rect x="2" y="2" width="17" height="8" rx="2" fill="#163B28"/><rect x="23.5" y="4" width="1.8" height="4" rx="1" fill="#163B28" opacity="0.45"/></svg></span></div>
+  <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 40px 24px 0;">
+    <img src="/_blob/4970f508a1060b3a16ff6ab0d0d965ed" alt="Pip the snake" style="width: 150px; height: 150px; object-fit: contain; animation: ssBob 3s ease-in-out infinite;">
+    <h1 style="margin: 14px 0 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 30px; text-align: center;">When were you born?</h1>
+    <p style="margin: 6px 0 0; max-width: 30ch; text-align: center; font-size: 15px; font-weight: 700; color: #6B7F70;">This helps us keep the game right for your age.</p>
+    <div role="listbox" aria-label="Birth year" style="margin-top: 26px; width: 220px; height: 196px; border-radius: 24px; background: #FFFEF8; border: 1px solid #ECE5CF; box-shadow: inset 0 1px 0 #FFFFFF, 0 2px 0 rgba(180,165,120,0.18), 0 10px 24px rgba(22,59,40,0.08); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <div aria-hidden="true" style="position: absolute; left: 12px; right: 12px; top: 74px; height: 48px; border-radius: 14px; background: #E3F2D3; border: 2px solid #A8D94F; box-sizing: border-box;"></div>
+      <sc-for list="{{ years }}" as="y" hint-placeholder-count="5">
+        <button role="option" aria-selected="{{ y.sel }}" onClick="{{ y.pick }}" style="position: relative; height: 38px; border: 0; background: transparent; cursor: pointer; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: {{ y.fs }}px; color: {{ y.col }}; opacity: {{ y.op }};">{{ y.v }}</button>
       </sc-for>
+      <span aria-hidden="true" style="position: absolute; top: 6px; font-size: 14px; color: #9AA79C;">▲</span>
+      <span aria-hidden="true" style="position: absolute; bottom: 6px; font-size: 14px; color: #9AA79C;">▼</span>
     </div>
+    <span style="margin-top: 10px; font-size: 13px; font-weight: 800; color: #6B7F70;">{{ hintText }}</span>
   </div>
-  <span style="font-size: 14px; font-weight: 800; color: {{ statusColor }};">{{ status }}</span>
-
-  <div style="margin-top: auto; align-self: stretch; display: flex; flex-direction: column; gap: 10px; align-items: center;">
-    <sc-if value="{{ picked }}" hint-placeholder-val="{{ false }}">
-      <a href="Home.dc.html" style="align-self: stretch; height: 58px; border-radius: 16px; background: linear-gradient(180deg, #A6E585 0%, #4CAF50 48%, #2E7D32 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,0.42), inset 0 -3px 0 rgba(0,0,0,0.14), 0 5px 0 #1B5E20, 0 12px 20px rgba(27,94,32,0.3); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px;">Continue</a>
-    </sc-if>
-    <sc-if value="{{ notPicked }}" hint-placeholder-val="{{ true }}">
-      <button disabled style="align-self: stretch; height: 58px; border: 0; border-radius: 16px; background: #DDE5DE; color: #5B6B5F; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 20px;">Continue</button>
-    </sc-if>
-    <span style="font-size: 13px; font-weight: 800;"><a href="#" style="text-decoration: none;">Privacy Policy</a> · <a href="#" style="text-decoration: none;">Terms</a></span>
+  <div style="position: absolute; z-index: 2; left: 24px; right: 24px; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+    <a href="{{ nextHref }}" aria-disabled="{{ notPicked }}" class="ss-press" style="position: relative; overflow: hidden; height: 60px; width: 100%; box-sizing: border-box; border-radius: 20px; background: {{ btnBg }}; box-shadow: {{ btnShadow }}; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22px; text-shadow: 0 1px 0 rgba(0,0,0,0.18); pointer-events: {{ pe }};"><sc-if value="{{ picked }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="position: absolute; inset: 0 auto 0 0; width: 40%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent); animation: ssShine 3.6s ease-in-out infinite;"></span></sc-if><span style="position: relative;">Continue</span></a>
+    <span style="font-size: 13px; font-weight: 800; color: #13864D;">Privacy Policy · Terms</span>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"picked":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
-  constructor(props) { super(props); this.state = { year: null }; }
+  constructor(props) { super(props); this.state = { year: props.picked === false ? null : 2009, top: 2007 }; }
   renderVals() {
-    const now = 2026, sel = this.state.year;
-    const years = [];
-    for (let y = now; y >= now - 100; y--) {
-      const on = sel === y;
-      years.push({
-        y, on: on ? 'true' : 'false', pick: () => this.setState({ year: y }),
-        style: 'flex-shrink: 0; height: 48px; border: 0; background: transparent; cursor: pointer; font-family: Fredoka, sans-serif; font-variant-numeric: tabular-nums; ' +
-          (on ? 'font-weight: 700; font-size: 24px; color: #1B2B1F;' : 'font-weight: 500; font-size: 20px; color: #5B6B5F;')
-      });
-    }
-    return {
-      years, picked: sel !== null, notPicked: sel === null,
-      status: sel === null ? 'Pick a year to continue' : 'Selected: ' + sel,
-      statusColor: sel === null ? '#5B6B5F' : '#2E7D32'
-    };
+    const sel = this.state.year, top = this.state.top;
+    const years = [0, 1, 2, 3, 4].map((i) => {
+      const v = top + i, d = Math.abs(i - 2);
+      return { v, sel: v === sel ? 'true' : 'false', fs: d === 0 ? 30 : d === 1 ? 22 : 17, op: d === 0 ? 1 : d === 1 ? 0.6 : 0.3,
+        col: v === sel ? '#075B35' : '#163B28', pick: () => this.setState({ year: v, top: v - 2 }) };
+    });
+    const picked = sel !== null;
+    const age = picked ? 2026 - sel : null;
+    return { years, picked, notPicked: picked ? 'false' : 'true', pe: picked ? 'auto' : 'none',
+      btnShadow: picked ? 'inset 0 2px 0 rgba(255,255,255,0.32), inset 0 -2px 0 rgba(0,0,0,0.12), 0 4px 0 #03432A, 0 12px 22px rgba(7,91,53,0.28)' : '0 4px 0 #C2B996',
+      btnBg: picked ? 'linear-gradient(180deg, #23A766 0%, #13864D 42%, #075B35 100%)' : '#D9D2BC', nextHref: 'Home.dc.html',
+      hintText: !picked ? 'Pick a year to continue' : age < 13 ? 'Under 13: child-safe ads only' : 'Next: privacy choices (EEA/UK only)' };
   }
 }
 </script>

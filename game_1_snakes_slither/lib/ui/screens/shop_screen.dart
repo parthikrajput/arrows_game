@@ -1,12 +1,12 @@
-// OWNER: UI agent. Redesigned ShopScreen per Phase 1 doc 06 §5.11 & 04 §6.
-// Keeps constructor, contracts, and AppKeys intact.
+// OWNER: UI agent. Canvas: Shop.dc.html (Boosters · Coins · Offers).
 import 'package:flutter/material.dart';
 
 import '../../contracts/app_keys.dart';
 import '../../contracts/view_models.dart';
+import '../popups/popups.dart' show boosterName;
 import '../theme/tokens.dart';
-import '../widgets/bevel_button.dart';
-import '../widgets/coin_pill.dart';
+import '../widgets/art.dart';
+import '../widgets/common.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({
@@ -18,6 +18,8 @@ class ShopScreen extends StatefulWidget {
   });
 
   final ShopData data;
+
+  /// Logic re-checks lock and coins; show a confirm step before calling if you like.
   final void Function(ShopTileData tile) onBuy;
   final VoidCallback onFreeCoins;
   final VoidCallback onBack;
@@ -26,350 +28,263 @@ class ShopScreen extends StatefulWidget {
   State<ShopScreen> createState() => _ShopScreenState();
 }
 
-class _ShopScreenState extends State<ShopScreen> with SingleTickerProviderStateMixin {
-  late final TabController _tabController = TabController(length: 3, vsync: this);
+enum _Tab { boosters, coins, offers }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+class _ShopScreenState extends State<ShopScreen> {
+  _Tab _tab = _Tab.boosters;
 
   @override
   Widget build(BuildContext context) {
+    final d = widget.data;
     return Scaffold(
       key: AppKeys.shopScreen,
-      backgroundColor: AppColors.bgSage,
-      appBar: AppBar(
-        backgroundColor: AppColors.bgSage,
-        elevation: 0,
-        leading: BackButton(
-          onPressed: widget.onBack,
-          color: AppColors.textPrimary,
-        ),
-        title: Text(
-          'Jungle Shop',
-          style: AppText.h1.copyWith(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+      body: CreamBackground(
+        leaves: false,
+        child: SafeArea(
+          child: CenteredColumn(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 56,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        RoundButton(
+                          size: 40,
+                          label: 'Back',
+                          onTap: widget.onBack,
+                          child: const LineIconView(LineIcon.back, size: 18),
+                        ),
+                        Expanded(
+                          child: Text('Shop', textAlign: TextAlign.center, style: AppText.fredoka(22)),
+                        ),
+                        CoinPill(coins: d.coins),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+                  child: _Tabs(value: _tab, onPick: (t) => setState(() => _tab = t)),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                    children: switch (_tab) {
+                      _Tab.boosters => _boosters(d),
+                      _Tab.coins => [_unavailable('Coin packs')],
+                      _Tab.offers => [_unavailable('Starter Pack and VIP No-Ads Pass')],
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: Space.gutter),
-            child: CoinPill(coins: widget.data.coins),
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.textSecondary,
-          indicatorColor: AppColors.primary,
-          indicatorWeight: 3,
-          labelStyle: AppText.button.copyWith(fontSize: 15, fontWeight: FontWeight.w700),
-          tabs: const [
-            Tab(text: 'Boosters'),
-            Tab(text: 'Coins'),
-            Tab(text: 'Offers'),
+      ),
+    );
+  }
+
+  List<Widget> _boosters(ShopData d) {
+    final freeOk = d.freeCoinsLeft > 0 && d.adAvailable && !d.busy;
+    return [
+      LayoutBuilder(
+        builder: (_, box) {
+          final w = (box.maxWidth - 20) / 3;
+          return Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (final t in d.tiles)
+                SizedBox(
+                  width: w,
+                  child: _Tile(tile: t, onTap: () => widget.onBuy(t)),
+                ),
+            ],
+          );
+        },
+      ),
+      const SizedBox(height: 14),
+      CreamCard(
+        key: AppKeys.shopFreeCoins,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: const Color(0xFFFFF3D6), borderRadius: BorderRadius.circular(14)),
+              child: const LineIconView(LineIcon.video, size: 24, color: Color(0xFFD9822B)),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Free +${d.freeCoinsAmount} coins', style: AppText.fredoka(17)),
+                  Text(
+                    !d.adAvailable ? 'Ad unavailable' : 'Watch an ad · ${d.freeCoinsLeft} left today',
+                    style: AppText.nunito(12, color: AppColors.muted),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 86,
+              child: GameButton(
+                label: 'Watch',
+                height: 36,
+                fontSize: 15,
+                shine: false,
+                onTap: freeOk ? widget.onFreeCoins : null,
+              ),
+            ),
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // 1. Boosters Tab
-          _buildBoostersTab(),
-
-          // 2. Coins Tab
-          _buildStoreUnavailableTab('Coins'),
-
-          // 3. Offers Tab
-          _buildStoreUnavailableTab('Offers'),
-        ],
+      const SizedBox(height: 18),
+      Text(
+        'Restore purchases · Terms · Privacy',
+        textAlign: TextAlign.center,
+        style: AppText.nunito(12, color: AppColors.muted),
       ),
-    );
+    ];
   }
 
-  Widget _buildBoostersTab() {
-    final d = widget.data;
-    final canFreeCoins = d.freeCoinsLeft > 0 && d.adAvailable && !d.busy;
+  Widget _unavailable(String what) => CreamCard(
+    padding: const EdgeInsets.all(20),
+    child: Column(
+      children: [
+        const ArtIcon(Art.coin, size: 48),
+        const SizedBox(height: 10),
+        Text('Store unavailable', style: AppText.fredoka(20)),
+        const SizedBox(height: 4),
+        Text(
+          '$what will appear here when the store is ready.',
+          textAlign: TextAlign.center,
+          style: AppText.nunito(14, weight: 700, color: AppColors.muted),
+        ),
+      ],
+    ),
+  );
+}
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(Space.gutter),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Daily Free Coins Card
-          _buildFreeCoinsTile(canFreeCoins),
-          const SizedBox(height: Space.lg),
-
-          // Boosters Grid Header
-          Text(
-            'Power-Up Boosters',
-            style: AppText.h2.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: Space.md),
-
-          // Boosters Grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: d.tiles.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: Space.md,
-              crossAxisSpacing: Space.md,
-              childAspectRatio: 0.95,
-            ),
-            itemBuilder: (context, index) {
-              final tile = d.tiles[index];
-              return _ShopBoosterCard(
-                tile: tile,
-                onBuy: () => widget.onBuy(tile),
-              );
-            },
-          ),
-          const SizedBox(height: Space.xl),
-
-          // Footer
-          Center(
-            child: Text(
-              'Restore purchases · Terms & Privacy',
-              style: AppText.caption.copyWith(
-                fontSize: 12,
-                color: AppColors.textSecondary,
+class _Tabs extends StatelessWidget {
+  const _Tabs({required this.value, required this.onPick});
+  final _Tab value;
+  final void Function(_Tab) onPick;
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(4),
+    decoration: BoxDecoration(color: AppColors.track, borderRadius: BorderRadius.circular(16)),
+    child: Row(
+      children: [
+        for (final t in _Tab.values)
+          Expanded(
+            child: Semantics(
+              selected: t == value,
+              child: Pressable(
+                onTap: () => onPick(t),
+                semanticLabel: switch (t) {
+                  _Tab.boosters => 'Boosters',
+                  _Tab.coins => 'Coins',
+                  _Tab.offers => 'Offers',
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: t == value
+                        ? const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xFF1E9C5C), Color(0xFF0B6B3E)],
+                          )
+                        : null,
+                    boxShadow: t == value
+                        ? const [BoxShadow(color: Color(0x4D075B35), offset: Offset(0, 3), blurRadius: 8)]
+                        : null,
+                  ),
+                  child: Text(switch (t) {
+                    _Tab.boosters => 'Boosters',
+                    _Tab.coins => 'Coins',
+                    _Tab.offers => 'Offers',
+                  }, style: AppText.fredoka(15, color: t == value ? Colors.white : const Color(0xFF4C6152))),
+                ),
               ),
             ),
           ),
-          const SizedBox(height: Space.md),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
 
-  Widget _buildFreeCoinsTile(bool enabled) {
-    final d = widget.data;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.bgCream,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: const Color(0xFFFFD54F), width: 2),
-        boxShadow: Shadows.elev1,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          key: AppKeys.shopFreeCoins,
-          borderRadius: BorderRadius.circular(Radii.md),
-          onTap: enabled ? widget.onFreeCoins : null,
-          child: Padding(
-            padding: const EdgeInsets.all(Space.lg),
-            child: Row(
-              children: [
+class _Tile extends StatelessWidget {
+  const _Tile({required this.tile, required this.onTap});
+  final ShopTileData tile;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    final t = tile;
+    final can = !t.locked && t.affordable;
+    return Pressable(
+      key: AppKeys.shopTile(t.booster.name, t.quantity),
+      onTap: can ? onTap : null,
+      semanticLabel: t.locked
+          ? '${boosterName(t.booster)}, unlocks at level ${t.unlockLevel}'
+          : '${t.quantity} ${boosterName(t.booster)} for ${t.price} coins',
+      child: Opacity(
+        opacity: t.locked ? .7 : 1,
+        child: CreamCard(
+          radius: 18,
+          padding: const EdgeInsets.fromLTRB(6, 10, 6, 10),
+          child: Column(
+            children: [
+              ArtIcon(ArtIcon.booster(t.booster), size: 52, dim: t.locked),
+              const SizedBox(height: 4),
+              Text(
+                boosterName(t.booster),
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                style: AppText.fredoka(14, height: 1.1),
+              ),
+              Text('× ${t.quantity}', style: AppText.nunito(12, color: AppColors.muted)),
+              const SizedBox(height: 6),
+              if (t.locked)
                 Container(
-                  width: 52,
-                  height: 52,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0xFFFFF9C4),
-                  ),
-                  child: const Center(
-                    child: Text('🎬', style: TextStyle(fontSize: 28)),
-                  ),
-                ),
-                const SizedBox(width: Space.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Free +${d.freeCoinsAmount} Coins',
-                        style: AppText.h2.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        d.freeCoinsLeft > 0
-                            ? 'Watch a quick ad (${d.freeCoinsLeft} left today)'
-                            : 'Come back tomorrow',
-                        style: AppText.caption.copyWith(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
-                        ),
+                  height: 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: AppColors.track, borderRadius: BorderRadius.circular(12)),
+                  child: Text('Unlocks at L${t.unlockLevel}', style: AppText.nunito(11, color: AppColors.muted)),
+                )
+              else
+                Container(
+                  height: 34,
+                  decoration: BoxDecoration(
+                    gradient: t.affordable ? kGreenButton : null,
+                    color: t.affordable ? null : const Color(0xFFD9D2BC),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: t.affordable ? AppColors.lip : const Color(0xFFC2B996),
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
-                ),
-                BevelButton.text(
-                  'Claim',
-                  onPressed: enabled ? widget.onFreeCoins : null,
-                  variant: BevelVariant.gold,
-                  height: 40,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStoreUnavailableTab(String tabName) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(Space.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('🛍', style: TextStyle(fontSize: 54)),
-            const SizedBox(height: Space.md),
-            Text(
-              '$tabName: Store unavailable',
-              style: AppText.h2.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: Space.sm),
-            Text(
-              'In-app purchases will arrive in an upcoming jungle update.',
-              style: AppText.body.copyWith(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ShopBoosterCard extends StatelessWidget {
-  const _ShopBoosterCard({
-    required this.tile,
-    required this.onBuy,
-  });
-
-  final ShopTileData tile;
-  final VoidCallback onBuy;
-
-  static const _emoji = {
-    Booster.hint: '🪲✨',
-    Booster.shield: '🐚',
-    Booster.hammer: '🔨',
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    final isLocked = tile.locked;
-    final isAffordable = tile.affordable;
-    final isEnabled = !isLocked && isAffordable;
-
-    final emoji = _emoji[tile.booster] ?? '✨';
-
-    return Container(
-      key: AppKeys.shopTile(tile.booster.name, tile.quantity),
-      decoration: BoxDecoration(
-        color: AppColors.bgCream,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(
-          color: isEnabled ? AppColors.creamEdge : const Color(0xFFECEFF1),
-          width: 2,
-        ),
-        boxShadow: isEnabled ? Shadows.elev1 : null,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(Radii.md),
-          onTap: isEnabled ? onBuy : null,
-          child: Padding(
-            padding: const EdgeInsets.all(Space.md),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Booster icon with quantity tag
-                Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Text(
-                      isLocked ? '🔒' : emoji,
-                      style: const TextStyle(fontSize: 34),
-                    ),
-                    if (!isLocked)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(Radii.pill),
-                        ),
-                        child: Text(
-                          '×${tile.quantity}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-
-                // Title
-                Text(
-                  '${tile.quantity} × ${tile.booster.name.toUpperCase()}',
-                  style: AppText.button.copyWith(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: isLocked ? AppColors.textDisabled : AppColors.textPrimary,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const ArtIcon(Art.coin, size: 16),
+                      const SizedBox(width: 5),
+                      Text('${t.price}', style: AppText.fredoka(15, color: Colors.white)),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-
-                // Price or Unlock badge
-                if (isLocked)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFECEFF1),
-                      borderRadius: BorderRadius.circular(Radii.pill),
-                    ),
-                    child: Text(
-                      'Unlocks at L${tile.unlockLevel}',
-                      style: AppText.caption.copyWith(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF78909C),
-                      ),
-                    ),
-                  )
-                else
-                  BevelButton.text(
-                    '${tile.price} 🪙',
-                    onPressed: isAffordable ? onBuy : null,
-                    variant: isAffordable ? BevelVariant.primary : BevelVariant.secondary,
-                    height: 38,
-                    expand: true,
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

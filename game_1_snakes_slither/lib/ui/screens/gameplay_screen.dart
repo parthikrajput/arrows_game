@@ -1,11 +1,13 @@
+// OWNER: UI agent. Canvas: Play.dc.html (LevelPlay, LevelHard, Hint, Hammer).
+// [board] is a ready-made widget: placed in the remaining space, never wrapped
+// in gesture detectors.
 import 'package:flutter/material.dart';
 
 import '../../contracts/app_keys.dart';
 import '../../contracts/view_models.dart';
 import '../theme/tokens.dart';
-import '../widgets/coin_pill.dart';
-import '../widgets/heart_berries.dart';
-import '../widgets/round_icon_button.dart';
+import '../widgets/art.dart';
+import '../widgets/common.dart';
 
 class GameplayScreen extends StatelessWidget {
   const GameplayScreen({
@@ -32,432 +34,416 @@ class GameplayScreen extends StatelessWidget {
   final VoidCallback onCancelHammer;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: AppKeys.gameplayScreen,
-      backgroundColor: AppColors.bgSage,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // 1. HUD (64 dp)
-            _buildHud(context),
-
-            // 2. Hammer target mode banner (when active)
-            if (hammerMode) _buildHammerBanner(context),
-
-            // 3. Board: occupies remaining space, unwrapped, centered
-            Expanded(
-              child: Center(
-                child: board,
-              ),
-            ),
-
-            // 4. Booster Bar (88 dp)
-            _buildBoosterBar(context),
-          ],
+  Widget build(BuildContext context) => Scaffold(
+    key: AppKeys.gameplayScreen,
+    backgroundColor: AppColors.grass,
+    body: DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          center: const Alignment(0, -.4),
+          radius: 1.2,
+          colors: hud.isHard
+              ? const [Color(0xFF4E9A36), Color(0xFF2F7424), Color(0xFF1C5418)]
+              : const [Color(0xFF5FAE3F), Color(0xFF3C8A2E), Color(0xFF23661F)],
+          stops: const [0, .55, 1],
         ),
       ),
-    );
-  }
-
-  Widget _buildHud(BuildContext context) {
-    return Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: Space.gutter),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          // Pause button (min 48×48 tap area)
-          RoundIconButton(
-            key: AppKeys.pauseButton,
-            icon: Icons.pause_rounded,
-            onPressed: onPause,
-            size: 44,
-            label: 'Pause game',
-            variant: RoundButtonVariant.cream,
-          ),
-          const SizedBox(width: Space.sm),
-
-          // Level badge with optional Hard chip
-          _buildLevelBadge(),
-
-          const Spacer(),
-
-          // Heart berries (with shield overlay)
-          HeartBerries(
-            hearts: hud.hearts,
-            maxHearts: hud.maxHearts,
-            shieldCharges: hud.shieldCharges,
-          ),
-
-          const Spacer(),
-
-          // Coins and Moves
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CoinPill(coins: hud.coins),
-              const SizedBox(height: 2),
-              Text(
-                'Moves ${hud.moves}',
-                style: AppText.caption.copyWith(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textSecondary,
+          const Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            height: 150,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x80032312), Color(0x00032312)],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLevelBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.bgCream,
-        borderRadius: BorderRadius.circular(Radii.pill),
-        border: Border.all(color: AppColors.creamEdge, width: 1.5),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Lv ${hud.level}',
-            style: AppText.h2.copyWith(
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
-          if (hud.isHard) ...[
-            const SizedBox(width: 4),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.danger,
-                borderRadius: BorderRadius.circular(Radii.xs),
-              ),
-              child: const Text(
-                '🐾',
-                style: TextStyle(fontSize: 10, height: 1.1),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHammerBanner(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: Space.gutter, vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.bgCream,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: const Color(0xFFFFB74D), width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1F000000),
-            blurRadius: 8,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('🔨', style: TextStyle(fontSize: 18)),
-          const SizedBox(width: Space.sm),
-          Expanded(
-            child: Text(
-              'Tap a snake or rock · Cancel',
-              style: AppText.body.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
-          TextButton(
-            key: AppKeys.hammerCancel,
-            onPressed: onCancelHammer,
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              backgroundColor: const Color(0xFFF0EAE1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Radii.sm),
-              ),
-            ),
-            child: Text(
-              'Cancel',
-              style: AppText.button.copyWith(
-                fontSize: 13,
-                color: AppColors.danger,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBoosterBar(BuildContext context) {
-    return Container(
-      height: 88,
-      padding: const EdgeInsets.symmetric(horizontal: Space.gutter, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          for (final b in boosters)
-            _BoosterButtonItem(
-              data: b,
-              onTap: () {
-                if (b.locked) return;
-                if (b.capReached) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Limit for this try'),
-                      duration: Duration(seconds: 2),
-                      behavior: SnackBarBehavior.floating,
+          SafeArea(
+            child: CenteredColumn(
+              child: Column(
+                children: [
+                  _Hud(hud: hud, onPause: onPause),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                    child: AnimatedSwitcher(
+                      duration: AppMotion.base,
+                      child: hammerMode
+                          ? _HammerBanner(onCancel: onCancelHammer)
+                          : Text(
+                              'Tap a snake to slide it out',
+                              style: AppText.nunito(12, color: const Color(0xEBFFFFFF)).copyWith(
+                                shadows: const [Shadow(color: Color(0x66000000), offset: Offset(0, 1), blurRadius: 2)],
+                              ),
+                            ),
                     ),
-                  );
-                  return;
-                }
-                if (!b.enabled) return;
-                onBooster(b.booster);
-              },
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BoosterButtonItem extends StatefulWidget {
-  const _BoosterButtonItem({
-    required this.data,
-    required this.onTap,
-  });
-
-  final BoosterButtonData data;
-  final VoidCallback onTap;
-
-  @override
-  State<_BoosterButtonItem> createState() => _BoosterButtonItemState();
-}
-
-class _BoosterButtonItemState extends State<_BoosterButtonItem> {
-  bool _pressed = false;
-
-  static const _emoji = {
-    Booster.hint: '🪲',
-    Booster.shield: '🐚',
-    Booster.hammer: '🔨',
-  };
-
-  static const _name = {
-    Booster.hint: 'Hint',
-    Booster.shield: 'Shield',
-    Booster.hammer: 'Hammer',
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    final b = widget.data;
-    final isInteractive = !b.locked && (b.enabled || b.capReached);
-    final isDimmed = !b.enabled && !b.locked && !b.capReached;
-    final boosterName = _name[b.booster] ?? b.booster.name;
-
-    final semanticsLabel = b.locked
-        ? '$boosterName booster, locked until level ${b.unlockLevel}'
-        : b.capReached
-            ? '$boosterName booster, limit ${b.used} of ${b.cap} used'
-            : '$boosterName booster, ${b.count} left';
-
-    final translateY = (_pressed && isInteractive) ? 2.5 : 0.0;
-    final lipHeight = (_pressed && isInteractive) ? 1.0 : 3.5;
-
-    return Semantics(
-      button: true,
-      enabled: isInteractive,
-      label: semanticsLabel,
-      child: GestureDetector(
-        key: AppKeys.booster(b.booster.name),
-        onTapDown: isInteractive ? (_) => setState(() => _pressed = true) : null,
-        onTapUp: isInteractive ? (_) => setState(() => _pressed = false) : null,
-        onTapCancel: isInteractive ? () => setState(() => _pressed = false) : null,
-        onTap: widget.onTap,
-        behavior: HitTestBehavior.opaque,
-        child: Opacity(
-          opacity: (b.locked || isDimmed || b.capReached) ? 0.65 : 1.0,
-          child: SizedBox(
-            width: 68,
-            height: 72,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topCenter,
-              children: [
-                // 3D Circular Button Base
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 60),
-                  transform: Matrix4.translationValues(0, translateY, 0),
-                  width: 54,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: b.active
-                          ? [const Color(0xFFFFF9C4), const Color(0xFFFFD54F)]
-                          : b.locked
-                              ? [const Color(0xFFECEFF1), const Color(0xFFCFD8DC)]
-                              : [Colors.white, AppColors.bgCream],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Center(child: board),
                     ),
-                    border: Border.all(
-                      color: b.active ? AppColors.coinGold : Colors.white,
-                      width: b.active ? 2.5 : 2.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: b.active
-                            ? AppColors.coinGoldDark
-                            : b.locked
-                                ? const Color(0xFF90A4AE)
-                                : AppColors.creamLip,
-                        blurRadius: 0,
-                        offset: Offset(0, lipHeight),
+                  ),
+                  SizedBox(
+                    height: 128,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final b in boosters) ...[
+                            if (b != boosters.first) const SizedBox(width: 12),
+                            Flexible(
+                              child: _BoosterCard(data: b, onTap: () => onBooster(b.booster)),
+                            ),
+                          ],
+                        ],
                       ),
-                      if (!_pressed && !b.locked)
-                        BoxShadow(
-                          color: b.active
-                              ? const Color(0x55F4B72F)
-                              : const Color(0x18163B28),
-                          blurRadius: b.active ? 8 : 4,
-                          offset: const Offset(0, 3),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+BoxDecoration _pill(double r) => BoxDecoration(
+  color: AppColors.hudPill,
+  borderRadius: BorderRadius.circular(r),
+  border: Border.all(color: const Color(0x29FFFFFF)),
+  boxShadow: AppShadows.hud,
+);
+
+class _Hud extends StatelessWidget {
+  const _Hud({required this.hud, required this.onPause});
+  final HudData hud;
+  final VoidCallback onPause;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+    child: SizedBox(
+      height: 50,
+      child: Row(
+        children: [
+          Pressable(
+            key: AppKeys.pauseButton,
+            onTap: onPause,
+            semanticLabel: 'Pause',
+            child: Container(
+              width: 50,
+              height: 50,
+              alignment: Alignment.center,
+              decoration: _pill(25),
+              child: const LineIconView(LineIcon.pause, size: 20, color: Colors.white),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: _pill(14),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FittedBox(
+                    child: Row(
+                      children: [
+                        Text(
+                          'LEVEL ${hud.level}',
+                          style: AppText.nunito(11, color: const Color(0xFFFFD84A), spacing: .6),
+                        ),
+                        if (hud.isHard) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                            decoration: BoxDecoration(color: AppColors.hardRed, borderRadius: BorderRadius.circular(6)),
+                            child: Text('HARD', style: AppText.nunito(10, color: Colors.white, spacing: .5)),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  FittedBox(
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${hud.moves} ',
+                            style: AppText.fredoka(20, color: Colors.white, height: 1),
+                          ),
+                          TextSpan(
+                            text: 'moves',
+                            style: AppText.fredoka(13, color: const Color(0xBFFFFFFF), height: 1),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Semantics(
+            label:
+                '${hud.hearts} of ${hud.maxHearts} hearts${hud.shieldCharges > 0 ? ', shell shield ${hud.shieldCharges}' : ''}',
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: _pill(14),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var i = 0; i < hud.maxHearts; i++)
+                        Padding(
+                          padding: EdgeInsets.only(left: i == 0 ? 0 : 3),
+                          child: AnimatedSwitcher(
+                            duration: AppMotion.base,
+                            transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
+                            child: ArtIcon(
+                              i < hud.hearts ? Art.heart : Art.heartEmpty,
+                              key: ValueKey(i < hud.hearts),
+                              size: 20,
+                            ),
+                          ),
                         ),
                     ],
                   ),
-                  child: Center(
-                    child: b.locked
-                        ? const Icon(Icons.lock_rounded, size: 24, color: Color(0xFF78909C))
-                        : Text(
-                            _emoji[b.booster] ?? '✨',
-                            style: const TextStyle(fontSize: 26),
-                          ),
-                  ),
-                ),
-
-                // Badge (Count, Lock Level, or Cap State)
-                Positioned(
-                  bottom: 6 - translateY,
-                  child: _buildBadge(b),
-                ),
+                  if (hud.shieldCharges > 0)
+                    Positioned(
+                      right: -16,
+                      top: -6,
+                      child: Container(
+                        height: 24,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF3D6),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFE0A33A), width: 2),
+                          boxShadow: const [BoxShadow(color: Color(0x40000000), offset: Offset(0, 2), blurRadius: 4)],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const ArtIcon(Art.shell, size: 14),
+                            Text('${hud.shieldCharges}', style: AppText.fredoka(12, color: const Color(0xFF8A4A10))),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Container(
+            height: 50,
+            padding: const EdgeInsets.only(left: 8, right: 10),
+            decoration: _pill(14),
+            child: Row(
+              children: [
+                const ArtIcon(Art.coin, size: 22),
+                const SizedBox(width: 5),
+                Text(fmt(hud.coins), style: AppText.fredoka(16, color: Colors.white)),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBadge(BoosterButtonData b) {
-    if (b.locked) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: const Color(0xFF546E7A),
-          borderRadius: BorderRadius.circular(Radii.pill),
-          border: Border.all(color: Colors.white, width: 1.2),
-        ),
-        child: Text(
-          'L${b.unlockLevel}',
-          style: AppText.caption.copyWith(
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-      );
-    }
-
-    if (b.capReached) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: const Color(0xFF78909C),
-          borderRadius: BorderRadius.circular(Radii.pill),
-          border: Border.all(color: Colors.white, width: 1.2),
-        ),
-        child: Text(
-          '${b.used}/${b.cap}',
-          style: AppText.caption.copyWith(
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-      );
-    }
-
-    if (b.count == 0) {
-      // Mini shop prompt "+'
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: AppColors.primaryLight,
-          borderRadius: BorderRadius.circular(Radii.pill),
-          border: Border.all(color: Colors.white, width: 1.2),
-        ),
-        child: Text(
-          '+',
-          style: AppText.caption.copyWith(
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-          ),
-        ),
-      );
-    }
-
-    // Normal count badge
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: b.active ? AppColors.coinGold : AppColors.primary,
-        borderRadius: BorderRadius.circular(Radii.pill),
-        border: Border.all(color: Colors.white, width: 1.2),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x22000000),
-            blurRadius: 3,
-            offset: Offset(0, 1),
-          ),
         ],
       ),
-      child: Text(
-        '${b.count}',
-        style: AppText.caption.copyWith(
-          fontSize: 11,
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
+    ),
+  );
+}
+
+class _HammerBanner extends StatelessWidget {
+  const _HammerBanner({required this.onCancel});
+  final VoidCallback onCancel;
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.fromLTRB(16, 6, 6, 6),
+    decoration: BoxDecoration(
+      color: const Color(0xC704341E),
+      borderRadius: BorderRadius.circular(22),
+      border: Border.all(color: const Color(0x38FFFFFF)),
+      boxShadow: const [BoxShadow(color: Color(0x40000000), offset: Offset(0, 8), blurRadius: 18)],
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const ArtIcon(Art.hammer, size: 24),
+        const SizedBox(width: 8),
+        Text('Tap a snake or rock', style: AppText.fredoka(16, color: Colors.white)),
+        const SizedBox(width: 10),
+        Pressable(
+          key: AppKeys.hammerCancel,
+          onTap: onCancel,
+          semanticLabel: 'Cancel hammer',
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.secondary,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: const [BoxShadow(color: AppColors.secondaryLip, offset: Offset(0, 2))],
+            ),
+            child: Text('Cancel', style: AppText.nunito(13)),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _BoosterCard extends StatelessWidget {
+  const _BoosterCard({required this.data, required this.onTap});
+  final BoosterButtonData data;
+  final VoidCallback onTap;
+
+  static String name(Booster b) => switch (b) {
+    Booster.hint => 'Firefly',
+    Booster.shield => 'Shell',
+    Booster.hammer => 'Hammer',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final b = data;
+    final tappable = !b.locked && b.enabled;
+    final buy = !b.locked && !b.capReached && b.count == 0;
+    return Pressable(
+      key: AppKeys.booster(b.booster.name),
+      onTap: tappable ? onTap : null,
+      semanticLabel: b.locked
+          ? '${name(b.booster)}, opens at level ${b.unlockLevel}'
+          : b.capReached
+          ? '${name(b.booster)}, used ${b.used} of ${b.cap}'
+          : buy
+          ? '${name(b.booster)}, buy more'
+          : '${name(b.booster)}, ${b.count} left',
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 98),
+        child: Opacity(
+          opacity: b.locked ? .82 : (!b.enabled && !b.active ? .7 : 1),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AnimatedContainer(
+                duration: AppMotion.base,
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.cardBorder),
+                  boxShadow: b.active
+                      ? const [
+                          BoxShadow(color: Color(0xFFFFE066), spreadRadius: 3),
+                          BoxShadow(color: Color(0x40000000), offset: Offset(0, 8), blurRadius: 18),
+                        ]
+                      : const [
+                          BoxShadow(color: AppColors.secondaryLip, offset: Offset(0, 4)),
+                          BoxShadow(color: Color(0x2E000000), offset: Offset(0, 8), blurRadius: 16),
+                        ],
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(child: ArtIcon(ArtIcon.booster(b.booster), size: 54, dim: b.locked)),
+                      const SizedBox(height: 4),
+                      Text(name(b.booster), style: AppText.fredoka(14)),
+                    ],
+                  ),
+                ),
+              ),
+              if (b.locked)
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(color: const Color(0x8C163B28), borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const LineIconView(LineIcon.lock, size: 22, color: Colors.white),
+                        const SizedBox(height: 2),
+                        Text('Opens at L${b.unlockLevel}', style: AppText.nunito(12, color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Positioned(
+                  top: -8,
+                  right: -6,
+                  child: _Badge(
+                    text: b.capReached
+                        ? '${b.used}/${b.cap}'
+                        : buy
+                        ? '+ Buy'
+                        : '${b.count}',
+                    gold: buy,
+                    grey: b.capReached,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({required this.text, this.gold = false, this.grey = false});
+  final String text;
+  final bool gold;
+  final bool grey;
+  @override
+  Widget build(BuildContext context) => Container(
+    constraints: const BoxConstraints(minWidth: 26),
+    height: 26,
+    padding: const EdgeInsets.symmetric(horizontal: 7),
+    alignment: Alignment.center,
+    decoration: BoxDecoration(
+      gradient: grey
+          ? const LinearGradient(colors: [Color(0xFF9AA59D), Color(0xFF7D8C80)])
+          : gold
+          ? kGoldButton
+          : const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors.emeraldLight, AppColors.emerald],
+            ),
+      borderRadius: BorderRadius.circular(13),
+      border: Border.all(color: AppColors.card, width: 2),
+      boxShadow: [
+        BoxShadow(
+          color: gold
+              ? AppColors.goldLip
+              : grey
+              ? const Color(0xFF5B6B5F)
+              : AppColors.lip,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Text(
+      text,
+      style: gold ? AppText.nunito(12, color: const Color(0xFF5A3A00)) : AppText.fredoka(13, color: Colors.white),
+    ),
+  );
 }

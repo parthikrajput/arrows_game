@@ -1,13 +1,14 @@
-// OWNER: UI agent. Redesigned Lucky Lily Wheel screen per Phase 1 doc 06 §5.14 & 04 §10.
-// Preserves constructor, contracts, and AppKeys intact.
+// OWNER: UI agent. Canvas: Wheel.dc.html (Lucky Lily Wheel).
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../contracts/app_keys.dart';
+import '../../contracts/ui_feedback.dart';
 import '../../contracts/view_models.dart';
 import '../theme/tokens.dart';
-import '../widgets/bevel_button.dart';
-import '../widgets/popup_card.dart';
+import '../widgets/art.dart';
+import '../widgets/common.dart';
 
 class WheelScreen extends StatefulWidget {
   const WheelScreen({
@@ -28,419 +29,400 @@ class WheelScreen extends StatefulWidget {
 }
 
 class _WheelScreenState extends State<WheelScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _spinController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2500),
-  );
-
-  int? _lastSeq;
-  double _baseAngle = 0.0;
-  double _targetAngle = 0.0;
+  late final AnimationController _spin = AnimationController(vsync: this, duration: const Duration(milliseconds: 2500));
+  double _from = 0;
+  double _to = 0;
+  bool _showOdds = false;
+  bool _revealed = true;
+  int _lastTick = 0;
 
   @override
   void initState() {
     super.initState();
-    _lastSeq = widget.data.spinSeq;
-    _checkSpin();
+    final i = widget.data.prizeIndex;
+    if (i != null) _from = _to = _restAngle(i);
+    _spin.addListener(_tick);
+    _spin.addStatusListener((s) {
+      if (s == AnimationStatus.completed && mounted) setState(() => _revealed = true);
+    });
   }
+
+  /// Wheel turned so segment [i] sits under the pointer at the top.
+  double _restAngle(int i) => -i * 2 * math.pi / widget.data.segments.length;
 
   @override
-  void didUpdateWidget(WheelScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _checkSpin();
+  void didUpdateWidget(WheelScreen old) {
+    super.didUpdateWidget(old);
+    final i = widget.data.prizeIndex;
+    if (widget.data.spinSeq != old.data.spinSeq && i != null) {
+      _from = _angle;
+      final rest = _restAngle(i);
+      final base = _from - (_from % (2 * math.pi));
+      _to = base + 4 * 2 * math.pi + (rest % (2 * math.pi));
+      _revealed = false;
+      if (AppMotion.reduced(context)) {
+        _spin.value = 1;
+        _revealed = true;
+      } else {
+        _spin.forward(from: 0);
+      }
+    }
   }
 
-  void _checkSpin() {
-    if (widget.data.spinSeq != _lastSeq && widget.data.prizeIndex != null) {
-      _lastSeq = widget.data.spinSeq;
+  double get _angle => _from + (_to - _from) * Curves.decelerate.transform(_spin.value);
 
-      // 8 equal segments. Pointer is at the top (-pi/2).
-      final segmentAngle = (2 * math.pi) / widget.data.segments.length;
-      final targetIndex = widget.data.prizeIndex!;
-
-      // Calculate angle so targetIndex lands under the top pointer
-      // Full extra rotations (4 to 5 full spins) + segment offset
-      final targetLanding = (2 * math.pi * 4) + (widget.data.segments.length - targetIndex) * segmentAngle;
-
-      final isReduced = MediaQuery.of(context).disableAnimations;
-
-      if (isReduced) {
-        setState(() {
-          _baseAngle = targetLanding;
-          _targetAngle = targetLanding;
-        });
-      } else {
-        setState(() {
-          _baseAngle = _targetAngle % (2 * math.pi);
-          _targetAngle = _baseAngle + targetLanding;
-        });
-        _spinController.forward(from: 0);
-      }
+  void _tick() {
+    final seg = (_angle / (2 * math.pi / 8)).floor();
+    if (seg != _lastTick) {
+      _lastTick = seg;
+      UiFeedback.of(context).sound(UiSound.spinTick);
     }
   }
 
   @override
   void dispose() {
-    _spinController.dispose();
+    _spin.dispose();
     super.dispose();
-  }
-
-  void _showOddsSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => PopupCard(
-        title: 'Wheel Odds & Rules',
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: Space.sm),
-            for (final s in widget.data.segments)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      s.label,
-                      style: AppText.body.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      '${(s.odds * 100).toStringAsFixed(1)}%',
-                      style: AppText.body.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            const SizedBox(height: Space.md),
-            BevelButton.text(
-              'Close',
-              onPressed: () => Navigator.of(context).pop(),
-              variant: BevelVariant.secondary,
-              height: 44,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final d = widget.data;
-    final prize = d.prizeIndex == null ? null : d.segments[d.prizeIndex!];
-
+    final prize = d.prizeIndex == null || !_revealed ? null : d.segments[d.prizeIndex!];
     return Scaffold(
       key: AppKeys.wheelScreen,
-      backgroundColor: AppColors.bgSage,
-      appBar: AppBar(
-        backgroundColor: AppColors.bgSage,
-        elevation: 0,
-        leading: BackButton(
-          onPressed: widget.onBack,
-          color: AppColors.textPrimary,
-        ),
-        title: Text(
-          'Lucky Lily Wheel',
-          style: AppText.h1.copyWith(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -.1),
+            radius: 1,
+            colors: [Color(0xFFF3FBEF), Color(0xFFDCEFDC), Color(0xFFC2E2C2)],
+            stops: [0, .55, 1],
           ),
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline_rounded, color: AppColors.textPrimary),
-            tooltip: 'Odds & Store Policy',
-            onPressed: () => _showOddsSheet(context),
-          ),
-          const SizedBox(width: Space.sm),
-        ],
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Space.gutter),
-          child: Column(
-            children: [
-              // Time locked warning (clock tamper protection)
-              if (d.timeLocked)
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: Space.sm),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFEBEE),
-                    borderRadius: BorderRadius.circular(Radii.sm),
-                    border: Border.all(color: AppColors.danger, width: 1.5),
-                  ),
-                  child: Row(
-                    children: [
-                      const Text('⏳', style: TextStyle(fontSize: 18)),
-                      const SizedBox(width: Space.sm),
-                      Expanded(
-                        child: Text(
-                          'Your clock seems off — jungle time will return soon',
-                          style: AppText.caption.copyWith(
-                            color: AppColors.danger,
-                            fontWeight: FontWeight.w700,
+        child: SafeArea(
+          child: CenteredColumn(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Row(
+                        children: [
+                          RoundButton(
+                            size: 46,
+                            label: 'Back',
+                            onTap: widget.onBack,
+                            child: const LineIconView(LineIcon.back, size: 18, color: Color(0xFF4A3A25)),
                           ),
-                        ),
+                          Expanded(
+                            child: Text(
+                              'Lucky Lily Wheel',
+                              textAlign: TextAlign.center,
+                              style: AppText.fredoka(22, weight: 700),
+                            ),
+                          ),
+                          RoundButton(
+                            size: 46,
+                            label: 'Show prize odds',
+                            onTap: () => setState(() => _showOdds = true),
+                            child: Text('i', style: AppText.fredoka(22, weight: 700, color: const Color(0xFF4A3A25))),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-
-              // Wheel & Pointer Canvas
-              Expanded(
-                child: Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Rotating Wheel
-                      AnimatedBuilder(
-                        animation: _spinController,
-                        builder: (context, child) {
-                          final currentAngle = _spinController.isAnimating
-                              ? Tween<double>(begin: _baseAngle, end: _targetAngle)
-                                  .chain(CurveTween(curve: Curves.decelerate))
-                                  .evaluate(_spinController)
-                              : _targetAngle;
-
-                          return Transform.rotate(
-                            angle: currentAngle,
-                            child: CustomPaint(
-                              size: const Size(280, 280),
-                              painter: _WheelPainter(d.segments),
+                    ),
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (_, box) {
+                          final size = math.min(330.0, math.min(box.maxWidth - 40, box.maxHeight - 40));
+                          return Center(
+                            child: SizedBox.square(
+                              dimension: size,
+                              child: AnimatedBuilder(
+                                animation: _spin,
+                                builder: (_, _) => CustomPaint(painter: _WheelPainter(d.segments, _angle)),
+                              ),
                             ),
                           );
                         },
                       ),
-
-                      // Top Pointer (facing downward into the wheel)
-                      Positioned(
-                        top: 0,
-                        child: _buildPointer(),
-                      ),
-
-                      // Center Hub Badge
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.bgCream,
-                          border: Border.all(color: AppColors.coinGold, width: 3),
-                          boxShadow: Shadows.elev1,
-                        ),
-                        child: const Center(
-                          child: Text('🌸', style: TextStyle(fontSize: 24)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Prize Reveal Card
-              if (prize != null) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF9E8),
-                    borderRadius: BorderRadius.circular(Radii.md),
-                    border: Border.all(color: const Color(0xFFFFE082), width: 1.5),
-                    boxShadow: Shadows.elev1,
-                  ),
-                  child: Text(
-                    'You won: ${prize.label} 🎉',
-                    style: AppText.h2.copyWith(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        d.timeLocked
+                            ? 'Your clock seems off — jungle time will return soon'
+                            : prize != null
+                            ? 'You won ${prize.label}!'
+                            : '',
+                        textAlign: TextAlign.center,
+                        style: AppText.fredoka(
+                          d.timeLocked ? 15 : 20,
+                          weight: 700,
+                          color: d.timeLocked ? AppColors.danger : const Color(0xFF2E7D32),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(28, 6, 28, 18),
+                      child: Column(
+                        children: [
+                          _SpinButton(
+                            label: d.freeUsed ? 'Free spin used today' : 'SPIN FREE',
+                            onTap: d.freeAvailable && !d.busy && _revealed ? widget.onSpinFree : null,
+                          ),
+                          const SizedBox(height: 12),
+                          Pressable(
+                            key: AppKeys.wheelSpinAd,
+                            onTap: d.adAvailable && !d.busy && _revealed ? widget.onSpinAd : null,
+                            semanticLabel: 'Watch an ad to spin again',
+                            child: Opacity(
+                              opacity: d.adAvailable ? 1 : .55,
+                              child: Container(
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xD9FFFFFF),
+                                  borderRadius: BorderRadius.circular(26),
+                                  border: Border.all(color: Colors.white),
+                                  boxShadow: const [
+                                    BoxShadow(color: Color(0x1F1E3C1E), offset: Offset(0, 6), blurRadius: 16),
+                                  ],
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (!d.adUsed) ...[
+                                      const LineIconView(LineIcon.video, size: 20),
+                                      const SizedBox(width: 8),
+                                    ],
+                                    Text(
+                                      d.adUsed ? 'Come back tomorrow' : 'Watch ad · spin again (1 left)',
+                                      style: AppText.fredoka(16),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            '1 free spin a day · spins can\'t be bought',
+                            style: AppText.nunito(12, weight: 700, color: const Color(0xFF5B6B5F)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: Space.md),
+                if (_showOdds) _OddsSheet(segments: d.segments, onClose: () => setState(() => _showOdds = false)),
               ],
-
-              // Spin Buttons
-              BevelButton.text(
-                d.freeUsed ? 'Free spin used' : 'Spin free',
-                key: AppKeys.wheelSpinFree,
-                onPressed: d.freeAvailable && !d.busy && !d.timeLocked ? widget.onSpinFree : null,
-                variant: BevelVariant.primary,
-                expand: true,
-                height: 52,
-              ),
-              const SizedBox(height: Space.md),
-
-              BevelButton.text(
-                d.adUsed ? 'Come back tomorrow' : '🎬 Spin again (1 left)',
-                key: AppKeys.wheelSpinAd,
-                onPressed: d.adAvailable && !d.busy && !d.timeLocked ? widget.onSpinAd : null,
-                variant: BevelVariant.gold,
-                expand: true,
-                height: 52,
-              ),
-              const SizedBox(height: Space.lg),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildPointer() {
-    return Container(
-      width: 28,
-      height: 34,
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x33000000),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: CustomPaint(
-        painter: _PointerPainter(),
+class _SpinButton extends StatelessWidget {
+  const _SpinButton({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) {
+    final on = onTap != null;
+    return Pressable(
+      key: AppKeys.wheelSpinFree,
+      onTap: onTap,
+      semanticLabel: label,
+      child: Container(
+        height: 64,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          color: on ? null : const Color(0xFFDDE5DE),
+          border: on ? Border.all(color: const Color(0xFFFFF3C4), width: 2) : null,
+          gradient: on
+              ? const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFFFFE082), Color(0xFFFFB300), Color(0xFFE08A00)],
+                )
+              : null,
+          boxShadow: on
+              ? const [
+                  BoxShadow(color: Color(0xFFA86300), offset: Offset(0, 5)),
+                  BoxShadow(color: Color(0x59A86300), offset: Offset(0, 14), blurRadius: 24),
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: AppText.fredoka(
+            22,
+            weight: 700,
+            color: on ? AppColors.goldText : const Color(0xFF5B6B5F),
+          ).copyWith(letterSpacing: on ? 1 : 0),
+        ),
       ),
     );
   }
 }
 
 class _WheelPainter extends CustomPainter {
-  _WheelPainter(this.segments);
+  _WheelPainter(this.segments, this.angle);
   final List<WheelSegmentData> segments;
+  final double angle;
 
-  static const _colors = [
-    Color(0xFFE8F5E9),
-    Color(0xFFFFF9C4),
-    Color(0xFFE1F5FE),
-    Color(0xFFFFECB3),
-    Color(0xFFEDE7F6),
-    Color(0xFFDCEDC8),
-    Color(0xFFFFE0B2),
-    Color(0xFFFCE4EC),
+  static const _fills = [
+    Color(0xFFFFF3D6),
+    Color(0xFF43A047),
+    Color(0xFFFFF3D6),
+    Color(0xFFD81B60),
+    Color(0xFFFFF3D6),
+    Color(0xFF039BE5),
+    Color(0xFFFFF3D6),
+    Color(0xFFFFB300),
   ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final radius = size.width / 2;
-    final count = segments.length;
-    if (count == 0) return;
-
-    final sweep = (2 * math.pi) / count;
-
-    // Outer wheel border & shadow
+    final c = size.center(Offset.zero);
+    final R = size.width / 2;
+    final r = R * 130 / 165;
+    // Rim with bulbs.
+    canvas.drawCircle(c + const Offset(0, 6), R, Paint()..color = const Color(0x40000000));
     canvas.drawCircle(
-      center,
-      radius,
+      c,
+      R,
       Paint()
-        ..color = AppColors.coinGoldDark
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 6,
+        ..shader = const RadialGradient(colors: [Color(0xFF2E7D32), Color(0xFF1B5E20)])
+            .createShader(Rect.fromCircle(center: c, radius: R)),
     );
-
-    for (int i = 0; i < count; i++) {
-      final startAngle = i * sweep - math.pi / 2;
-      final segColor = _colors[i % _colors.length];
-
-      // Draw segment slice
-      final path = Path()
-        ..moveTo(center.dx, center.dy)
-        ..arcTo(
-          Rect.fromCircle(center: center, radius: radius),
-          startAngle,
-          sweep,
-          false,
-        )
-        ..close();
-
-      canvas.drawPath(path, Paint()..color = segColor);
-
-      // Draw dividing ray
-      final edgeAngle = startAngle + sweep;
-      final rayEnd = center + Offset(math.cos(edgeAngle), math.sin(edgeAngle)) * radius;
-      canvas.drawLine(
-        center,
-        rayEnd,
+    canvas.drawCircle(
+      c,
+      R - 3,
+      Paint()
+        ..color = const Color(0xFFFFD54F)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4,
+    );
+    for (var k = 0; k < 16; k++) {
+      final a = k * math.pi / 8 - math.pi / 2;
+      final p = c + Offset(math.cos(a), math.sin(a)) * (R * 146 / 165);
+      canvas.drawCircle(p, R * .028, Paint()..color = k.isEven ? const Color(0xFFFFF8D6) : const Color(0xFFFFCA28));
+    }
+    final n = segments.length;
+    final sweep = 2 * math.pi / n;
+    canvas.save();
+    canvas.translate(c.dx, c.dy);
+    canvas.rotate(angle);
+    for (var i = 0; i < n; i++) {
+      final start = -math.pi / 2 - sweep / 2 + i * sweep;
+      final fill = _fills[i % _fills.length];
+      canvas.drawArc(Rect.fromCircle(center: Offset.zero, radius: r), start, sweep, true, Paint()..color = fill);
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset.zero, radius: r),
+        start,
+        sweep,
+        true,
         Paint()
-          ..color = AppColors.coinGold
-          ..strokeWidth = 2,
+          ..color = const Color(0x33000000)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1,
       );
-
-      // Draw text label along segment axis
-      final textAngle = startAngle + sweep / 2;
-      final labelRadius = radius * 0.65;
-      final labelPos = center + Offset(math.cos(textAngle), math.sin(textAngle)) * labelRadius;
-
       canvas.save();
-      canvas.translate(labelPos.dx, labelPos.dy);
-      canvas.rotate(textAngle + math.pi / 2);
-
-      final textSpan = TextSpan(
-        text: segments[i].label,
-        style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w800,
-          color: Color(0xFF1B2B1F),
+      canvas.rotate(i * sweep);
+      final light = fill == _fills[0];
+      final label = segments[i].label;
+      final tp = TextPainter(
+        text: TextSpan(
+          text: label,
+          style: AppText.fredoka(
+            label.length > 6 ? r * .1 : r * .14,
+            weight: 700,
+            color: light ? const Color(0xFF3E2A00) : Colors.white,
+          ),
         ),
-      );
-      final textPainter = TextPainter(
-        text: textSpan,
-        textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
-      )..layout(maxWidth: radius * 0.5);
-
-      textPainter.paint(
-        canvas,
-        Offset(-textPainter.width / 2, -textPainter.height / 2),
-      );
+        textAlign: TextAlign.center,
+      )..layout(maxWidth: r * .6);
+      tp.paint(canvas, Offset(-tp.width / 2, -r * .62 - tp.height / 2));
       canvas.restore();
     }
-  }
-
-  @override
-  bool shouldRepaint(_WheelPainter oldDelegate) => oldDelegate.segments != segments;
-}
-
-class _PointerPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(size.width / 2, size.height)
-      ..lineTo(0, 0)
-      ..lineTo(size.width, 0)
-      ..close();
-
-    canvas.drawPath(
-      path,
+    canvas.restore();
+    // Hub.
+    final hub = R * 32 / 165;
+    canvas.drawCircle(c + const Offset(0, 4), hub + 2, Paint()..color = const Color(0x59000000));
+    canvas.drawCircle(c, hub + 2, Paint()..color = const Color(0xFF8A5A00));
+    canvas.drawCircle(c, hub, Paint()..color = Colors.white);
+    canvas.drawCircle(
+      c,
+      hub - 3,
       Paint()
-        ..color = AppColors.danger
-        ..style = PaintingStyle.fill,
+        ..shader = const RadialGradient(
+          center: Alignment(-.3, -.44),
+          colors: [Color(0xFFFFF8D6), Color(0xFFFFCA28), Color(0xFFB07800)],
+          stops: [0, .45, 1],
+        ).createShader(Rect.fromCircle(center: c, radius: hub)),
     );
+    // Pointer at the top.
+    final top = c - Offset(0, R - 4);
+    final ptr = Path()
+      ..moveTo(top.dx - 14, top.dy - 10)
+      ..lineTo(top.dx + 14, top.dy - 10)
+      ..lineTo(top.dx, top.dy + 18)
+      ..close();
+    canvas.drawPath(ptr.shift(const Offset(0, 3)), Paint()..color = const Color(0x59000000));
+    canvas.drawPath(ptr, Paint()..color = AppColors.red);
     canvas.drawPath(
-      path,
+      ptr,
       Paint()
         ..color = Colors.white
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
+        ..strokeWidth = 2.5
+        ..strokeJoin = StrokeJoin.round,
     );
   }
 
   @override
-  bool shouldRepaint(_PointerPainter oldDelegate) => false;
+  bool shouldRepaint(_WheelPainter o) => o.angle != angle || o.segments != segments;
+}
+
+class _OddsSheet extends StatelessWidget {
+  const _OddsSheet({required this.segments, required this.onClose});
+  final List<WheelSegmentData> segments;
+  final VoidCallback onClose;
+  @override
+  Widget build(BuildContext context) => Positioned.fill(
+    child: ColoredBox(
+      color: const Color(0x8C03261A),
+      child: PopupCard(
+        children: [
+          Text('Prize odds', style: AppText.fredoka(24, weight: 700)),
+          const SizedBox(height: 12),
+          for (final s in segments)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(child: Text(s.label, style: AppText.nunito(15))),
+                  Text('${(s.odds * 100).toStringAsFixed(s.odds * 100 % 1 == 0 ? 0 : 1)}%', style: AppText.fredoka(15)),
+                ],
+              ),
+            ),
+          const SizedBox(height: 10),
+          Text(
+            "Slices look the same size, but these chances are the real ones. Spins can't be bought.",
+            textAlign: TextAlign.center,
+            style: AppText.nunito(12, weight: 700, color: AppColors.muted),
+          ),
+          const SizedBox(height: 14),
+          GameButton(label: 'Close', tone: ButtonTone.cream, height: 48, onTap: onClose),
+        ],
+      ),
+    ),
+  );
 }

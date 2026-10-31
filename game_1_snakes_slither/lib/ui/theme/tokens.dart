@@ -1,220 +1,250 @@
-// OWNER: UI agent. Complete design system tokens per Phase 1 doc 06 & canvas brand.
+// OWNER: UI agent. Values copied from the UI canvas "Snake Slither Game UI"
+// (design/ui_canvas). Keep names stable once used.
 import 'package:flutter/material.dart';
 
 import '../../contracts/view_models.dart';
 
-/// Snakes Slither brand palette and color tokens.
-/// Source of truth: design/ui_canvas/README.md & phases/phase_1/06_UI_UX_SCREENS.md §2.1.
 class AppColors {
   const AppColors._();
+  // Canvas palette.
+  static const forest = Color(0xFF075B35);
+  static const emerald = Color(0xFF13864D);
+  static const emeraldLight = Color(0xFF23A766);
+  static const lip = Color(0xFF03432A);
+  static const leaf = Color(0xFFA8D94F);
+  static const leafWash = Color(0xFFE3F2D3);
+  static const gold = Color(0xFFF4B72F);
+  static const goldLight = Color(0xFFFFD24A);
+  static const goldLip = Color(0xFFB37A00);
+  static const goldText = Color(0xFF4A2E00);
+  static const goldWash = Color(0xFFFDF0CC);
+  static const cream = Color(0xFFF7F4E8);
+  static const creamDeep = Color(0xFFEFE9D3);
+  static const card = Color(0xFFFFFEF8);
+  static const cardBorder = Color(0xFFECE5CF);
+  static const well = Color(0xFFF5F0DF);
+  static const secondary = Color(0xFFEFE9D6);
+  static const secondaryBorder = Color(0xFFE2D9BE);
+  static const secondaryLip = Color(0xFFD6CBAA);
+  static const track = Color(0xFFEDE6D0);
+  static const text = Color(0xFF163B28);
+  static const muted = Color(0xFF6B7F70);
+  static const navIdle = Color(0xFF7D8C80);
+  static const red = Color(0xFFE84B3C);
+  static const redLip = Color(0xFFA8281C);
+  static const hardRed = Color(0xFFE5322D);
+  static const hudPill = Color(0xB804341E); // rgba(4,52,30,0.72)
+  static const grass = Color(0xFF3C8A2E);
 
-  // Brand palette
-  static const primary = Color(0xFF075B35); // Forest primary
-  static const primaryLight = Color(0xFF13864D); // Emerald secondary
-  static const primaryLeaf = Color(0xFFA8D94F); // Leaf accent
-  static const primaryDark = Color(0xFF043820); // Deep forest for bevel lip
+  // Older names still used by logic-side code.
+  static const bgSage = cream;
+  static const bgCream = cream;
+  static const surface = card;
+  static const surfaceAlt = well;
+  static const primary = emerald;
+  static const primaryLight = Color(0xFF66BB6A);
   static const onPrimary = Color(0xFFFFFFFF);
-
-  // Background & surface
-  static const bgSage = Color(0xFFF7F4E8); // Cream background from UI canvas
-  static const bgCream = Color(0xFFFFFEF8); // Card background from UI canvas
-  static const surface = Color(0xFFFFFFFF);
-  static const surfaceAlt = Color(0xFFF7F9FA);
-  static const creamEdge = Color(0xFFF4EFE3);
-  static const creamLip = Color(0xFFDCD6C5);
-
-  // Coins, stars & rewards
-  static const coinGold = Color(0xFFF4B72F); // Brand Gold
-  static const coinGoldDark = Color(0xFFB8860B);
-  static const starYellow = Color(0xFFFFD54F);
-
-  // Status & feedback
-  static const heart = Color(0xFFE53935);
-  static const danger = Color(0xFFC62828);
-  static const previewClear = Color(0xFF075B35);
+  static const coinGold = Color(0xFFF9C93A);
+  static const coinGoldDark = Color(0xFFB8730A);
+  static const heart = Color(0xFFFF4D5E);
+  static const danger = Color(0xFFD32F2F);
+  static const previewClear = Color(0xFF2E7D32);
   static const previewBlocked = Color(0xFFD32F2F);
-  static const vipPurple = Color(0xFF7E57C2);
-  static const scrim = Color(0x73000000);
-
-  // Text colors (WCAG AA contrast compliant against bgCream & bgSage)
-  static const textPrimary = Color(0xFF163B28); // Brand dark green text
-  static const textSecondary = Color(0xFF4A6B56); // Medium contrast green
+  static const textPrimary = text;
+  static const textSecondary = muted;
   static const textDisabled = Color(0xFF9AA59D);
+  static const vipPurple = Color(0xFF7E57C2);
+  static const scrim = Color(0x9903261A);
 
-  // Snake palette (8 colors from Phase 1 doc 06 §2.2)
-  static Color snake(SnakeColor c) => switch (c) {
-    SnakeColor.red => const Color(0xFFFF7043),
-    SnakeColor.green => const Color(0xFF7CB342),
-    SnakeColor.blue => const Color(0xFF29B6F6),
-    SnakeColor.yellow => const Color(0xFFFFCA28),
-    SnakeColor.purple => const Color(0xFF9575CD),
-    SnakeColor.orange => const Color(0xFFFFA726),
-    SnakeColor.pink => const Color(0xFFF06292),
-    SnakeColor.teal => const Color(0xFF26A69A),
+  static Color snake(SnakeColor c) => snakePalette(c).body;
+
+  static SnakePalette snakePalette(SnakeColor c) => switch (c) {
+    SnakeColor.red => const SnakePalette(
+      Color(0xFFFF7043),
+      Color(0xFFBF360C),
+      Color(0xFFFFD1BF),
+      [0.01, 3],
+      1.9,
+      true,
+      0.85,
+    ),
+    SnakeColor.green => const SnakePalette(
+      Color(0xFF7CB342),
+      Color(0xFF33691E),
+      Color(0xFFE3F2C7),
+      [1.6, 1.8],
+      0.9,
+      true,
+      0.85,
+    ),
+    SnakeColor.blue => const SnakePalette(
+      Color(0xFF29B6F6),
+      Color(0xFF01579B),
+      Color(0xFFE1F5FE),
+      [0.7, 2.6],
+      5.2,
+      false,
+      0.45,
+    ),
+    SnakeColor.yellow => const SnakePalette(
+      Color(0xFFFFCA28),
+      Color(0xFFA87A00),
+      Color(0xFFFFF8D6),
+      [0.01, 2.2],
+      1.3,
+      true,
+      0.9,
+    ),
+    SnakeColor.purple => const SnakePalette(
+      Color(0xFF9575CD),
+      Color(0xFF4527A0),
+      Color(0xFFEDE7F6),
+      [0.01, 3.4],
+      2.2,
+      true,
+      0.8,
+    ),
+    SnakeColor.orange => const SnakePalette(
+      Color(0xFFFFA726),
+      Color(0xFFD84315),
+      Color(0xFFFFE6C2),
+      [1, 3.2],
+      6,
+      false,
+      0.4,
+    ),
+    SnakeColor.pink => const SnakePalette(
+      Color(0xFFF06292),
+      Color(0xFFAD1457),
+      Color(0xFFFDE3EC),
+      [0.01, 2.6],
+      1.6,
+      true,
+      0.85,
+    ),
+    SnakeColor.teal => const SnakePalette(
+      Color(0xFF26A69A),
+      Color(0xFF004D40),
+      Color(0xFFD6F2EF),
+      [1.4, 2.2],
+      1,
+      true,
+      0.85,
+    ),
   };
-
-  /// Biome board tints (doc 01 §2.3)
-  static Color biomeTint(int level) {
-    if (level <= 100) return const Color(0xFFE8F5E9);
-    if (level <= 200) return const Color(0xFFE6F2DF);
-    if (level <= 300) return const Color(0xFFFFF4E0);
-    if (level <= 400) return const Color(0xFFE3EFEA);
-    return const Color(0xFFE4E8F5);
-  }
 }
 
-/// Spacing scale (4, 8, 12, 16, 24, 32, 48).
-abstract final class Space {
-  static const double xs = 4;
-  static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-  static const double xl = 24;
-  static const double xxl = 32;
-  static const double huge = 48;
-  static const double gutter = 16;
+/// Body, outline and highlight colours plus the dash pattern that makes each
+/// colour readable without colour vision (doc 06 §2.2).
+class SnakePalette {
+  const SnakePalette(
+    this.body,
+    this.dark,
+    this.light,
+    this.dash,
+    this.patternWidth,
+    this.roundCap,
+    this.patternOpacity,
+  );
+  final Color body;
+  final Color dark;
+  final Color light;
+
+  /// On/off lengths in board units (one cell = 10).
+  final List<double> dash;
+  final double patternWidth;
+  final bool roundCap;
+  final double patternOpacity;
 }
 
-/// Corner radii tokens (xs 8, sm 12, md 16, lg 24, pill 999).
-abstract final class Radii {
-  static const double xs = 8;
-  static const double sm = 12;
-  static const double md = 16;
-  static const double lg = 24;
-  static const double pill = 999;
-}
-
-/// Pre-baked and box shadows (elev1, elev2, bevelLip, pressed).
-abstract final class Shadows {
-  static const elev1 = [
-    BoxShadow(color: Color(0x14000000), blurRadius: 12, offset: Offset(0, 4)),
-  ];
-
-  static const elev2 = [
-    BoxShadow(color: Color(0x1F000000), blurRadius: 24, offset: Offset(0, 8)),
-  ];
-
-  static const bevelLip = [
-    BoxShadow(color: Color(0x33000000), blurRadius: 0, offset: Offset(0, 4)),
-  ];
-
-  static const pressed = [
-    BoxShadow(color: Color(0x33000000), blurRadius: 0, offset: Offset(0, 1)),
-  ];
-
-  static List<BoxShadow> bevel(Color lip, {bool pressed = false}) => [
-    BoxShadow(color: lip, blurRadius: 0, offset: Offset(0, pressed ? 1 : 4)),
-    if (!pressed)
-      const BoxShadow(color: Color(0x1F163B28), blurRadius: 10, offset: Offset(0, 5)),
-  ];
-}
-
-/// Motion durations and easing curves from doc 06 §2.6.
 class AppMotion {
   const AppMotion._();
-
   static const fast = Duration(milliseconds: 150);
   static const base = Duration(milliseconds: 250);
-  static const move = Duration(milliseconds: 320);
   static const bonk = Duration(milliseconds: 380);
   static const popupIn = Duration(milliseconds: 300);
   static const locked = Duration(milliseconds: 200);
+  static const press = Duration(milliseconds: 140);
 
-  static const Curve fastCurve = Curves.easeOut;
-  static const Curve baseCurve = Curves.easeOutCubic;
-  static const Curve moveCurve = Curves.easeInOutCubic;
-  static const Curve bonkForwardCurve = Curves.easeOut;
-  static const Curve bonkBackCurve = Curves.elasticOut;
-  static const Curve popupCurve = Curves.easeOutBack;
+  /// Exit duration grows with distance: 250–450 ms.
+  static Duration exitFor(int cellsTravelled) => Duration(milliseconds: (250 + cellsTravelled * 25).clamp(250, 450));
 
-  /// Exit duration scales with path distance: 250–450 ms.
-  static Duration exitFor(int cellsTravelled) =>
-      Duration(milliseconds: (250 + cellsTravelled * 25).clamp(250, 450));
+  static bool reduced(BuildContext context) => MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 }
 
-/// Typography system bundling Fredoka and Nunito offline with Gujarati/Hindi fallbacks.
-/// Source of truth: doc 06 §2.3.
-abstract final class AppText {
-  static const _fallbacks = ['BalooBhai2', 'Baloo2'];
+/// Fredoka for headlines and numbers, Nunito for body text. Both are bundled
+/// variable fonts, so weight goes through a font variation as well.
+class AppText {
+  const AppText._();
+  static TextStyle fredoka(double size, {double weight = 600, Color color = AppColors.text, double? height}) =>
+      TextStyle(
+        fontFamily: 'Fredoka',
+        fontSize: size,
+        fontWeight: _w(weight),
+        fontVariations: [FontVariation.weight(weight)],
+        color: color,
+        height: height,
+        fontFeatures: const [FontFeature.tabularFigures()],
+      );
 
-  static const display = TextStyle(
-    fontFamily: 'Fredoka',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 32,
-    height: 40 / 32,
-    fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
-  );
-
-  static const h1 = TextStyle(
-    fontFamily: 'Fredoka',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 24,
-    height: 32 / 24,
-    fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
-  );
-
-  static const h2 = TextStyle(
-    fontFamily: 'Fredoka',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 20,
-    height: 28 / 20,
-    fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
-  );
-
-  static const body = TextStyle(
+  static TextStyle nunito(
+    double size, {
+    double weight = 800,
+    Color color = AppColors.text,
+    double? height,
+    double? spacing,
+  }) => TextStyle(
     fontFamily: 'Nunito',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 16,
-    height: 24 / 16,
-    fontWeight: FontWeight.w500,
-    color: AppColors.textPrimary,
+    fontSize: size,
+    fontWeight: _w(weight),
+    fontVariations: [FontVariation.weight(weight)],
+    color: color,
+    height: height,
+    letterSpacing: spacing,
   );
 
-  static const caption = TextStyle(
-    fontFamily: 'Nunito',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 13,
-    height: 18 / 13,
-    fontWeight: FontWeight.w500,
-    color: AppColors.textSecondary,
-  );
-
-  static const button = TextStyle(
-    fontFamily: 'Fredoka',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 18,
-    height: 24 / 18,
-    fontWeight: FontWeight.w600,
-    color: Colors.white,
-  );
-
-  static const hudNumber = TextStyle(
-    fontFamily: 'Fredoka',
-    fontFamilyFallback: _fallbacks,
-    fontSize: 20,
-    height: 24 / 20,
-    fontWeight: FontWeight.w600,
-    fontFeatures: [FontFeature.tabularFigures()],
-    color: AppColors.textPrimary,
-  );
+  static FontWeight _w(double w) => FontWeight.values[((w / 100).round() - 1).clamp(0, 8)];
 }
 
-/// Builds the app's light ThemeData.
+class AppShadows {
+  const AppShadows._();
+  static const card = [
+    BoxShadow(color: Color(0x2EB4A578), offset: Offset(0, 2)),
+    BoxShadow(color: Color(0x12163B28), offset: Offset(0, 10), blurRadius: 24),
+  ];
+  static const chip = [BoxShadow(color: Color(0x1A163B28), offset: Offset(0, 4), blurRadius: 12)];
+  static const popup = [
+    BoxShadow(color: AppColors.secondaryLip, offset: Offset(0, 6)),
+    BoxShadow(color: Color(0x59000000), offset: Offset(0, 30), blurRadius: 60),
+  ];
+  static const hud = [BoxShadow(color: Color(0x33000000), offset: Offset(0, 6), blurRadius: 14)];
+}
+
+const kCreamBackground = RadialGradient(
+  center: Alignment(0, -1),
+  radius: 1.25,
+  colors: [AppColors.card, AppColors.cream, AppColors.creamDeep],
+  stops: [0, .55, 1],
+);
+
+const kGreenButton = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: [AppColors.emeraldLight, AppColors.emerald, AppColors.forest],
+  stops: [0, .42, 1],
+);
+
+const kGoldButton = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors: [AppColors.goldLight, AppColors.gold],
+);
+
 ThemeData buildAppTheme() => ThemeData(
-  useMaterial3: true,
-  brightness: Brightness.light,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: AppColors.primary,
-    primary: AppColors.primary,
-    secondary: AppColors.primaryLight,
-    surface: AppColors.bgCream,
-    brightness: Brightness.light,
-  ),
-  scaffoldBackgroundColor: AppColors.bgSage,
-  cardColor: AppColors.bgCream,
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.emerald, surface: AppColors.cream),
+  scaffoldBackgroundColor: AppColors.cream,
   fontFamily: 'Nunito',
-  fontFamilyFallback: const ['BalooBhai2', 'Baloo2'],
+  useMaterial3: true,
+  splashFactory: NoSplash.splashFactory,
+  highlightColor: Colors.transparent,
 );

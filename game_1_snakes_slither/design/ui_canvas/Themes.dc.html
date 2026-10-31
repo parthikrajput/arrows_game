@@ -36,7 +36,7 @@ a{color:inherit;text-decoration:none}
 class Component extends DCLogic {
   constructor(props) { super(props); this.state = { sel: 0 }; }
   renderVals() {
-    const list = [{ name: 'Forest', img: '/_blob/88d8e8388ff384fe666386422a5952e6', price: 0 },{ name: 'Desert', img: '/_blob/835437040697267a39111f888a7ee613', price: 200 },{ name: 'Snow', img: '/_blob/700684c6ef18546c5824aa941b62c5da', price: 200 },{ name: 'Space', img: '/_blob/3ab6677afd68d75927b3b07165b689e6', price: 300 },{ name: 'Beach', img: '/_blob/ec452e1a4f01ce1762204f9fa83be42a', price: 300 },{ name: 'Candy', img: '/_blob/be2732778d0a1cb167663403b1922a12', price: 300 }];
+    const list = [{ name: 'Forest', img: '/_blob/58017d716f038a656481d323825e2d47', price: 0 },{ name: 'Desert', img: '/_blob/d98f228e5c7f530f049be55d7e13c472', price: 200 },{ name: 'Snow', img: '/_blob/b56e0b34b406b40cbe467320b1b3e2ac', price: 200 },{ name: 'Space', img: '/_blob/a04f2579f959effc2955d4ecb5dcfa96', price: 300 },{ name: 'Beach', img: '/_blob/761074ea677238cce9e637cdca1b70c4', price: 300 },{ name: 'Candy', img: '/_blob/848f659def4aaaa214741500cef06896', price: 300 }];
     const sel = this.state.sel;
     const themes = list.map((t, i) => ({ ...t, equipped: i === 0, forSale: i !== 0, pick: () => this.setState({ sel: i }),
       style: 'display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 6px 8px; border-radius: 18px; background: #FFFEF8; cursor: pointer; font: inherit; animation-delay: ' + (i * 0.05) + 's; ' +

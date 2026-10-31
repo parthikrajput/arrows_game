@@ -34,10 +34,9 @@ Three agents build this Flutter app. Each owns separate files, so work never ove
    For button and popup sounds use `UiFeedback.of(context)` (`lib/contracts/ui_feedback.dart`), never a service.
 3. Board: draw each cell with `geometry.rectOf()` / `geometry.centerOf()` so drawings line up with taps. Call `onMotionDone(motion.id)` exactly once after each animation. Don't add gesture detectors on the board.
 4. Look and content:
-   - **Look:** follow the UI canvas brand: `design/ui_canvas/screens/*.png`, `design/brand/` (logo, 3D Pip renders) and the colour and type table in `design/ui_canvas/README.md`.
-   - **What's on each screen, its states and accessibility:** follow `phases/phase_1/06_UI_UX_SCREENS.md`.
-   - **Ignore the canvas's classic-snake parts:** fruit, score and best score, D-pad or swipe, gems, skins, food, themes, Rewards and Profile.
-   - **Reuse the canvas's "Archive" puzzle screens** (Hint, Hammer, Rush, Wheel, Board, Booster and others in `design/ui_canvas/*.dc.html`) as layout references.
+   - **Look:** the UI canvas "Snake Slither Game UI" is the design, to be matched exactly. The repo copy is `design/ui_canvas/*.dc.html` (open in the canvas) with colours and type in `design/ui_canvas/README.md`. Logo, Pip and art are in `design/brand/`.
+   - **Gameplay rules stay the Phase 1 puzzle** (tap snakes out of a tangle). Canvas parts that belong to classic snake (score/best, D-pad, fruit, length) are not built; the puzzle board, hearts, moves and boosters take their place in the same visual style.
+   - **Phase by phase:** build only the screens of the current task in `handoff/UI_TASKS.md`. Features that appear in the canvas but belong to a later phase (snake skins, board themes and so on) wait for that phase.
    - Copy any art you use into `assets/images/`.
 
 ## Level agent

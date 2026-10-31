@@ -63,6 +63,10 @@ void main() {
     t.view.physicalSize = const Size(412 * 3, 915 * 3); // phone, portrait
     t.view.devicePixelRatio = 3;
     addTearDown(t.view.reset);
+    // Looping decoration (bob, shine, glow) never settles; the UI turns it
+    // off when the system asks for less motion, as players can.
+    t.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(t.platformDispatcher.clearAccessibilityFeaturesTestValue);
     await t.pumpWidget(
       SnakesSlitherApp(
         store: store,
