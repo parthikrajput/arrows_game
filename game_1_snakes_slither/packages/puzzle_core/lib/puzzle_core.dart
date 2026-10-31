@@ -8,3 +8,4 @@ export 'src/model.dart';
 export 'src/solver.dart';
 export 'src/prng.dart';
 export 'src/level_validator.dart';
+export 'src/level_draft_check.dart';
