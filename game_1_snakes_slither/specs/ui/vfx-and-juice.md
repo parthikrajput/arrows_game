@@ -3,7 +3,7 @@ Source docs: ../../PERFORMANCE_OPTIMIZATION.md, ../../SPLASH_AND_INSTANT_LAUNCH.
 # Spec: VFX and Game Feel (Snakes Slither)
 
 ## Status
-Approved
+Implemented
 
 ## Type
 New Feature
@@ -87,6 +87,10 @@ leafBurst (12/24/40 particles, life 300 ms, from the Play button), dawn light ra
 - The effect for each event marked "VFX still to define" is not designed yet. It needs art direction for Snakes Slither.
 - Whether win confetti and exit sparkle share one pool or use two.
 - The Phase 3 to 20 signature systems (Cycles, Multi-floor, Light and Beams, Rotation, Growth, Gravity, Mirror and others) need their own effects. They are covered in each phase spec, not here.
+
+## Implementation Notes
+- 2026-11-01: lib/ui/board/vfx.dart: pre-allocated ParticlePool capped by tier (30/80/150), one drawRawAtlas per frame, on-demand ticker; effects on the same cue as SFX/haptics: exit sparkle, bump shake (tier) + heart-break petals + red flash, shield pop, hammer debris; Reduce Motion and Battery Saver honoured; win confetti stays within the Low cap.
+- Pending device checks: VFX-06 (60 fps on a Low device during win).
 
 ## Change Request History
 

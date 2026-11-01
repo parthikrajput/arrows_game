@@ -1,6 +1,7 @@
-﻿# 06 — UI/UX & Screens
+# 06 — UI/UX & Screens
 > Design tokens, accessibility, responsive rules અને Phase 1 ની **દરેક screen** (purpose, wireframe, components, states, navigation, ads).
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [01 Rules](./01_GAME_CONCEPT_AND_RULES.md) · [04 Boosters & Shop](./04_BOOSTERS_COINS_SHOP.md) · [05 Daily & Streak](./05_DAILY_CHALLENGE_AND_STREAK.md) · [07 Frontend & QA](./07_FRONTEND_IMPLEMENTATION_AND_QA.md)
 
 ---

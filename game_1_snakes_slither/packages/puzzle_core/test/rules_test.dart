@@ -167,7 +167,7 @@ void main() {
       var a = Attempt.start(sample().board);
       for (var i = 0; i < 3; i++) {
         final (next, target) = a.useHint();
-        expect(Engine.tapSnake(a.board, target!).kind, MoveKind.exit);
+        expect(Engine.tapSnake(a.board, target!.snakeId!).kind, MoveKind.exit);
         a = next;
       }
       expect(() => a.useHint(), throwsStateError);

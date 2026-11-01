@@ -1,6 +1,7 @@
-﻿# 03 — Obstacle Catalog, Phase 1 (M001–M049 + Finale)
+# 03 — Obstacle Catalog, Phase 1 (M001–M049 + Finale)
 > Phase 1 ના 49 mechanics ના exact rules (standard §10), jungle themed names, JSON schema v3, implementation notes અને level-design usage — એક card per mechanic.
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard §10, §12](../../SHARED_CORE_STANDARD.md) · [01 Rules (Move resolution order)](./01_GAME_CONCEPT_AND_RULES.md) · [02 Level Progression](./02_LEVEL_PROGRESSION_0001_0500.md) · [07 Frontend & QA](./07_FRONTEND_IMPLEMENTATION_AND_QA.md)
 
 ---

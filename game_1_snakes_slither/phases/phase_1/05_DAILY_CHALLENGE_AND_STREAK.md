@@ -1,6 +1,7 @@
-﻿# 05 — Daily Jungle Puzzle & 7-Day Jungle Streak
+# 05 — Daily Jungle Puzzle & 7-Day Jungle Streak
 > Daily Challenge ના rules, weekday modifiers, seed, difficulty, silhouettes, streak ladder, miss/saver rules, day key & anti-cheat, offline behaviour, leaderboards અને edge cases.
 
+**Status:** Approved (2026-11-01) — Implemented  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard §8](../../SHARED_CORE_STANDARD.md) · [03 Obstacle Catalog](./03_OBSTACLE_CATALOG_PHASE_1.md) · [04 Boosters & Shop](./04_BOOSTERS_COINS_SHOP.md) · [06 Screens](./06_UI_UX_SCREENS.md) · [07 Frontend & QA](./07_FRONTEND_IMPLEMENTATION_AND_QA.md)
 
 ---

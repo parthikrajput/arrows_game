@@ -7,7 +7,10 @@ import 'package:puzzle_core/puzzle_core.dart';
 
 import '../../contracts/view_models.dart';
 import '../../data/level_repository.dart';
+import '../../data/save_store.dart';
+import '../../services/analytics.dart';
 import '../../services/audio_service.dart';
+import '../../services/perf/perf.dart';
 import '../../services/time_guard.dart';
 import '../../state/ads_cubit.dart';
 import '../../state/daily_cubit.dart';
@@ -19,8 +22,21 @@ import '../../state/wallet_cubit.dart';
 import '../../ui/popups/popups.dart';
 import '../../ui/screens/gameplay_screen.dart';
 import '../../ui/theme/tokens.dart';
+import '../../state/tutorial_cubit.dart';
+import '../../ui/popups/tutorial_popups.dart';
 import 'board_input.dart';
 import 'game_bloc.dart';
+import 'tutorials.dart';
+
+/// Rotating tips on the Level Failed popup.
+const failTips = [
+  'Tip: hold a snake to preview its path',
+  'Tip: free the snake that blocks the most others first',
+  'Tip: the Glow Firefly shows the next safe move',
+  'Tip: the Safety Shell Shield blocks your next 2 bonks',
+  'Tip: a curvy snake still leaves straight from its head',
+  'Tip: Retry is always free',
+];
 
 /// Loads a level and connects GameBloc to the gameplay screen and popups.
 class GameplayRoute extends StatelessWidget {
@@ -67,15 +83,23 @@ class GameplayRoute extends StatelessWidget {
         progress: c.read<ProgressCubit>(),
         ads: c.read<AdsCubit>(),
         hasNextLevel: isDaily ? false : repo.exists(levelNumber + 1),
+        guidedTaps: !isDaily && Tutorials.guidedTaps(level.number, c.read<TutorialCubit>().state),
+        onTrack: isDaily ? null : c.read<Analytics>().log,
       ),
-      child: _GameplayView(isDaily: isDaily),
+      child: _GameplayView(
+        isDaily: isDaily,
+        introType: isDaily ? null : repo.introducesMechanic(level.number),
+      ),
     );
   }
 }
 
 class _GameplayView extends StatefulWidget {
-  const _GameplayView({this.isDaily = false});
+  const _GameplayView({this.isDaily = false, this.introType});
   final bool isDaily;
+
+  /// Mechanic this level introduces (its "NEW!" card shows first).
+  final String? introType;
 
   @override
   State<_GameplayView> createState() => _GameplayViewState();
@@ -86,15 +110,19 @@ class _GameplayViewState extends State<_GameplayView> {
     onHide: () => context.read<GameBloc>().add(const Paused()),
   );
 
+  final _frames = FrameMonitor();
+
   @override
   void initState() {
     super.initState();
     _life; // start listening
+    _frames.start();
   }
 
   @override
   void dispose() {
     _life.dispose();
+    _frames.stop();
     super.dispose();
   }
 
@@ -105,10 +133,17 @@ class _GameplayViewState extends State<_GameplayView> {
     level: r.level,
     hasGiftBasket: r.gift != null && !r.gift!.isChest,
     hasChest: r.gift?.isChest ?? false,
+    hasRush: r.rushNext,
   );
 
+  /// Win sequence: Gift Basket / Chest ⇒ Golden Slither Rush (no ads around
+  /// it) ⇒ next level, or after L500 the Phase Complete screen.
   Future<void> _afterRewards(BuildContext context, LevelCompleteData r) async {
     final router = GoRouter.of(context);
+    if (r.rushNext) {
+      router.go('/rush/${r.level}');
+      return;
+    }
     await context.read<AdsCubit>().maybeShowInterstitial(_winContext(r));
     if (!mounted) return;
     router.go(r.hasNext ? '/play/${r.level + 1}' : '/map');
@@ -161,12 +196,14 @@ class _GameplayViewState extends State<_GameplayView> {
     }
     _winRecorded = false;
     _showGift = false;
+    _frames.start();
     bloc.add(const Restarted());
   }
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<GameBloc>();
+    final tutorial = context.watch<TutorialCubit>().state;
     final wallet = context.watch<WalletCubit>().state;
     final settings = context.watch<SettingsCubit>().state;
     final progress = context.watch<ProgressCubit>().state;
@@ -175,8 +212,15 @@ class _GameplayViewState extends State<_GameplayView> {
     return BlocConsumer<GameBloc, GameState>(
       listenWhen: (a, b) => a.cueSeq != b.cueSeq || a.status != b.status,
       listener: (context, s) {
+        final tc = context.read<TutorialCubit>();
+        if (!widget.isDaily) Tutorials.doneBy(s).forEach(tc.markSeen);
+        if (s.status == GameStatus.won || s.status == GameStatus.failed) {
+          context.read<PerfSettings>().levelFinished(_frames.stop());
+        }
         if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
           _winRecorded = true;
+          // Every win refreshes the backup copy of the save.
+          context.read<SaveStore>().backup();
           if (widget.isDaily) {
             context.read<DailyCubit>().completeDaily();
           } else {
@@ -189,6 +233,10 @@ class _GameplayViewState extends State<_GameplayView> {
         final lv = s.level.number;
         final a = s.attempt;
         final popup = _popup(context, s, wallet, settings, progress, ads);
+        final playing = s.status == GameStatus.playing || s.status == GameStatus.animating;
+        final tip = widget.isDaily || popup != null || !playing ? null : Tutorials.tipFor(s, tutorial);
+        final intro = widget.isDaily ? null : Tutorials.introFor(lv, widget.introType, tutorial);
+        final focus = tip?.focus ?? TipFocus.none;
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, _) {
@@ -212,6 +260,11 @@ class _GameplayViewState extends State<_GameplayView> {
                   shieldCharges: a.shieldCharges,
                   moves: a.moves,
                   coins: wallet.coins,
+                  gemsLeft: s.level.mechanicTypes.contains('M026') ? a.board.gemsLeft : null,
+                  mongooseHp: a.board.mongooseHp ?? (s.level.mechanicTypes.contains('M049') ? 0 : null),
+                  showHearts: lv != 1,
+                  highlightHearts: focus == TipFocus.hearts,
+                  highlightMoves: focus == TipFocus.moves,
                 ),
                 boosters: [
                   for (final b in Booster.values)
@@ -229,6 +282,11 @@ class _GameplayViewState extends State<_GameplayView> {
                       active:
                           (b == Booster.shield && a.shieldActive) ||
                           (b == Booster.hammer && s.status == GameStatus.hammerTarget),
+                      highlight: switch (b) {
+                        Booster.hint => focus == TipFocus.hint,
+                        Booster.shield => focus == TipFocus.shield,
+                        Booster.hammer => focus == TipFocus.hammer,
+                      },
                     ),
                 ],
                 board: const BoardInput(),
@@ -236,7 +294,21 @@ class _GameplayViewState extends State<_GameplayView> {
                 onPause: () => bloc.add(const Paused()),
                 onBooster: (b) => bloc.add(BoosterPressed(b)),
                 onCancelHammer: () => bloc.add(const HammerCancelled()),
+                banner: !widget.isDaily && ads.bannerFor(lv) ? ads.service.banner() : null,
+                bannerHeight: !widget.isDaily && ads.bannerFor(lv) ? AdsCubit.bannerReserve : 0,
               ),
+              if (tip != null)
+                TutorialTip(
+                  data: tip.data,
+                  onGotIt: () => context.read<TutorialCubit>().markSeen(tip.data.id),
+                ),
+              if (intro != null && popup == null) ...[
+                const ModalBarrier(color: AppColors.scrim, dismissible: false),
+                MechanicIntroCard(
+                  data: intro,
+                  onGotIt: () => context.read<TutorialCubit>().markSeen(intro.type),
+                ),
+              ],
               if (popup != null) ...[
                 BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
@@ -288,6 +360,8 @@ class _GameplayViewState extends State<_GameplayView> {
           onMap: () => context.go(widget.isDaily ? '/daily' : '/map'),
           onHome: () => context.go('/'),
           onToggle: context.read<SettingsCubit>().toggle,
+          level: widget.isDaily ? null : lv,
+          moves: s.attempt.moves,
         );
       case GameStatus.secondChance:
         return SecondChancePopup(
@@ -306,6 +380,9 @@ class _GameplayViewState extends State<_GameplayView> {
         );
       case GameStatus.failed:
         return LevelFailedPopup(
+          level: widget.isDaily ? null : lv,
+          moves: s.attempt.moves,
+          tip: failTips[(lv + s.attempt.moves) % failTips.length],
           onRetry: () => bloc.add(const Restarted()),
           onHome: () => context.go(widget.isDaily ? '/daily' : '/'),
         );

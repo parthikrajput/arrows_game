@@ -107,6 +107,10 @@ Initial status for all items is **"Not run"**:
 ## Open Questions
 - None. The stack, BLoC hierarchy, rendering architecture, and QA checklist align with SHARED_CORE_STANDARD §13–§15.
 
+## Implementation Notes
+- 2026-11-01: Done: analytics service with the 20 agreed events wired to play, boosters, revives, Rush, purchases and FTUE (lib/services/analytics.dart); save backup box written after each win, flush on pause, corrupt-section restore with a notice, schema version recorded (lib/data/save_store.dart); board hit-test priority (interactive cells, canopy, body, 0.5-cell slop); leaderboard submission via games_services (ids by --dart-define).
+- Pending: Firebase Analytics / Crashlytics / Remote Config backends (need google-services.json and GoogleService-Info.plist); the device QA checklist (§7) has not been run.
+
 ## Change Request History
 
 - 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

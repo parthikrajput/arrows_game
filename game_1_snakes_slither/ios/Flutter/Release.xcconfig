@@ -1,1 +1,4 @@
 #include "Generated.xcconfig"
+
+// Google test app id; release CI overrides it.
+ADMOB_APP_ID=ca-app-pub-3940256099942544~1458002511

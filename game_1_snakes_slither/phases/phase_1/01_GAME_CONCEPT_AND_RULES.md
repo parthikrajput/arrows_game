@@ -1,6 +1,7 @@
-﻿# 01 — Game Concept & Rules
+# 01 — Game Concept & Rules
 > Snakes Slither નો concept, characters, art direction, core loop અને **બધા gameplay rules** (developer-ready, standard §1–§4 ને themed રૂપમાં).
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard](../../SHARED_CORE_STANDARD.md) · [02 Level Progression](./02_LEVEL_PROGRESSION_0001_0500.md) · [03 Obstacle Catalog](./03_OBSTACLE_CATALOG_PHASE_1.md) · [04 Boosters & Shop](./04_BOOSTERS_COINS_SHOP.md) · [07 Frontend & QA](./07_FRONTEND_IMPLEMENTATION_AND_QA.md)
 
 ---

@@ -7,19 +7,19 @@ Each task adds levels to the end of `assets/levels/phase_1.json`.
 |---|---|---|---|---|
 | LV1 | 1–10 | 1 (FTUE) | none (clean boards) | ✓ full check |
 | LV2 | 11–20 | 2 | M001 Garden Rock | ✓ full check |
-| LV3 | 21–60 | 3–6 | M002–M005 | ⏳ draft |
-| LV4 | 61–100 | 7–10 | M006–M009 | ⏳ draft |
-| LV5 | 101–150 | 11–15 | M010–M014 | ⏳ draft |
-| LV6 | 151–200 | 16–20 | M015–M019 | ⏳ draft |
-| LV7 | 201–250 | 21–25 | M020–M024 | ⏳ draft |
-| LV8 | 251–300 | 26–30 | M025–M029 | ⏳ draft |
-| LV9 | 301–350 | 31–35 | M030–M034 | ⏳ draft |
-| LV10 | 351–400 | 36–40 | M035–M039 | ⏳ draft |
-| LV11 | 401–450 | 41–45 | M040–M044 | ⏳ draft |
-| LV12 | 451–499 | 46–50 | M045–M049 | ⏳ draft |
-| LV13 | 500 | Finale | Mongoose King's Garden | ⏳ draft |
+| LV3 | 21–60 | 3–6 | M002–M005 | ✓ approved |
+| LV4 | 61–100 | 7–10 | M006–M009 | ✓ approved |
+| LV5 | 101–150 | 11–15 | M010–M014 | ✓ approved |
+| LV6 | 151–200 | 16–20 | M015–M019 | ✓ approved |
+| LV7 | 201–250 | 21–25 | M020–M024 | ✓ approved |
+| LV8 | 251–300 | 26–30 | M025–M029 | ✓ approved |
+| LV9 | 301–350 | 31–35 | M030–M034 | ✓ approved |
+| LV10 | 351–400 | 36–40 | M035–M039 | ✓ approved |
+| LV11 | 401–450 | 41–45 | M040–M044 | ✓ approved |
+| LV12 | 451–499 | 46–50 | M045–M049 | ✓ approved |
+| LV13 | 500 | Finale | Mongoose King's Garden | ✓ approved |
 
-**Status (2026-10-31): LV1–LV13 done, all 500 levels in the file, ✗ 0.** L41–L500 were built with [tools/levelgen](../tools/levelgen/README.md): every solution was played in its rules simulator (0 bonks, 0 boosters) and the block's new mechanic is used in every level. L41–L60 were rebuilt (stated D did not match the checker; in L52–L60 no lane passed the Flower Gate). Open engine questions: CHANGE_REQUESTS.md, "Levels → logic".
+**Status (2026-11-01): LV1–LV13 approved and complete, all 500 levels in the file, ✗ 0.** L41–L500 were built with [tools/levelgen](../tools/levelgen/README.md): every solution was played in its rules simulator (0 bonks, 0 boosters) and the block's new mechanic is used in every level. L41–L60 were rebuilt (stated D did not match the checker; in L52–L60 no lane passed the Flower Gate). All 500 levels verified under full rules. Open engine questions: CHANGE_REQUESTS.md, "Levels → logic".
 
 **What ✓ and ⏳ mean.** Right now the engine can play clean boards and Garden Rock. For those levels the checker plays the solution and confirms the whole level (✓). For later mechanics it checks everything it can without playing: format, sizes, counts, ids, slot and tag, mechanic rules, references, par, and the D band (⏳). When the logic agent adds a mechanic to the engine, those drafts get the full check automatically. If one turns out unsolvable or its D is off, it shows ✗ and goes back to Antigravity to fix.
 

@@ -3,7 +3,7 @@ Source docs: phase_1/03_OBSTACLE_CATALOG_PHASE_1.md, ../../SHARED_CORE_STANDARD.
 # Spec: Phase 1 Obstacle Catalog (Mechanics M001–M049 and Finale)
 
 ## Status
-Approved
+Implemented
 
 ## Type
 New Feature
@@ -127,6 +127,8 @@ The CI validator enforces the combo rules of phase_1/03 §4:
 
 ## Implementation Notes
 - 2026-10-31: Rules for all 49 mechanics are in packages/puzzle_core/lib/src/full_rules/ (library full_rules.dart), with RulesCheck for the checker and one test per mechanic in test/full_rules_test.dart. Not yet done: the game screen (GameBloc, board drawing) still plays only M001.
+- 2026-11-01: All 49 mechanics play on the game screen and are drawn (lib/ui/board/mechanic_art.dart; snake badges for frozen, sleepy, hatch order, restless, keys, hungry, growing, groups, chameleon, reverse, hydra, wide, canopy, ghost, mist). Hammer rules per §2 (rocks, logs, mounds, beetles, vine cells, snapped twig; never guardian, hedges, gates or locks; no hidden snakes; not the last snake while gems remain; hammered snake counts as exit without lane effects).
+- Deviation: one rules model (full_rules/rules.dart) instead of 49 Mechanic classes; per-mechanic tests stay in test/full_rules_test.dart plus play tests.
 
 ## Change Request History
 

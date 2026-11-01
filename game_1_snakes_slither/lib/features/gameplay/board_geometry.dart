@@ -38,12 +38,37 @@ class BoardGeometry {
     return Cell(x, y);
   }
 
-  /// Snake under the finger. On an empty cell, the nearest body segment within
-  /// half a cell wins, which keeps small (29 dp) cells tappable.
+  /// Interactive obstacle under the finger (lever, switch, gear, lilypad,
+  /// stump). These win over a snake on the same cell. A Whirl Stump is
+  /// tapped on its centre seam, so the snakes inside stay tappable.
+  int? interactiveAt(BoardState b, Offset local) {
+    final c = cellAt(local);
+    for (final o in b.obstacles) {
+      if (!o.interactive || o.cells.isEmpty) continue;
+      if (o.type == 'M034') {
+        final xs = o.cells.map((c) => c.x), ys = o.cells.map((c) => c.y);
+        final seam = Offset((xs.reduce(math.min) + 1) * cell, (ys.reduce(math.min) + 1) * cell);
+        if ((seam - local).distance <= cell * .35) return o.id;
+      } else if (c != null && o.cells.contains(c)) {
+        return o.id;
+      }
+    }
+    return null;
+  }
+
+  /// Snake under the finger. The Canopy layer wins over the ground. On an
+  /// empty cell, the nearest body segment within half a cell wins, which
+  /// keeps small (29 dp) cells tappable.
   int? snakeAt(BoardState b, Offset local) {
     final c = cellAt(local);
     if (c != null) {
-      final hit = b.snakeAt(c);
+      Snake? hit;
+      for (final s in b.snakes.values) {
+        final wide = s.marks.wideSide;
+        final cells = [...s.body, if (wide != null) for (final x in s.body) x.step(wide)];
+        if (!cells.contains(c)) continue;
+        if (hit == null || s.marks.layer > hit.marks.layer) hit = s;
+      }
       if (hit != null) return hit.id;
     }
     int? best;
@@ -63,5 +88,15 @@ class BoardGeometry {
   int? rockAt(BoardState b, Offset local) {
     final c = cellAt(local);
     return c == null ? null : b.rockAt(c)?.id;
+  }
+
+  /// Hammerable obstacle (not a rock) under the finger.
+  int? hammerObstacleAt(BoardState b, Offset local) {
+    final c = cellAt(local);
+    if (c == null) return null;
+    for (final o in b.obstacles) {
+      if (o.hammerable && o.cells.contains(c)) return o.id;
+    }
+    return null;
   }
 }

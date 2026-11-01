@@ -1,6 +1,7 @@
-﻿# 04 — Boosters, Coins & Shop
+# 04 — Boosters, Coins & Shop
 > 4 themed boosters + free preview, Heart Berry Refill, coins inflow/outflow, Jungle Gift Basket, Golden Slither Rush, Lucky Lily Wheel, Shop catalog, ads rules અને compliance.
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard §3–§7](../../SHARED_CORE_STANDARD.md) · [01 Rules](./01_GAME_CONCEPT_AND_RULES.md) · [02 Progression](./02_LEVEL_PROGRESSION_0001_0500.md) · [05 Daily & Streak](./05_DAILY_CHALLENGE_AND_STREAK.md) · [06 Screens](./06_UI_UX_SCREENS.md) · [07 Frontend & QA](./07_FRONTEND_IMPLEMENTATION_AND_QA.md)
 
 બધા numbers = launch defaults (Firebase Remote Config, §13). Standard થી અલગ number લખવો નહીં.

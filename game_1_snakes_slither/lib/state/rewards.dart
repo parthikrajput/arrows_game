@@ -13,6 +13,9 @@ class Rewards {
   const Rewards._();
   static const phaseFinale = 500;
 
+  /// Golden Slither Rush follows the first clear of L25, L50 … L500.
+  static bool rushAfter(int level) => level > 0 && level <= phaseFinale && level % 25 == 0;
+
   /// Null for levels without a basket.
   static GiftBasket? basketFor(int level) {
     if (level == phaseFinale) {

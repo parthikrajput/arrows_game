@@ -1,6 +1,7 @@
-﻿# 02 — Level Progression (Levels 1–500)
+# 02 — Level Progression (Levels 1–500)
 > Phase 1 ના 500 levels ની ગોઠવણ: tiers, 10-level block pattern, FTUE L1–10, booster tutorials, દરેક block નું table અને L500 Finale.
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard §9](../../SHARED_CORE_STANDARD.md) · [01 Rules](./01_GAME_CONCEPT_AND_RULES.md) · [03 Obstacle Catalog](./03_OBSTACLE_CATALOG_PHASE_1.md) · [04 Boosters & Shop](./04_BOOSTERS_COINS_SHOP.md) · [Scaling to 10,000](../../SCALING_TO_10000_LEVELS.md)
 
 ---

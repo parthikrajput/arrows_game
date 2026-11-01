@@ -2,6 +2,7 @@
 library;
 
 export 'src/attempt.dart';
+export 'src/play.dart' show PlayLevel, dirFromIndex, dirIndex;
 export 'src/engine.dart';
 export 'src/level_codec.dart';
 export 'src/model.dart';

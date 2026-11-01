@@ -4,11 +4,8 @@ The UI agent adds a row whenever a screen needs data, a callback or a key the co
 
 | # | Screen / file | What's needed | Why |
 |---|---|---|---|
-| 2 | Home nav | `onOpenLeaderboards` | Ranks tab left out of the nav until Leaderboards exist |
-| 3 | `LevelFailedPopup`, `PausePopup` | Level number and moves | Canvas shows "Level 37 · Moves 7"; popups use generic text for now |
-| 4 | Shop Coins / Offers | Coin packs, Starter Pack and VIP products | Tabs show "Store unavailable" while `storeAvailable` is false |
 
-## Levels → logic (L41–L500 drafts)
+## Levels → logic (L41–L500 approved)
 
 How the level file reads the mechanic cards where a card leaves a choice open. Every solution was played in a rules simulator built from 03 and 01 §5.9, with 0 bonks and 0 boosters.
 

@@ -1,6 +1,7 @@
-﻿# Phase 1 — Launch Scope (Levels 1–500)
+# Phase 1 — Launch Scope (Levels 1–500)
 > Snakes Slither ના launch build માં શું છે, શું નથી, અને Phase 1 ના દરેક document નો index.
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Game overview](../../README.md) · [Shared Core Standard](../../SHARED_CORE_STANDARD.md) · [Phase 2 index](../phase_2/README.md) · [Scaling to 10,000](../../SCALING_TO_10000_LEVELS.md)
 
 ---

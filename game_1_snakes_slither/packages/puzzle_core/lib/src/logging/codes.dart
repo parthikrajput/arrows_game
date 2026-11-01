@@ -51,6 +51,7 @@ abstract final class LogCodes {
   static const isolateException = 'E-ISOLATE';
   static const perfFrameJank = 'W-PERF-001';
   static const perfLevelLoadSlow = 'W-PERF-002';
+  static const perfMemoryPressure = 'W-PERF-003';
   static const perfSlowColdStart = 'W-PERF-004';
   static const perfIntroJankGuard = 'W-PERF-005';
 }

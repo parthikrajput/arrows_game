@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pip coiled into a ring with a leaf hat, inside the central 192 dp of a 288 dp canvas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <path android:fillColor="#7CB342"
+        android:pathData="M144,64a80,80 0,1 1,-0.1 0zM144,100a44,44 0,1 0,0.1 0z" />
+    <path android:fillColor="#9CCC65"
+        android:pathData="M144,72a72,72 0,0 1,72 72h-12a60,60 0,0 0,-60 -60z" />
+    <path android:fillColor="#8BC34A"
+        android:pathData="M196,106a30,30 0,1 1,-0.1 0z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M186,128a7,7 0,1 1,-0.1 0zM208,128a7,7 0,1 1,-0.1 0z" />
+    <path android:fillColor="#163B28"
+        android:pathData="M188,129a3.5,3.5 0,1 1,-0.1 0zM210,129a3.5,3.5 0,1 1,-0.1 0z" />
+    <path android:fillColor="#43A047"
+        android:pathData="M176,96c8,-22 32,-26 44,-14c-12,2 -26,8 -44,14z" />
+</vector>

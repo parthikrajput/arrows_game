@@ -18,6 +18,10 @@ class SettingsCubit extends Cubit<SettingsData> {
       haptics: b('haptics', true),
       colourBlind: b('colourBlind', false),
       reducedMotion: b('reducedMotion', false),
+      brightNights: b('brightNights', false),
+      batterySaver: b('batterySaver', false),
+      shareDiagnostics: b('shareDiagnostics', false),
+      language: j['language'] as String? ?? 'en',
     );
   }
 
@@ -31,19 +35,16 @@ class SettingsCubit extends Cubit<SettingsData> {
       'haptics': s.haptics,
       'colourBlind': s.colourBlind,
       'reducedMotion': s.reducedMotion,
+      'brightNights': s.brightNights,
+      'batterySaver': s.batterySaver,
+      'shareDiagnostics': s.shareDiagnostics,
+      'language': s.language,
     });
   }
 
-  void toggle(SettingKey k) {
-    final s = state;
-    emit(
-      SettingsData(
-        sound: k == SettingKey.sound ? !s.sound : s.sound,
-        music: k == SettingKey.music ? !s.music : s.music,
-        haptics: k == SettingKey.haptics ? !s.haptics : s.haptics,
-        colourBlind: k == SettingKey.colourBlind ? !s.colourBlind : s.colourBlind,
-        reducedMotion: k == SettingKey.reducedMotion ? !s.reducedMotion : s.reducedMotion,
-      ),
-    );
+  void toggle(SettingKey k) => emit(state.toggled(k));
+
+  void setLanguage(String code) {
+    if (const {'en', 'gu', 'hi'}.contains(code)) emit(state.withLanguage(code));
   }
 }

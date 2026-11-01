@@ -128,6 +128,10 @@ All items initialized with status **"Not run"**:
 ## Open Questions
 - None. Performance budgets and device thresholds are governed directly by SHARED_CORE_STANDARD §13 and PERFORMANCE_OPTIMIZATION.md.
 
+## Implementation Notes
+- 2026-11-01: Done: device tier from the Android host (RAM / isLowRamDevice), saved and demoted after 3 levels over 5% jank; FrameMonitor (W-PERF-001, p95 raster); quality profiles (particles 30/80/150, shake 0/4/6 dp, image cache 48/96/160 MB) with Battery Saver forcing Low; RepaintBoundary around the board; cached static layers (background and resting board recorded once as ui.Picture); level file parsed on an isolate; Hint search on an isolate; memory pressure clears the image cache (W-PERF-003).
+- Pending: on-device measurements PERF-01…PERF-26 (Redmi 9A, mid tier, 120 Hz); drawRawAtlas batching for snake segments was not done (snakes are paths, cached when still).
+
 ## Change Request History
 
 - 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

@@ -174,18 +174,26 @@ class Rules {
 
 /// Mutable game state. Lists are copied on write by [St.copy].
 class St {
-  St(this.status, this.bodies, this.dirs, this.ms, this.ms2, this.mlist, this.moves);
+  St(this.status, this.bodies, this.dirs, this.ms, this.ms2, this.mlist, this.moves,
+      [this.gone = const []]);
   List<int> status; // 0 not spawned, 1 on board, 2 gone
   List<List<int>> bodies;
   List<int> dirs;
   List<int> ms, ms2;
   List<List<int>> mlist;
   int moves;
+
+  /// Mechanics smashed by the Hammer; their cells act as plain floor.
+  List<int> gone;
   List<int>? _occ0, _occ1;
 
   St copy() => St(List.of(status), List.of(bodies), List.of(dirs), List.of(ms), List.of(ms2),
-      List.of(mlist), moves);
+      List.of(mlist), moves, List.of(gone));
 }
+
+/// Why a tap was not a legal move. Play mode turns these into a bump
+/// (blocked, noFood) or a locked tap (locked); the checker rejects them all.
+enum Fail { none, locked, blocked, noFood, unclear, notInteractive }
 
 class Trace {
   int kind = 0; // 0 exit, 1 blocked, 2 mud stop, 3 unclear, 4 blind (mist), 5 loop
@@ -202,22 +210,42 @@ class Trace {
 }
 
 class Outcome {
-  Outcome(this.next, this.kind, [this.note = '']);
+  Outcome(this.next, this.kind, [this.note = '', this.fail = Fail.none]);
   final St? next;
   final int kind; // 0 exit move, 1 other legal move, -1 not allowed
   final String note;
+  final Fail fail;
   Set<int> used = {};
   bool unclear = false;
+
+  /// Lanes of every snake that moved (or tried to), keyed by snake index.
+  Map<int, Trace> traces = {};
+
+  /// Heart-loss events from counters during this move (play mode only).
+  int heartEvents = 0;
 }
 
 class Sim {
-  Sim(this.lv) : r = Rules(lv) {
+  // Sent to the Hint isolate together with St; holds plain data only.
+  Sim(this.lv, {this.play = false}) : r = Rules(lv) {
     _initStatic();
   }
   final Level lv;
   final Rules r;
+
+  /// Game-screen mode: a Restless Caterpillar timeout costs a heart and
+  /// resets, a lilypad may turn into a tangle, and situations the cards leave
+  /// open resolve as a bump instead of "not allowed".
+  final bool play;
   bool strictUnclear = true; // unclear situations count as not allowed
   bool ignoreDynamic = false; // building: beetles and vines are placed later
+  int _hearts = 0;
+
+  /// Mechanic on cell [c], ignoring smashed ones.
+  int mechAt(St st, int c) {
+    final mi = r.cellMech[c];
+    return mi >= 0 && st.gone.contains(mi) ? -1 : mi;
+  }
 
   void _initStatic() {
     for (final m in lv.mechs) {
@@ -348,7 +376,7 @@ class Sim {
     var c = startCell, d = dir;
     final seen = <int>{};
     var jump = false;
-    final beetles = ignoreDynamic ? const <int>[] : r.of('M025');
+    final beetles = ignoreDynamic ? const <int>[] : [for (final b in r.of('M025')) if (!st.gone.contains(b)) b];
     final vines = ignoreDynamic ? const <int>[] : r.of('M027');
     for (var guard = 0; guard < 400; guard++) {
       final n = lv.step(c, d);
@@ -389,7 +417,7 @@ class Sim {
           }
         }
         // a jumped cell holding something the lane would react to is unclear
-        final jm = r.cellMech[n];
+        final jm = mechAt(st, n);
         if (jm >= 0 && const {'M026', 'M036', 'M037', 'M008', 'M044', 'M014', 'M018', 'M020', 'M038'}
             .contains(lv.mechs[jm].type)) {
           t.kind = 3;
@@ -402,7 +430,7 @@ class Sim {
       // snakes
       final ob = o[n];
       if (ob >= 0) {
-        final bm = r.cellMech[n];
+        final bm = mechAt(st, n);
         final isBridge = bm >= 0 &&
             (lv.mechs[bm].type == 'M015' || (lv.mechs[bm].type == 'M042' && st.ms[bm] == 0));
         if (isBridge && (d % 2 == 0) == (lv.mechs[bm].axis == 0)) {
@@ -461,7 +489,7 @@ class Sim {
           return t;
         }
       }
-      final mi = r.cellMech[n];
+      final mi = mechAt(st, n);
       if (mi < 0) {
         c = n;
         continue;
@@ -534,6 +562,8 @@ class Sim {
         case 'M020':
           t.kind = 0;
           t.viaBurrowHome = true;
+          t.endCell = n;
+          t.endDir = d;
           return t;
         case 'M026' || 'M036':
           break;
@@ -575,20 +605,21 @@ class Sim {
 
   int anyBodyLayer(St st, int c, int layer) => occ(st, layer)[c];
 
-  /// Lane start and direction for a snake tap.
-  (int, int) laneStart(St st, int s) {
+  /// Lane start and direction for a snake tap. [tail] picks the far head of
+  /// a Two-Headed Hydra.
+  (int, int) laneStart(St st, int s, {bool tail = false}) {
     final sn = lv.snakes[s];
     final b = st.bodies[s];
-    if (sn.reverse) {
-      final tail = b.last, prev = b[b.length - 2];
-      return (tail, lv.dirFromTo(prev, tail));
+    if (sn.reverse || tail) {
+      final end = b.last, prev = b[b.length - 2];
+      return (end, lv.dirFromTo(prev, end));
     }
     return (b.first, st.dirs[s]);
   }
 
-  Trace laneOf(St st, int s) {
+  Trace laneOf(St st, int s, {bool tail = false}) {
     final sn = lv.snakes[s];
-    final (c, d) = laneStart(st, s);
+    final (c, d) = laneStart(st, s, tail: tail);
     if (sn.wideSide < 0) return trace(st, s, c, d);
     // wide snake: spine lane and side lane, both straight
     final t1 = trace(st, s, c, d);
@@ -598,9 +629,12 @@ class Sim {
     t.lane = [...t1.lane, ...t2.lane];
     t.used = {...t1.used, ...t2.used};
     t.kind = t1.kind != 0 ? t1.kind : t2.kind;
+    t.blocker = t1.kind != 0 ? t1.blocker : t2.blocker;
+    t.endCell = t1.endCell;
+    t.endDir = t1.endDir;
     // the side lane must not hit the spine body and vice versa (own body)
     for (final x in [...t1.lane, ...t2.lane]) {
-      final m = r.cellMech[x];
+      final m = mechAt(st, x);
       if (m >= 0 && const {'M008', 'M014', 'M018', 'M037', 'M038', 'M044', 'M020'}
           .contains(lv.mechs[m].type)) {
         t.kind = 3;
@@ -611,35 +645,39 @@ class Sim {
 
   // ---- locks -------------------------------------------------------------
 
-  bool locked(St st, int s) {
-    if (st.status[s] != 1) return true;
+  bool locked(St st, int s) => lockReason(st, s) != null;
+
+  /// Mechanic type that keeps snake [s] from moving right now, or null.
+  /// 'gone' means the snake is not on the board.
+  String? lockReason(St st, int s) {
+    if (st.status[s] != 1) return 'gone';
     for (var i = 0; i < lv.mechs.length; i++) {
       final m = lv.mechs[i];
       switch (m.type) {
         case 'M003':
-          if (m.path == s && st.ms[i] > 0) return true;
+          if (m.path == s && st.ms[i] > 0) return 'M003';
         case 'M010':
-          if (st.ms[i] == 0 && m.hidden.contains(s)) return true;
+          if (st.ms[i] == 0 && m.hidden.contains(s)) return 'M010';
         case 'M028':
           final idx = st.ms[i];
-          if (m.order.contains(s) && (idx >= m.order.length || m.order[idx] != s)) return true;
+          if (m.order.contains(s) && (idx >= m.order.length || m.order[idx] != s)) return 'M028';
         case 'M033':
-          if (m.path == s && st.ms[i] == 0) return true;
+          if (m.path == s && st.ms[i] == 0) return 'M033';
         case 'M046':
-          if (m.path == s && st.ms[i] == 0) return true;
+          if (m.path == s && st.ms[i] == 0) return 'M046';
       }
     }
-    if (isGhost(st, s)) return true;
+    if (isGhost(st, s)) return 'M021';
     final sn = lv.snakes[s];
     if (sn.layer == 0 && lv.layers > 1) {
       final o1 = occ(st, 1);
-      if (st.bodies[s].any((c) => o1[c] >= 0)) return true;
+      if (st.bodies[s].any((c) => o1[c] >= 0)) return 'M032';
     }
     if (r.lilyOf.containsKey(s)) {
       final b = st.bodies[s];
-      if (lv.step(b[0], st.dirs[s]) == b[1]) return true;
+      if (lv.step(b[0], st.dirs[s]) == b[1]) return 'M013';
     }
-    return false;
+    return null;
   }
 
   // ---- actions -------------------------------------------------------------
@@ -674,15 +712,19 @@ class Sim {
     for (var i = 0; i < lv.mechs.length; i++) lv.mechs[i].id: i
   };
 
+  int snakeIndex(String id) => _snakeById[id] ?? -1;
+  int mechIndex(String id) => _mechById[id] ?? -1;
+
   Outcome apply(St st0, String a) {
     final si = _snakeById[a];
-    if (si != null) return _tapSnake(st0, si);
+    if (si != null) return tapSnake(st0, si);
     final mi = _mechById[a];
-    if (mi != null) return _tapMech(st0, mi);
+    if (mi != null) return tapMech(st0, mi);
     return Outcome(null, -1, 'unknown $a');
   }
 
-  Outcome _tapMech(St st0, int mi) {
+  /// Taps an interactive cell (lever, lilypad, switch, stump, gear).
+  Outcome tapMech(St st0, int mi) {
     final m = lv.mechs[mi];
     final st = st0.copy();
     final used = <int>{mi};
@@ -691,19 +733,23 @@ class Sim {
         st.ms[mi] ^= (1 << m.gates.length) - 1;
         // a gate closing on a body is not described
         for (var g = 0; g < m.gates.length; g++) {
-          if (anyBody(st, m.gates[g]) >= 0) return Outcome(null, -1, 'gate on body');
+          if (anyBody(st, m.gates[g]) >= 0) return Outcome(null, -1, 'gate on body', Fail.locked);
         }
       case 'M013':
-        if (m.gearLinked || st.status[m.path] != 1) return Outcome(null, -1, 'locked');
+        if (m.gearLinked || st.status[m.path] != 1) {
+          return Outcome(null, -1, 'locked', Fail.locked);
+        }
         st.dirs = List.of(st.dirs);
         st.dirs[m.path] = cw(st.dirs[m.path]);
         final b = st.bodies[m.path];
-        if (lv.step(b[0], st.dirs[m.path]) == b[1]) return Outcome(null, -1, 'tangled');
+        if (!play && lv.step(b[0], st.dirs[m.path]) == b[1]) {
+          return Outcome(null, -1, 'tangled', Fail.locked);
+        }
       case 'M018':
         st.ms[mi] ^= 1;
       case 'M034':
         final res = _rotateStump(st, m);
-        if (!res) return Outcome(null, -1, 'stump locked');
+        if (!res) return Outcome(null, -1, 'stump locked', Fail.locked);
       case 'M045':
         st.dirs = List.of(st.dirs);
         for (final t in m.turntables) {
@@ -711,17 +757,21 @@ class Sim {
           if (st.status[p] != 1) continue;
           st.dirs[p] = cw(st.dirs[p]);
           final b = st.bodies[p];
-          if (lv.step(b[0], st.dirs[p]) == b[1]) return Outcome(null, -1, 'tangled');
+          if (!play && lv.step(b[0], st.dirs[p]) == b[1]) {
+            return Outcome(null, -1, 'tangled', Fail.locked);
+          }
           used.add(t);
         }
       default:
-        return Outcome(null, -1, 'not interactive');
+        return Outcome(null, -1, 'not interactive', Fail.notInteractive);
     }
     st._occ0 = null;
     st._occ1 = null;
     final ok = _endMove(st, used);
-    if (!ok) return Outcome(null, -1, 'tick violation');
-    return Outcome(st, 1)..used = used;
+    if (!ok) return Outcome(null, -1, 'tick violation', Fail.unclear);
+    return Outcome(st, 1)
+      ..used = used
+      ..heartEvents = _hearts;
   }
 
   bool _rotateStump(St st, Mech m) {
@@ -745,32 +795,42 @@ class Sim {
     return any;
   }
 
-  Outcome _tapSnake(St st0, int s) {
-    if (locked(st0, s)) return Outcome(null, -1, 'locked');
+  /// Taps snake [s]. [tail] sends a Two-Headed Hydra out of its far end.
+  Outcome tapSnake(St st0, int s, {bool tail = false}) {
+    if (locked(st0, s)) return Outcome(null, -1, 'locked', Fail.locked);
     // sleepy python: first tap wakes it
     final sl = r.sleepyOf[s];
     if (sl != null && st0.ms[sl] == 0) {
       final st = st0.copy();
       st.ms[sl] = 1;
-      if (!_endMove(st, {sl})) return Outcome(null, -1, 'tick');
-      return Outcome(st, 1)..used = {sl};
+      if (!_endMove(st, {sl})) return Outcome(null, -1, 'tick', Fail.unclear);
+      return Outcome(st, 1)
+        ..used = {sl}
+        ..heartEvents = _hearts;
     }
     final g = r.groupOf[s];
     final members = g == null
         ? [s]
         : [for (final p in lv.mechs[g].paths) if (st0.status[p] == 1) p];
     for (final p in members) {
-      if (locked(st0, p)) return Outcome(null, -1, 'locked member');
-      if (p != s && r.sleepyOf[p] != null) return Outcome(null, -1, 'unclear');
+      if (locked(st0, p)) return Outcome(null, -1, 'locked member', Fail.locked);
+      if (p != s && r.sleepyOf[p] != null) {
+        return Outcome(null, -1, 'unclear', play ? Fail.locked : Fail.unclear);
+      }
     }
     final traces = <int, Trace>{};
+    Outcome failed(String note, Fail why) => Outcome(null, -1, note, why)..traces = traces;
     for (final p in members) {
-      final t = laneOf(st0, p);
-      if (t.kind == 2 && members.length == 1) {
-        return _mud(st0, p, t);
-      }
-      if (t.kind != 0) return Outcome(null, -1, 'blocked ${t.kind}');
+      final t = laneOf(st0, p, tail: tail && p == s && lv.snakes[s].hydra);
       traces[p] = t;
+      if (t.kind == 2 && members.length == 1) {
+        final mud = _mud(st0, p, t);
+        if (mud.kind >= 0 || !play) return mud..traces = traces;
+        return failed(mud.note, Fail.blocked);
+      }
+      if (t.kind != 0) {
+        return failed('blocked ${t.kind}', t.kind == 3 && !play ? Fail.unclear : Fail.blocked);
+      }
     }
     // hungry: needs food on the lane
     final st = st0.copy();
@@ -787,18 +847,20 @@ class Sim {
             break;
           }
         }
-        if (ate < 0) return Outcome(null, -1, 'no food');
+        if (ate < 0) return failed('no food', Fail.noFood);
         st.ms[hi] |= 1 << ate;
         used.add(hi);
       }
     }
     // twig bridge crossed while a body lies on it: not described
-    for (final p in members) {
-      for (final c in traces[p]!.lane) {
-        final bm = r.cellMech[c];
-        if (bm >= 0 && lv.mechs[bm].type == 'M042' && st.ms[bm] == 0 && anyBody(st0, c) >= 0 &&
-            anyBody(st0, c) != p) {
-          return Outcome(null, -1, 'unclear twig');
+    if (!play) {
+      for (final p in members) {
+        for (final c in traces[p]!.lane) {
+          final bm = mechAt(st0, c);
+          if (bm >= 0 && lv.mechs[bm].type == 'M042' && st.ms[bm] == 0 && anyBody(st0, c) >= 0 &&
+              anyBody(st0, c) != p) {
+            return failed('unclear twig', Fail.unclear);
+          }
         }
       }
     }
@@ -807,22 +869,36 @@ class Sim {
       used.addAll(traces[p]!.used);
       _exitTriggers(st0, st, p, traces[p]!, moundHits, used);
     }
-    if (moundHits.values.any((v) => v > 1)) return Outcome(null, -1, 'unclear mound');
+    if (!play && moundHits.values.any((v) => v > 1)) return failed('unclear mound', Fail.unclear);
     st._occ0 = null;
     st._occ1 = null;
-    if (!_endMove(st, used)) return Outcome(null, -1, 'tick violation');
-    return Outcome(st, 0)..used = used;
+    if (!_endMove(st, used)) return failed('tick violation', Fail.unclear);
+    return Outcome(st, 0)
+      ..used = used
+      ..traces = traces
+      ..heartEvents = _hearts;
+  }
+
+  /// A bump: nothing moves, but it is a Move, so counters tick.
+  Outcome bump(St st0) {
+    final st = st0.copy();
+    _endMove(st, {});
+    return Outcome(st, 1)..heartEvents = _hearts;
   }
 
   Outcome _mud(St st0, int s, Trace t) {
     final sn = lv.snakes[s];
-    if (sn.reverse || sn.hydra || sn.wideSide >= 0) return Outcome(null, -1, 'unclear mud');
+    if (sn.reverse || sn.hydra || sn.wideSide >= 0) {
+      return Outcome(null, -1, 'unclear mud', Fail.unclear);
+    }
     // relocation lane must be a plain straight run
     for (final c in t.lane) {
-      final m = r.cellMech[c];
-      if (m >= 0 && lv.mechs[m].type != 'M037') return Outcome(null, -1, 'unclear mud');
+      final m = mechAt(st0, c);
+      if (m >= 0 && lv.mechs[m].type != 'M037') {
+        return Outcome(null, -1, 'unclear mud', Fail.unclear);
+      }
     }
-    if (t.jumped.isNotEmpty) return Outcome(null, -1, 'unclear mud');
+    if (t.jumped.isNotEmpty) return Outcome(null, -1, 'unclear mud', Fail.unclear);
     final old = st0.bodies[s];
     final path = [...t.lane.reversed, ...old];
     final nb = path.sublist(0, old.length);
@@ -833,11 +909,16 @@ class Sim {
     st._occ0 = null;
     st._occ1 = null;
     final used = {r.cellMech[t.mud]};
-    if (!_endMove(st, used)) return Outcome(null, -1, 'tick');
-    return Outcome(st, 1)..used = used;
+    if (!_endMove(st, used)) return Outcome(null, -1, 'tick', Fail.unclear);
+    return Outcome(st, 1)
+      ..used = used
+      ..heartEvents = _hearts;
   }
 
-  void _exitTriggers(St before, St st, int s, Trace t, Map<int, int> moundHits, Set<int> used) {
+  /// [lane] = false for a Hammer smash: the snake counts as gone for keys,
+  /// counts and HP, but its lane never ran (no gems, mounds or bridges).
+  void _exitTriggers(St before, St st, int s, Trace t, Map<int, int> moundHits, Set<int> used,
+      {bool lane = true}) {
     st.status = st.status; // copied already
     st.status[s] = 2;
     final laneSet = t.lane.toSet();
@@ -876,7 +957,7 @@ class Sim {
             used.add(i);
           }
         case 'M016':
-          if (st.ms[i] > 0) {
+          if (lane && st.ms[i] > 0) {
             final c = m.cells.first;
             if (laneSet.any((x) => lv.adj(x, c))) {
               st.ms[i]--;
@@ -885,6 +966,7 @@ class Sim {
             }
           }
         case 'M026':
+          if (!lane) break;
           for (var gi = 0; gi < m.cells.length; gi++) {
             if (laneSet.contains(m.cells[gi])) {
               st.ms[i] |= 1 << gi;
@@ -897,7 +979,8 @@ class Sim {
             used.add(i);
           }
         case 'M042':
-          if (st.ms[i] == 0 &&
+          if (lane &&
+              st.ms[i] == 0 &&
               (laneSet.contains(m.cells.first) || before.bodies[s].contains(m.cells.first))) {
             st.ms[i] = 1;
             used.add(i);
@@ -913,8 +996,10 @@ class Sim {
   }
 
   /// moveCount++, ticks in the fixed order, derived states. False = a
-  /// heart-loss event (restless timeout) or an unclear situation.
+  /// heart-loss event (restless timeout) or an unclear situation. In play
+  /// mode a timeout is counted in [_hearts] and the counter starts again.
   bool _endMove(St st, Set<int> used) {
+    _hearts = 0;
     st.moves++;
     st._occ0 = null;
     st._occ1 = null;
@@ -925,13 +1010,19 @@ class Sim {
       final p = lv.mechs[i].path;
       if (st.status[p] == 1) {
         st.ms[i]--;
-        if (st.ms[i] <= 0) return false;
+        if (st.ms[i] <= 0) {
+          if (!play) return false;
+          st.ms[i] = lv.mechs[i].n;
+          _hearts++;
+          used.add(i);
+        }
       }
     }
     for (final i in r.of('M031')) {
       if (st.ms[i] > 0) st.ms[i]--;
     }
     for (final i in r.of('M025')) {
+      if (st.gone.contains(i)) continue;
       final m = lv.mechs[i];
       final nx = (st.ms[i] + 1) % m.cells.length;
       if (anyBody(st, m.cells[nx]) < 0) st.ms[i] = nx;
@@ -957,13 +1048,14 @@ class Sim {
           final t = lv.step(b.last, d);
           if (t >= 0) {
             final free = anyBody(st, t) < 0 &&
-                r.cellMech[t] < 0 &&
+                mechAt(st, t) < 0 &&
                 r.gateOf[t] < 0 &&
                 r.plateGateOf[t] < 0 &&
                 !_dynamicAt(st, t);
-            if (!free && anyBody(st, t) < 0) return false; // grows onto a mechanic cell: unclear
-            if (free) {
-              if (b.length >= 8) return false; // longer than 8: unclear
+            // grows onto a mechanic cell, or past 8 cells: not described
+            if (!free && anyBody(st, t) < 0 && !play) return false;
+            if (free && b.length >= 8 && !play) return false;
+            if (free && b.length < 8) {
               st.bodies = List.of(st.bodies);
               st.bodies[p] = [...b, t];
               st._occ0 = null;
@@ -974,7 +1066,12 @@ class Sim {
         }
       }
     }
-    // derived
+    _derived(st, used);
+    return true;
+  }
+
+  /// Cages that open and nests that hatch once the board allows it.
+  void _derived(St st, Set<int> used) {
     for (final i in r.of('M033')) {
       if (st.ms[i] == 1) continue;
       final m = lv.mechs[i];
@@ -999,11 +1096,82 @@ class Sim {
         st._occ1 = null;
       }
     }
+  }
+
+  // ---- Magic Stone Hammer ----------------------------------------------------
+
+  bool _gemsLeft(St st) {
+    for (final i in r.of('M026')) {
+      if (st.ms[i] != (1 << lv.mechs[i].cells.length) - 1) return true;
+    }
+    return false;
+  }
+
+  /// Visible, solid snakes can be smashed, except a closed Tail-Biter Loop
+  /// and the last snake while gems are still on the board.
+  bool canHammerSnake(St st, int s) {
+    if (st.status[s] != 1 || isGhost(st, s)) return false;
+    for (var i = 0; i < lv.mechs.length; i++) {
+      final m = lv.mechs[i];
+      if (m.type == 'M010' && st.ms[i] == 0 && m.hidden.contains(s)) return false;
+      if (m.type == 'M046' && m.path == s && st.ms[i] == 0) return false;
+    }
+    if (_gemsLeft(st) && st.status.where((x) => x != 2).length <= 1) return false;
     return true;
+  }
+
+  /// Hammerable obstacles: rocks, logs, mounds, beetles, vine cells and a
+  /// snapped twig bridge. Guardians, hedges, gates and locks never are.
+  bool canHammerMech(St st, int mi, {int cell = -1}) {
+    if (st.gone.contains(mi)) return false;
+    final m = lv.mechs[mi];
+    return switch (m.type) {
+      'M001' || 'M002' || 'M025' => true,
+      'M016' => st.ms[mi] > 0,
+      'M042' => st.ms[mi] == 1,
+      'M027' => st.mlist[mi].contains(cell),
+      _ => false,
+    };
+  }
+
+  /// Smashing a snake counts as its exit for keys, counts, HP and order.
+  /// Not a Move, so nothing ticks.
+  Outcome hammerSnake(St st0, int s) {
+    if (!canHammerSnake(st0, s)) return Outcome(null, -1, 'not hammerable', Fail.locked);
+    final st = st0.copy();
+    final used = <int>{};
+    _exitTriggers(st0, st, s, Trace(), {}, used, lane: false);
+    st._occ0 = null;
+    st._occ1 = null;
+    _derived(st, used);
+    return Outcome(st, 0)..used = used;
+  }
+
+  Outcome hammerMech(St st0, int mi, {int cell = -1}) {
+    if (!canHammerMech(st0, mi, cell: cell)) {
+      return Outcome(null, -1, 'not hammerable', Fail.locked);
+    }
+    final st = st0.copy();
+    final m = lv.mechs[mi];
+    switch (m.type) {
+      case 'M016':
+        st.ms[mi] = 0;
+      case 'M027':
+        st.mlist = List.of(st.mlist);
+        st.mlist[mi] = [for (final c in st.mlist[mi]) if (c != cell) c];
+      default:
+        st.gone = [...st.gone, mi];
+    }
+    st._occ0 = null;
+    st._occ1 = null;
+    final used = <int>{mi};
+    _derived(st, used);
+    return Outcome(st, 1)..used = used;
   }
 
   bool _dynamicAt(St st, int c) {
     for (final b in r.of('M025')) {
+      if (st.gone.contains(b)) continue;
       if (beetleCell(st, b) == c) return true;
     }
     for (final v in r.of('M027')) {
@@ -1021,7 +1189,7 @@ class Sim {
         if (n < 0) continue;
         if (anyBody(st, n) >= 0) continue;
         if (_dynamicAt(st, n)) continue;
-        if (r.cellMech[n] >= 0 || r.gateOf[n] >= 0 || r.plateGateOf[n] >= 0) {
+        if (mechAt(st, n) >= 0 || r.gateOf[n] >= 0 || r.plateGateOf[n] >= 0) {
           continue; // obstacle or gem: not free
         }
         st.mlist = List.of(st.mlist);
@@ -1050,13 +1218,14 @@ class Sim {
     sb.write('|');
     sb.writeAll(st.ms2, ',');
     for (final i in r.of('M027')) {
-      sb.write('|${st.mlist[i].length}');
+      sb.write('|${st.mlist[i].join('.')}');
     }
     for (var s = 0; s < lv.snakes.length; s++) {
       if (!identical(st.bodies[s], lv.snakes[s].body)) sb.write('|$s:${st.bodies[s].join('.')}');
       if (st.dirs[s] != lv.snakes[s].dir) sb.write('|d$s:${st.dirs[s]}');
     }
     if (r.timeKey) sb.write('|t${st.moves % 6}');
+    if (st.gone.isNotEmpty) sb.write('|g${st.gone.join('.')}');
     return sb.toString();
   }
 

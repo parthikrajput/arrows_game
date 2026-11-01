@@ -174,11 +174,15 @@ class AppMotion {
 
 /// Fredoka for headlines and numbers, Nunito for body text. Both are bundled
 /// variable fonts, so weight goes through a font variation as well.
+/// Gujarati and Devanagari glyphs come from the bundled Baloo fonts.
+const indicFallback = ['BalooBhai2', 'Baloo2'];
+
 class AppText {
   const AppText._();
   static TextStyle fredoka(double size, {double weight = 600, Color color = AppColors.text, double? height}) =>
       TextStyle(
         fontFamily: 'Fredoka',
+        fontFamilyFallback: indicFallback,
         fontSize: size,
         fontWeight: _w(weight),
         fontVariations: [FontVariation.weight(weight)],
@@ -195,6 +199,7 @@ class AppText {
     double? spacing,
   }) => TextStyle(
     fontFamily: 'Nunito',
+    fontFamilyFallback: indicFallback,
     fontSize: size,
     fontWeight: _w(weight),
     fontVariations: [FontVariation.weight(weight)],

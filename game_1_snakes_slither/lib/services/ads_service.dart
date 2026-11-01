@@ -1,7 +1,18 @@
-/// Ad network. Milestone 1–2 use a fake that always succeeds, so revive, 2X,
-/// free coins and the wheel can be tested; AdMob replaces it later behind the
-/// same interface. Callers go through AdsCubit, which applies the rules.
+import 'package:flutter/widgets.dart';
+
+/// Ad network. AdMobService on phones; the fake (always succeeds) in tests and
+/// on platforms without ads. Callers go through AdsCubit, which applies the rules.
 abstract class AdsService {
+  /// Loads consent and the ad SDK. Children get child-directed, G-rated,
+  /// non-personalised ads.
+  Future<void> start({required bool childDirected}) async {}
+
+  /// Settings › Privacy choices (UMP privacy options form).
+  Future<void> showPrivacyOptions() async {}
+
+  /// Anchored adaptive banner; empty where ads don't exist.
+  Widget banner() => const SizedBox.shrink();
+
   bool get rewardedReady;
   bool get interstitialReady;
 
@@ -12,7 +23,7 @@ abstract class AdsService {
   Future<bool> showInterstitial();
 }
 
-class FakeAdsService implements AdsService {
+class FakeAdsService extends AdsService {
   @override
   bool get rewardedReady => true;
 

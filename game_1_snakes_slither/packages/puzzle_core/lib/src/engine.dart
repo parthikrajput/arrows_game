@@ -2,18 +2,44 @@ import 'model.dart';
 
 /// Result of tracing a snake's exit lane (used by moves and the free preview).
 class LaneTrace {
-  const LaneTrace({required this.cells, required this.blocker});
+  const LaneTrace({
+    required this.cells,
+    required this.blocker,
+    this.exitDir,
+    this.fromTail = false,
+    this.unknown = false,
+  });
 
-  /// Empty cells the head can travel through, in order, up to the blocker or edge.
+  /// Cells the lane travels through, in order, up to the blocker or edge.
+  /// Mirrors, switches and burrows bend or jump it, so it need not be straight.
   final List<Cell> cells;
 
-  /// First blocking cell, or null when the lane is clear to the edge.
+  /// First blocking cell (may sit just off the board for a hedge), or null
+  /// when the lane is clear.
   final Cell? blocker;
 
-  bool get isClear => blocker == null;
+  /// Direction the lane leaves in after its last cell (null = snake dir).
+  final Dir? exitDir;
+
+  /// The lane starts at the tail (Reverse Slither, far head of a Hydra).
+  final bool fromTail;
+
+  /// Lane runs into Jungle Mist: the preview ends in a grey "?".
+  final bool unknown;
+
+  bool get isClear => blocker == null && !unknown;
 }
 
-enum MoveKind { exit, bump, locked }
+/// exit = left the board; bump = blocked (costs a heart); locked = no Move;
+/// action = any other Move (lever, lilypad, wake-up, mud stop).
+enum MoveKind { exit, bump, locked, action }
+
+/// One snake moving in a Move, with the lane it follows.
+class SnakeLane {
+  const SnakeLane(this.snake, this.lane);
+  final Snake snake;
+  final LaneTrace lane;
+}
 
 /// Pure description of what one tap did. The app animates from this.
 class MoveResult {
@@ -22,18 +48,35 @@ class MoveResult {
     required this.snakeId,
     required this.next,
     required this.lane,
+    this.obstacleId,
+    this.parts = const [],
+    this.lockReason,
+    this.heartEvents = 0,
   });
 
   final MoveKind kind;
+
+  /// Snake tapped, or -1 for an obstacle tap.
   final int snakeId;
+  final int? obstacleId;
   final BoardState next;
   final LaneTrace lane;
+
+  /// Every snake that moved together (Twins, Pond Twins, Parade), the tapped
+  /// one first. Empty for single-snake engines.
+  final List<SnakeLane> parts;
+
+  /// Mechanic type behind a locked tap.
+  final String? lockReason;
+
+  /// Heart-loss events: the bump itself plus any counter that ran out.
+  final int heartEvents;
 
   /// Counts toward the Move counter (locked taps do not).
   bool get countsAsMove => kind != MoveKind.locked;
 
   /// A bump costs a heart (or a Shield charge).
-  bool get causesHeartLoss => kind == MoveKind.bump;
+  bool get causesHeartLoss => kind == MoveKind.bump || heartEvents > 0;
 }
 
 /// Deterministic rules: same state + same tap = same result.

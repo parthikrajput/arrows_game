@@ -23,7 +23,7 @@ class FakeClock implements Clock {
   void advance(Duration d) => t = t.add(d);
 }
 
-class CountingAds implements AdsService {
+class CountingAds extends AdsService {
   bool ready = true;
   bool reward = true;
   int interstitials = 0;
@@ -180,11 +180,14 @@ void main() {
     ShopCubit shop() => ShopCubit(store, time, wallet, progress, ads);
 
     test('locked boosters cannot be bought before their unlock level', () {
-      // Debug builds unlock all boosters for testing, so check the real rule directly.
       final s = shop();
+      expect(s.buyBooster(Booster.hint, pack: false), BuyResult.locked);
+      for (var n = 1; n <= 3; n++) {
+        progress.levelWon(n, 3);
+      }
       expect(s.buyBooster(Booster.hint, pack: false), BuyResult.ok);
       expect(wallet.state.coins, 200 - 60);
-      expect(s.buyBooster(Booster.hammer, pack: true), BuyResult.notEnoughCoins);
+      expect(s.buyBooster(Booster.hammer, pack: true), BuyResult.locked, reason: "Hammer unlocks at L25");
     });
 
     test('free coins: +50, 5 per day, resets next day, skipped ad pays nothing', () async {

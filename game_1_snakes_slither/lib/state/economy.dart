@@ -27,5 +27,5 @@ class Economy {
   /// could never be tried. Debug builds unlock everything for testing.
   static bool get unlockAllBoosters => kDebugMode;
 
-  static bool isUnlocked(Booster b, int level) => unlockAllBoosters || level >= unlockLevel[b]!;
+  static bool isUnlocked(Booster b, int level) => level >= unlockLevel[b]!;
 }

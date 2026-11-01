@@ -27,6 +27,9 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Release builds pass -PadmobAppId=…; the default is Google's test app id.
+        manifestPlaceholders["admobAppId"] =
+            (project.findProperty("admobAppId") as String?) ?: "ca-app-pub-3940256099942544~3347511713"
     }
 
     buildTypes {
@@ -46,4 +49,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

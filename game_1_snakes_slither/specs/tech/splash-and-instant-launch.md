@@ -146,6 +146,10 @@ All items initialized with status **"Not run"**:
 ## Open Questions
 - None. Launch architecture, Android Kotlin integration, and "Jungle Dawn" timeline are defined in SPLASH_AND_INSTANT_LAUNCH.md.
 
+## Implementation Notes
+- 2026-11-01: Done: GameApp.kt starts the engine and Dart in Application.onCreate with tier and start time args; MainActivity installs the SplashScreen API splash (splash_bg #12301F, splash_mark), holds it until Flutter's first frame (4 s cap), reportFullyDrawn, SplashExit 120 ms fade with blur on API 31+; Flutter "Jungle Dawn" intro (lib/ui/intro/jungle_dawn.dart): full / short / fade modes, tap catcher letting Play through, Back and other taps skip in ≤120 ms, jank guard (W-PERF-005), cold-start TTID check (W-PERF-004), system bar style switch.
+- Verified: flutter build apk --debug succeeds. Pending: the AVD eyelid/tongue/hat morph uses a static mark; device QA SPL-01…24.
+
 ## Change Request History
 
 - 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

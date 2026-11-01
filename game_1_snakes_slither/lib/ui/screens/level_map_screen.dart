@@ -155,6 +155,23 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
               ),
             ),
           ),
+          Positioned(
+            right: 16,
+            bottom: 196,
+            child: SafeArea(
+              child: RoundButton(
+                key: AppKeys.mapJumpToCurrent,
+                size: 48,
+                label: 'Jump to current level',
+                // Straight jump: animating across hundreds of nodes would drop frames.
+                onTap: () {
+                  setState(() => _selected = null);
+                  _scroll.jumpTo(math.max(0, (_currentIndex - 2) * _rowH));
+                },
+                child: const LineIconView(LineIcon.map, size: 22),
+              ),
+            ),
+          ),
           if (focus != null)
             Positioned(
               left: 0,
@@ -231,6 +248,20 @@ class _MapRow extends StatelessWidget {
               left: cx - 14,
               top: _rowH / 2 - r - 40,
               child: const Bob(period: Duration(milliseconds: 1400), distance: 8, child: _Pin()),
+            ),
+          if (node.isIntro && node.state != NodeState.cleared)
+            Positioned(
+              left: cx - 22,
+              top: _rowH / 2 + r - 6,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2E7D32),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: Text('NEW!', style: AppText.nunito(10, color: Colors.white, spacing: .4)),
+              ),
             ),
           if (node.number % 10 == 0 && node.state != NodeState.cleared)
             Positioned(

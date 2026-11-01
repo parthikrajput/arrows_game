@@ -245,9 +245,15 @@ class AudioService implements UiFeedback {
       case GameCue.hammerHit:
         await play(Sfx.boosterHammer);
         await _haptics.heavyImpact();
-      case GameCue.hintNoSolution || GameCue.notEnoughCoins:
+      case GameCue.hintNoSolution || GameCue.notEnoughCoins || GameCue.hammerBlocked:
         await play(Sfx.lockedTap);
         await _haptics.selectionClick();
+      case GameCue.action:
+        await play(Sfx.pathTap);
+        await _haptics.selectionClick();
+      case GameCue.heartTimer:
+        await play(Sfx.heartLost);
+        await _haptics.heavyImpact();
     }
   }
 

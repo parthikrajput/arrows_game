@@ -25,7 +25,9 @@ const _flower =
 const _shell =
     '<svg viewBox="0 0 24 24"><path d="M12 21 L3 9.5 C 3 3.5 21 3.5 21 9.5 Z" fill="#FFB98A" stroke="#B4441E" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 21 V5 M12 21 L8 5.6 M12 21 L16 5.6 M12 21 L5 7.5 M12 21 L19 7.5" stroke="#C8532A" stroke-width="0.9" fill="none"/></svg>';
 
-enum Art { coin, star, starEmpty, heart, heartEmpty, gift, flower, shell, hint, shield, hammer }
+const _tortoise = '<svg viewBox="0 0 64 64"> <defs> <radialGradient id="ttShell" cx="0.45" cy="0.3" r="0.8"><stop offset="0" stop-color="#C9A27E"></stop><stop offset="0.6" stop-color="#8D6E50"></stop><stop offset="1" stop-color="#5D4037"></stop></radialGradient> <radialGradient id="ttSkin" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#E6F4C8"></stop><stop offset="0.6" stop-color="#A9CF7A"></stop><stop offset="1" stop-color="#6E9A45"></stop></radialGradient>  </defs> <ellipse cx="35" cy="57" rx="25" ry="3.4" fill="#1B2B1F" opacity="0.3"></ellipse> <ellipse cx="20" cy="53" rx="5.4" ry="3.6" fill="url(#ttSkin)" stroke="#4E7A2C" stroke-width="1.2"></ellipse> <ellipse cx="50" cy="53" rx="5.4" ry="3.6" fill="url(#ttSkin)" stroke="#4E7A2C" stroke-width="1.2"></ellipse> <path d="M15 47 Q 16 17 39 17 Q 61 17 61 47 Z" fill="url(#ttShell)" stroke="#4A2F1E" stroke-width="1.6" stroke-linejoin="round"></path> <path d="M29 21 L25 33 L31 43 M39 18 V31 M49 21 L53 33 L47 43 M25 33 H53 M31 43 H47 M31 31 L39 31 L47 31" fill="none" stroke="#4A2F1E" stroke-width="1.3" stroke-linejoin="round" opacity="0.7"></path> <path d="M27 22 Q 36 17 46 21" fill="none" stroke="#F1DCC2" stroke-width="2" stroke-linecap="round" opacity="0.6"></path> <rect x="13" y="44" width="50" height="6" rx="3" fill="#E7D5BE" stroke="#4A2F1E" stroke-width="1.2"></rect> <circle cx="13" cy="33" r="10" fill="url(#ttSkin)" stroke="#4E7A2C" stroke-width="1.4"></circle> <path d="M5 27 Q 9 24 14 25" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round" opacity="0.7"></path> <circle cx="9.3" cy="31" r="3.4" fill="#E3F2FD" fill-opacity="0.75" stroke="#3E2723" stroke-width="1.1"></circle> <circle cx="17" cy="31" r="3.4" fill="#E3F2FD" fill-opacity="0.75" stroke="#3E2723" stroke-width="1.1"></circle> <path d="M12.7 31 H13.6" stroke="#3E2723" stroke-width="1.1"></path> <circle cx="9.7" cy="31.5" r="1.1" fill="#1B2B1F"></circle><circle cx="17.4" cy="31.5" r="1.1" fill="#1B2B1F"></circle> <path d="M6.5 27.5 Q 9.3 26.3 12 27.3 M14.5 27.3 Q 17.2 26.3 19.8 27.5" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round"></path> <path d="M9.5 38 Q 13 40.5 16.5 38" fill="none" stroke="#1B2B1F" stroke-width="1.3" stroke-linecap="round"></path> </svg>';
+
+enum Art { coin, star, starEmpty, heart, heartEmpty, gift, flower, shell, hint, shield, hammer, tortoise }
 
 class ArtIcon extends StatelessWidget {
   const ArtIcon(this.art, {super.key, this.size = 24, this.dim = false});
@@ -53,6 +55,7 @@ class ArtIcon extends StatelessWidget {
       Art.hint => kHintSvg,
       Art.shield => kShieldSvg,
       Art.hammer => kHammerSvg,
+      Art.tortoise => _tortoise,
     };
     Widget pic = SvgPicture.string(src, width: size, height: size);
     if (dim) {

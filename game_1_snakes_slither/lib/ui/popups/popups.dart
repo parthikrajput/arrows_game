@@ -76,7 +76,11 @@ class PausePopup extends StatelessWidget {
     required this.onMap,
     required this.onHome,
     required this.onToggle,
+    this.level,
+    this.moves,
   });
+  final int? level;
+  final int? moves;
   final SettingsData settings;
   final VoidCallback onResume;
 
@@ -106,6 +110,7 @@ class PausePopup extends StatelessWidget {
     return _Announce(
       child: PopupCard(
         key: AppKeys.pausePopup,
+        badge: level == null ? null : 'Level $level${moves == null ? '' : ' · Moves $moves'}',
         children: [
           const _Title('Paused'),
           const _Sub('Take a breath, the snakes will wait'),
@@ -181,12 +186,20 @@ class SettingsList extends StatelessWidget {
             children: [
               row('Colour-blind mode', SettingKey.colourBlind, settings.colourBlind, first: true),
               row('Reduce motion', SettingKey.reducedMotion, settings.reducedMotion),
+              row('Brighter nights', SettingKey.brightNights, settings.brightNights),
+              row('Battery Saver', SettingKey.batterySaver, settings.batterySaver),
             ],
           ),
         ),
+        const SizedBox(height: 14),
+        const SectionLabel('PRIVACY'),
+        CreamCard(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+          child: row('Share diagnostics', SettingKey.shareDiagnostics, settings.shareDiagnostics, first: true),
+        ),
         const SizedBox(height: 12),
         Text(
-          'Progress is saved on this device only',
+          'Progress is saved on this device only. Uninstalling the app removes it; purchases come back with Restore purchases.',
           textAlign: TextAlign.center,
           style: AppText.nunito(13, color: AppColors.muted),
         ),
@@ -386,13 +399,26 @@ class _RingPainter extends CustomPainter {
 // ── Level Failed ──
 
 class LevelFailedPopup extends StatelessWidget {
-  const LevelFailedPopup({super.key, required this.onRetry, required this.onHome});
+  const LevelFailedPopup({
+    super.key,
+    required this.onRetry,
+    required this.onHome,
+    this.level,
+    this.moves,
+    this.tip = 'Tip: hold a snake to preview its path',
+  });
   final VoidCallback onRetry;
   final VoidCallback onHome;
+  final int? level;
+  final int? moves;
+
+  /// Rotating gameplay tip.
+  final String tip;
   @override
   Widget build(BuildContext context) => _Announce(
     child: PopupCard(
       key: AppKeys.failedPopup,
+      badge: level == null ? null : 'Level $level${moves == null ? '' : ' · Moves $moves'}',
       children: [
         const _Title('Level Failed!'),
         const SizedBox(height: 6),
@@ -404,7 +430,7 @@ class LevelFailedPopup extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(color: AppColors.well, borderRadius: BorderRadius.circular(17)),
-          child: Text('Tip: hold a snake to preview its path', style: AppText.nunito(13, color: AppColors.muted)),
+          child: Text(tip, textAlign: TextAlign.center, style: AppText.nunito(13, color: AppColors.muted)),
         ),
         const SizedBox(height: 18),
         GameButton(key: AppKeys.retry, label: 'Retry', onTap: onRetry),

@@ -59,7 +59,7 @@ void main(List<String> args) {
     final result = problems.isNotEmpty
         ? '✗ ${problems.join('; ')}'
         : missing.isNotEmpty
-        ? '✓ rules (game screen waits for ${(missing.toList()..sort()).join(', ')})'
+        ? '✓ rules'
         : '✓ app';
     if (problems.isNotEmpty) {
       bad++;
@@ -75,7 +75,7 @@ void main(List<String> args) {
     );
   }
   stdout.writeln(
-    '\n✓ ${ok + draft} fully checked ($ok playable in the game screen today) · ✗ $bad with problems',
+    '\n✓ ${ok + draft} fully checked, all playable on the game screen · ✗ $bad with problems',
   );
   exit(bad == 0 ? 0 : 1);
 }

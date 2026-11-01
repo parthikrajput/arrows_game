@@ -19,6 +19,8 @@ class GameplayScreen extends StatelessWidget {
     required this.onPause,
     required this.onBooster,
     required this.onCancelHammer,
+    this.banner,
+    this.bannerHeight = 0,
   });
 
   final HudData hud;
@@ -32,6 +34,11 @@ class GameplayScreen extends StatelessWidget {
   final VoidCallback onPause;
   final void Function(Booster b) onBooster;
   final VoidCallback onCancelHammer;
+
+  /// Adaptive banner (L11+, no VIP). Its height is reserved even before the
+  /// ad loads, so the board never jumps.
+  final Widget? banner;
+  final double bannerHeight;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -78,11 +85,38 @@ class GameplayScreen extends StatelessWidget {
                       duration: AppMotion.base,
                       child: hammerMode
                           ? _HammerBanner(onCancel: onCancelHammer)
-                          : Text(
-                              'Tap a snake to slide it out',
-                              style: AppText.nunito(12, color: const Color(0xEBFFFFFF)).copyWith(
-                                shadows: const [Shadow(color: Color(0x66000000), offset: Offset(0, 1), blurRadius: 2)],
-                              ),
+                          : Row(
+                              key: const ValueKey('goals'),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (hud.gemsLeft != null)
+                                  _GoalChip(
+                                    key: AppKeys.hudGems,
+                                    color: const Color(0xFF26C6DA),
+                                    icon: Icons.diamond_rounded,
+                                    text: '${hud.gemsLeft}',
+                                    label: '${hud.gemsLeft} gems left',
+                                  ),
+                                Flexible(
+                                  child: Text(
+                                    'Tap a snake to slide it out',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppText.nunito(12, color: const Color(0xEBFFFFFF)).copyWith(
+                                      shadows: const [
+                                        Shadow(color: Color(0x66000000), offset: Offset(0, 1), blurRadius: 2),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (hud.mongooseHp != null)
+                                  _GoalChip(
+                                    key: AppKeys.hudMongoose,
+                                    color: AppColors.hardRed,
+                                    icon: Icons.favorite_rounded,
+                                    text: 'HP ${hud.mongooseHp}',
+                                    label: 'Mongoose HP ${hud.mongooseHp}',
+                                  ),
+                              ],
                             ),
                     ),
                   ),
@@ -103,17 +137,110 @@ class GameplayScreen extends StatelessWidget {
                           for (final b in boosters) ...[
                             if (b != boosters.first) const SizedBox(width: 12),
                             Flexible(
-                              child: _BoosterCard(data: b, onTap: () => onBooster(b.booster)),
+                              child: _Highlight(
+                                on: b.highlight,
+                                radius: 22,
+                                child: _BoosterCard(data: b, onTap: () => onBooster(b.booster)),
+                              ),
                             ),
                           ],
                         ],
                       ),
                     ),
                   ),
+                  if (bannerHeight > 0) ...[
+                    // ≥ 8 dp gap and a divider between the boosters and the ad.
+                    const SizedBox(height: 4),
+                    const Divider(height: 4, thickness: 1, color: Color(0x33FFFFFF)),
+                    SizedBox(height: bannerHeight, child: banner ?? const SizedBox.shrink()),
+                  ],
                 ],
               ),
             ),
           ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Pulsing gold ring a tutorial puts around a HUD part or booster.
+class _Highlight extends StatefulWidget {
+  const _Highlight({required this.on, required this.child, this.radius = 16});
+  final bool on;
+  final Widget child;
+  final double radius;
+  @override
+  State<_Highlight> createState() => _HighlightState();
+}
+
+class _HighlightState extends State<_Highlight> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100));
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_Highlight old) {
+    super.didUpdateWidget(old);
+    _sync();
+  }
+
+  void _sync() {
+    if (widget.on && !AppMotion.reduced(context)) {
+      if (!_c.isAnimating) _c.repeat(reverse: true);
+    } else {
+      _c.stop();
+      _c.value = widget.on ? 1 : 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => !widget.on
+      ? widget.child
+      : AnimatedBuilder(
+          animation: _c,
+          builder: (_, child) => DecoratedBox(
+            position: DecorationPosition.foreground,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(widget.radius),
+              border: Border.all(color: AppColors.gold.withValues(alpha: .55 + .45 * _c.value), width: 3),
+              boxShadow: [BoxShadow(color: AppColors.gold.withValues(alpha: .45 * _c.value), blurRadius: 12)],
+            ),
+            child: child,
+          ),
+          child: widget.child,
+        );
+}
+
+class _GoalChip extends StatelessWidget {
+  const _GoalChip({super.key, required this.color, required this.icon, required this.text, required this.label});
+  final Color color;
+  final IconData icon;
+  final String text;
+  final String label;
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: label,
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: _pill(12),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 4),
+          Text(text, style: AppText.fredoka(13, color: Colors.white)),
         ],
       ),
     ),
@@ -153,107 +280,124 @@ class _Hud extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: _pill(14),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FittedBox(
-                    child: Row(
-                      children: [
-                        Text(
-                          'LEVEL ${hud.level}',
-                          style: AppText.nunito(11, color: const Color(0xFFFFD84A), spacing: .6),
-                        ),
-                        if (hud.isHard) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                            decoration: BoxDecoration(color: AppColors.hardRed, borderRadius: BorderRadius.circular(6)),
-                            child: Text('HARD', style: AppText.nunito(10, color: Colors.white, spacing: .5)),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  FittedBox(
-                    child: Text.rich(
-                      TextSpan(
+            child: _Highlight(
+              on: hud.highlightMoves,
+              radius: 14,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: _pill(14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FittedBox(
+                      child: Row(
                         children: [
-                          TextSpan(
-                            text: '${hud.moves} ',
-                            style: AppText.fredoka(20, color: Colors.white, height: 1),
+                          Text(
+                            'LEVEL ${hud.level}',
+                            style: AppText.nunito(11, color: const Color(0xFFFFD84A), spacing: .6),
                           ),
-                          TextSpan(
-                            text: 'moves',
-                            style: AppText.fredoka(13, color: const Color(0xBFFFFFFF), height: 1),
-                          ),
+                          if (hud.isHard) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                              decoration: BoxDecoration(
+                                color: AppColors.hardRed,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text('HARD', style: AppText.nunito(10, color: Colors.white, spacing: .5)),
+                            ),
+                          ],
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    FittedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${hud.moves} ',
+                              style: AppText.fredoka(20, color: Colors.white, height: 1),
+                            ),
+                            TextSpan(
+                              text: 'moves',
+                              style: AppText.fredoka(13, color: const Color(0xBFFFFFFF), height: 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          Semantics(
-            label:
-                '${hud.hearts} of ${hud.maxHearts} hearts${hud.shieldCharges > 0 ? ', shell shield ${hud.shieldCharges}' : ''}',
-            child: Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: _pill(14),
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+          if (hud.showHearts) const SizedBox(width: 8),
+          if (hud.showHearts)
+            _Highlight(
+              on: hud.highlightHearts,
+              radius: 14,
+              child: Semantics(
+                label:
+                    '${hud.hearts} of ${hud.maxHearts} hearts${hud.shieldCharges > 0 ? ', shell shield ${hud.shieldCharges}' : ''}',
+                child: Container(
+                  height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: _pill(14),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
                     children: [
-                      for (var i = 0; i < hud.maxHearts; i++)
-                        Padding(
-                          padding: EdgeInsets.only(left: i == 0 ? 0 : 3),
-                          child: AnimatedSwitcher(
-                            duration: AppMotion.base,
-                            transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
-                            child: ArtIcon(
-                              i < hud.hearts ? Art.heart : Art.heartEmpty,
-                              key: ValueKey(i < hud.hearts),
-                              size: 20,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (var i = 0; i < hud.maxHearts; i++)
+                            Padding(
+                              padding: EdgeInsets.only(left: i == 0 ? 0 : 3),
+                              child: AnimatedSwitcher(
+                                duration: AppMotion.base,
+                                transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
+                                child: ArtIcon(
+                                  i < hud.hearts ? Art.heart : Art.heartEmpty,
+                                  key: ValueKey(i < hud.hearts),
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (hud.shieldCharges > 0)
+                        Positioned(
+                          right: -16,
+                          top: -6,
+                          child: Container(
+                            height: 24,
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF3D6),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFFE0A33A), width: 2),
+                              boxShadow: const [
+                                BoxShadow(color: Color(0x40000000), offset: Offset(0, 2), blurRadius: 4),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const ArtIcon(Art.shell, size: 14),
+                                Text(
+                                  '${hud.shieldCharges}',
+                                  style: AppText.fredoka(12, color: const Color(0xFF8A4A10)),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                     ],
                   ),
-                  if (hud.shieldCharges > 0)
-                    Positioned(
-                      right: -16,
-                      top: -6,
-                      child: Container(
-                        height: 24,
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFF3D6),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFE0A33A), width: 2),
-                          boxShadow: const [BoxShadow(color: Color(0x40000000), offset: Offset(0, 2), blurRadius: 4)],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const ArtIcon(Art.shell, size: 14),
-                            Text('${hud.shieldCharges}', style: AppText.fredoka(12, color: const Color(0xFF8A4A10))),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
+                ),
               ),
             ),
-          ),
           const SizedBox(width: 8),
           Container(
             height: 50,

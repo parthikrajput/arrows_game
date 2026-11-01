@@ -3,7 +3,7 @@ Source docs: phase_1/01_GAME_CONCEPT_AND_RULES.md, ../../SHARED_CORE_STANDARD.md
 # Spec: Core Concept and Gameplay Rules
 
 ## Status
-Approved
+Implemented
 
 ## Type
 New Feature
@@ -107,6 +107,8 @@ Every Move must execute through this exact 9-step pipeline:
 
 ## Implementation Notes
 - 2026-10-31: The full rules model (full_rules/rules.dart) follows the 9-step move order, locks and counters; a play mode for the game screen (bump as a Move, hearts, Shield, Hammer) is still to do.
+- 2026-11-01: The game screen plays the full rules (packages/puzzle_core/lib/src/play.dart + attempt.dart on full_rules/rules.dart with play mode): bumps are Moves that tick counters, locked taps carry a reason, Restless timeouts cost a heart, tangles allowed, Hydra end by tapped cell, group moves, mud stops, interactive taps. GameBloc: obstacle taps, queue of 1, Hint off-solution on an isolate. Verified: every level's solution wins with ★★★ through the game rules (test/play_test.dart, test/game_bloc_test.dart).
+- Deviation: the separate Engine/MoveResolver files were not created; the 9-step order lives in Sim._endMove / tapSnake (one engine for checker, solver and game).
 
 ## Change Request History
 

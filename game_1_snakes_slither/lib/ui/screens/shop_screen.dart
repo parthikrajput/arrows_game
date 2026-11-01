@@ -15,9 +15,17 @@ class ShopScreen extends StatefulWidget {
     required this.onBuy,
     required this.onFreeCoins,
     required this.onBack,
+    this.onBuyProduct,
+    this.onRestore,
+    this.onOpenVip,
   });
 
   final ShopData data;
+
+  /// Store purchase by product id (coin packs, Starter Pack).
+  final void Function(String productId)? onBuyProduct;
+  final VoidCallback? onRestore;
+  final VoidCallback? onOpenVip;
 
   /// Logic re-checks lock and coins; show a confirm step before calling if you like.
   final void Function(ShopTileData tile) onBuy;
@@ -73,8 +81,9 @@ class _ShopScreenState extends State<ShopScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                     children: switch (_tab) {
                       _Tab.boosters => _boosters(d),
-                      _Tab.coins => [_unavailable('Coin packs')],
-                      _Tab.offers => [_unavailable('Starter Pack and VIP No-Ads Pass')],
+                      _Tab.coins => d.storeAvailable ? _coins(d) : [_unavailable('Coin packs'), _footer()],
+                      _Tab.offers =>
+                        d.storeAvailable ? _offers(d) : [_unavailable('Starter Pack and VIP No-Ads Pass'), _footer()],
                     },
                   ),
                 ),
@@ -144,14 +153,170 @@ class _ShopScreenState extends State<ShopScreen> {
           ],
         ),
       ),
-      const SizedBox(height: 18),
-      Text(
-        'Restore purchases · Terms · Privacy',
-        textAlign: TextAlign.center,
-        style: AppText.nunito(12, color: AppColors.muted),
-      ),
+      _footer(),
     ];
   }
+
+  Widget _footer() => Padding(
+    padding: const EdgeInsets.only(top: 18),
+    child: Center(
+      child: TextButton(
+        key: AppKeys.shopRestore,
+        onPressed: widget.onRestore,
+        child: Text('Restore purchases · Terms · Privacy', style: AppText.nunito(12, color: AppColors.muted)),
+      ),
+    ),
+  );
+
+  List<Widget> _coins(ShopData d) => [
+    for (final p in d.coinPacks)
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: CreamCard(
+          key: AppKeys.coinPack(p.productId),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Row(
+            children: [
+              const ArtIcon(Art.coin, size: 40),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${fmt(p.coins)} coins', style: AppText.fredoka(19)),
+                    if (p.badge != null)
+                      Container(
+                        margin: const EdgeInsets.only(top: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: p.badge == 'Popular' ? AppColors.emerald : AppColors.gold,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(p.badge!, style: AppText.nunito(11, color: Colors.white)),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 92,
+                child: GameButton(
+                  label: p.price,
+                  height: 40,
+                  fontSize: 16,
+                  shine: false,
+                  onTap: d.purchaseBusy == null ? () => widget.onBuyProduct?.call(p.productId) : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    if (d.message != null)
+      Text(
+        d.message!,
+        textAlign: TextAlign.center,
+        style: AppText.nunito(13, color: AppColors.muted),
+      ),
+    _footer(),
+  ];
+
+  List<Widget> _offers(ShopData d) {
+    final st = d.starter;
+    return [
+      if (st != null)
+        CreamCard(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: Text('Starter Pack', style: AppText.fredoka(20))),
+                  Text('⏱ ${st.timeLeft}', style: AppText.nunito(13, color: AppColors.hardRed)),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 10,
+                runSpacing: 6,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  _chip(const ArtIcon(Art.coin, size: 18), '${fmt(st.coins)} coins'),
+                  for (final e in st.boosters.entries) _chip(ArtIcon(ArtIcon.booster(e.key), size: 18), '×${e.value}'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              GameButton(
+                key: AppKeys.starterBuy,
+                label: st.price,
+                height: 46,
+                onTap: d.purchaseBusy == null ? () => widget.onBuyProduct?.call(st.productId) : null,
+              ),
+            ],
+          ),
+        ),
+      if (st != null) const SizedBox(height: 12),
+      CreamCard(
+        key: AppKeys.vipOpen,
+        padding: const EdgeInsets.all(14),
+        child: Pressable(
+          onTap: d.vipActive ? null : widget.onOpenVip,
+          semanticLabel: 'VIP No-Ads Pass',
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: const Color(0xFF7E57C2), borderRadius: BorderRadius.circular(14)),
+                child: const Icon(Icons.workspace_premium_rounded, color: Colors.white),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('VIP No-Ads Pass', style: AppText.fredoka(18)),
+                    Text(
+                      d.vipActive
+                          ? 'Active · thank you!'
+                          : 'No interstitial or banner ads · rewarded ads stay optional',
+                      style: AppText.nunito(12, color: AppColors.muted),
+                    ),
+                  ],
+                ),
+              ),
+              if (!d.vipActive && d.vipPrice != null)
+                Text('${d.vipPrice} / month', style: AppText.fredoka(15, color: const Color(0xFF7E57C2))),
+            ],
+          ),
+        ),
+      ),
+      if (d.message != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text(
+            d.message!,
+            textAlign: TextAlign.center,
+            style: AppText.nunito(13, color: AppColors.muted),
+          ),
+        ),
+      _footer(),
+    ];
+  }
+
+  Widget _chip(Widget icon, String text) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    decoration: BoxDecoration(color: AppColors.leafWash, borderRadius: BorderRadius.circular(10)),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        icon,
+        const SizedBox(width: 4),
+        Text(text, style: AppText.fredoka(14)),
+      ],
+    ),
+  );
 
   Widget _unavailable(String what) => CreamCard(
     padding: const EdgeInsets.all(20),
@@ -186,6 +351,11 @@ class _Tabs extends StatelessWidget {
             child: Semantics(
               selected: t == value,
               child: Pressable(
+                key: switch (t) {
+                  _Tab.coins => AppKeys.shopTabCoins,
+                  _Tab.offers => AppKeys.shopTabOffers,
+                  _Tab.boosters => null,
+                },
                 onTap: () => onPick(t),
                 semanticLabel: switch (t) {
                   _Tab.boosters => 'Boosters',

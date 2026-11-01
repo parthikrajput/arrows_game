@@ -126,6 +126,10 @@ Implement the wallet, shop, boosters, ads, and IAP services:
 - In `phase_1/04 §8.2`, an older draft table and wireframe referenced an obsolete 4th booster ("Snake Charmer Flute" at 40/100 coins). SHARED_CORE_STANDARD §5 governs: exactly 3 boosters (Hint 60/150, Shield 80/200, Hammer 100/250) + free preview.
 - Net revenue from ₹20/month subscription after GST and 15% Play Store cut is ~₹14; pricing will be monitored via Remote Config.
 
+## Implementation Notes
+- 2026-11-01: Code complete: Golden Slither Rush (lib/features/rush/), store purchases (lib/services/store_service.dart, lib/state/iap_cubit.dart: coin packs, Starter Pack 48 h after L15, VIP, Restore; nothing granted before server verification, pending purchases retried, purchase ids never paid twice), VIP paywall and Starter popup, AdMob (lib/services/admob_service.dart: rewarded, interstitial, adaptive banner from L11, UMP consent, child-directed G-rated ads for under 13), neutral age gate, Cloud Function source functions/src/index.ts (verifyPurchase).
+- Pending verification (needs accounts): real AdMob app/unit ids, Play Console / App Store products, deploying verifyPurchase with PLAY_PACKAGE_NAME / APPLE_SHARED_SECRET, sandbox purchases and restore (README E6). Debug builds without VERIFY_PURCHASE_URL use a fake store.
+
 ## Change Request History
 
 - 2026-10-31 | Reviewed and approved; file paths moved from apps/snakes_slither/ to the app root; current state recorded | Spec sync before implementation | user

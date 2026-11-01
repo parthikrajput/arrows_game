@@ -144,6 +144,9 @@ void main() {
     ),
     'play_l12': game(12),
     'play_l19_hard': game(19, hard: true, shield: 2),
+    // One board per mechanic group, to check the obstacle art.
+    for (final n in [31, 41, 61, 81, 91, 101, 131, 161, 191, 251, 261, 291, 321, 341, 351, 401, 491, 500])
+      'mech_l$n': game(n),
     'preview': game(
       19,
       hard: true,

@@ -112,6 +112,8 @@ Implement the design system and screen widgets in Flutter:
 
 ## Implementation Notes
 - 2026-10-31: lib/ui compiles again: flutter_svg restored and 7 orphan widget files from an old branch removed (bevel_button, coin_pill, heart_berries, popup_card, round_icon_button, star_row, widgets).
+- 2026-11-01: Added screens: Age Gate, Golden Slither Rush (intro, play, results), VIP paywall, Starter Pack popup, Leaderboards (+ Home Ranks tab), Phase Complete, tutorial tips and mechanic intro cards; gameplay HUD gems / Mongoose HP and reserved banner slot; Settings language, Jungle Guide, wheel odds, privacy choices, Restore, Report a problem, Brighter nights, Battery Saver, Share diagnostics; Level Failed rotating tips; level and moves on Pause/Failed.
+- Pending: Gujarati and Hindi strings. The language setting switches the app locale and Indic fonts are wired, but the screen texts are still English; they need translation and native-speaker review.
 
 ## Change Request History
 

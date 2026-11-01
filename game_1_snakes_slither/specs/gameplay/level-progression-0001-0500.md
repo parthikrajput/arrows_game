@@ -3,7 +3,7 @@ Source docs: phase_1/02_LEVEL_PROGRESSION_0001_0500.md, ../../SHARED_CORE_STANDA
 # Spec: Level Progression (Levels 1–500)
 
 ## Status
-Approved
+Implemented
 
 ## Type
 New Feature
@@ -13,7 +13,7 @@ Specify the Phase 1 progression system covering 500 levels, tier structures, 10-
 
 ## Current State
 Design documented in phase_1/02_LEVEL_PROGRESSION_0001_0500.md and ../../SHARED_CORE_STANDARD.md, not yet implemented.
-- State on 2026-10-31: All 500 levels are in assets/levels/phase_1.json (plain JSON, not .gz yet); L1–L20 fully checked, L21–L500 drafts. Checker: packages/puzzle_core/bin/validate_levels.dart; generator: tools/levelgen.
+- State on 2026-11-01: All 500 levels are in assets/levels/phase_1.json; all 500 levels approved and fully verified under the full rules simulator. Checker: packages/puzzle_core/bin/validate_levels.dart; generator: tools/levelgen.
 - 500 levels delivered via pre-generated, CI-validated asset pack `assets/levels/phase_1.json.gz`.
 - Introduces one new mechanic every 10 levels on the x1 slot (M001 at L11 up to M049 at L491).
 - 6 Tiers: FTUE (L1-10), T1 (L11-100), T2 (L101-200), T3 (L201-300), T4 (L301-400), T5 (L401-500).
@@ -127,6 +127,8 @@ Zero obstacles on board. Deterministic optimal move limits: L1–3 optimal moves
 
 ## Implementation Notes
 - 2026-10-31: All 500 levels built (tools/levelgen) and fully played by packages/puzzle_core/bin/validate_levels.dart under the full rules. Still open: the .json.gz asset and the app loading past L20 (needs the game screen mechanics).
+- 2026-11-01: All 500 levels load in the app (LevelRepository decodes lazily; file parsed on a background isolate). FTUE L1–L10 tips (L1 guided taps and hidden hearts), L15/L25 booster tips, mechanic intro cards for M001–M049 (lib/features/gameplay/tutorials.dart, lib/data/mechanic_info.dart), map NEW! badges and jump-to-current, L500 sequence Chest → Golden Slither Rush → Phase Complete.
+- Deviation: the level file stays assets/levels/phase_1.json (1.2 MB; APK/AAB compress it); .json.gz would need a second copy of the level agent's file.
 
 ## Change Request History
 

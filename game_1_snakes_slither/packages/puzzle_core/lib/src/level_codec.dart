@@ -1,4 +1,5 @@
 import 'model.dart';
+import 'play.dart';
 import 'solver.dart';
 
 class LevelFormatException implements Exception {
@@ -96,6 +97,37 @@ class LevelCodec {
       rethrow;
     } catch (e) {
       throw LevelFormatException('$where: bad level JSON ($e)');
+    }
+  }
+
+  /// Reads any Phase 1 level (all mechanics) for the game screen. Structure
+  /// and solvability are the level checker's job (CI and flutter test).
+  static Level decodePlay(Map<String, dynamic> j) {
+    final n = j['level'];
+    try {
+      if (j['schema'] != schema) {
+        throw LevelFormatException('L${n ?? '?'}: schema must be $schema, got ${j['schema']}');
+      }
+      final p = PlayLevel.fromJson(j);
+      final level = Level(
+        number: n as int,
+        tag: LevelTag.values.byName(j['tag'] as String),
+        slot: LevelSlot.values.byName(j['slot'] as String),
+        board: p.view(p.initial()),
+        parMoves: j['par_moves'] as int? ?? 0,
+        difficulty: (j['difficulty'] as num? ?? 0).toDouble(),
+        solution: ((j['solution'] as List?) ?? const []).cast<String>(),
+        mechanicTypes: [
+          for (final m in (j['mechanics'] as List? ?? const [])) (m as Map)['type'] as String,
+        ],
+        raw: j,
+      );
+      PlayLevel.attach(level, p);
+      return level;
+    } on LevelFormatException {
+      rethrow;
+    } catch (e) {
+      throw LevelFormatException('L${n ?? '?'}: bad level JSON ($e)');
     }
   }
 

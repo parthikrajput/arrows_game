@@ -51,6 +51,73 @@ enum SnakeColor { red, green, blue, yellow, purple, orange, pink, teal }
 
 enum SnakeSkin { snake, caterpillar }
 
+/// Mechanic state of one snake, for badges and lock icons. Rules live in the
+/// full rules engine; this is only what the board needs to draw.
+class SnakeMarks {
+  const SnakeMarks({
+    this.layer = 0,
+    this.reverse = false,
+    this.hydra = false,
+    this.wideSide,
+    this.lock,
+    this.frozen = 0,
+    this.sleeping = false,
+    this.hidden = false,
+    this.ghost = false,
+    this.cageColor,
+    this.hatch = 0,
+    this.restless = 0,
+    this.keyColor,
+    this.hungry = false,
+    this.growing = false,
+    this.group = 0,
+    this.child = false,
+    this.chameleon = false,
+    this.loop = false,
+  });
+
+  /// 1 = Canopy (drawn above the ground layer).
+  final int layer;
+  final bool reverse;
+  final bool hydra;
+
+  /// Wide (Giant Anaconda) snakes cover a second column on this side.
+  final Dir? wideSide;
+
+  /// Mechanic type that blocks taps right now ("M003", "M021", …) or null.
+  final String? lock;
+
+  /// Frost Coil: exits still needed.
+  final int frozen;
+  final bool sleeping;
+
+  /// Under Jungle Mist: drawn as a silhouette.
+  final bool hidden;
+
+  /// Phantom Snake on a ghost move: drawn see-through.
+  final bool ghost;
+  final String? cageColor;
+
+  /// Hatch Order number (1-based), 0 = none.
+  final int hatch;
+
+  /// Restless Caterpillar: moves left before it costs a heart.
+  final int restless;
+
+  /// Carries the key for a Bamboo Cage / Knot Cage / Tail-Biter of this colour.
+  final String? keyColor;
+  final bool hungry;
+  final bool growing;
+
+  /// Twins, Pond Twins and Parade members share a non-zero group number.
+  final int group;
+  final bool child;
+  final bool chameleon;
+
+  /// Closed Tail-Biter Loop.
+  final bool loop;
+}
+
 class Snake {
   const Snake({
     required this.id,
@@ -59,7 +126,10 @@ class Snake {
     required this.color,
     this.skin = SnakeSkin.snake,
     this.ref = '',
+    this.marks = const SnakeMarks(),
   });
+
+  final SnakeMarks marks;
 
   final int id;
 
@@ -86,12 +156,68 @@ class Rock {
   final String ref;
 }
 
+/// Any board mechanic other than a Garden Rock, as the board draws it.
+class Obstacle {
+  const Obstacle({
+    required this.id,
+    required this.type,
+    required this.cells,
+    this.ref = '',
+    this.value = 0,
+    this.open = false,
+    this.color = '',
+    this.arrow,
+    this.orient = '',
+    this.side,
+    this.horizontal = false,
+    this.links = const [],
+    this.done = const [],
+    this.hammerable = false,
+    this.interactive = false,
+  });
+
+  /// Index in the level's mechanics list; used for taps and the Hammer.
+  final int id;
+
+  /// Mechanic id, e.g. "M009".
+  final String type;
+  final List<Cell> cells;
+  final String ref;
+
+  /// Countdown, HP, keys left or the beetle's waypoint, depending on [type].
+  final int value;
+
+  /// Gate open, mist cleared, cage open, bridge snapped, switch turned right.
+  final bool open;
+  final String color;
+  final Dir? arrow;
+
+  /// Mushroom Bumper "/" or "\".
+  final String orient;
+
+  /// Board edge for hedges and arches.
+  final Dir? side;
+  final bool horizontal;
+
+  /// Linked cells: twig gates of a lever, gate of a pressure stone.
+  final List<Cell> links;
+
+  /// Per cell of [cells]: gem collected / berry eaten.
+  final List<bool> done;
+  final bool hammerable;
+
+  /// Tapping it is a Move (lever, lilypad, switch, stump, gear).
+  final bool interactive;
+}
+
 class BoardState {
   BoardState({
     required this.width,
     required this.height,
     required Map<int, Snake> snakes,
     required Map<int, Rock> rocks,
+    this.obstacles = const [],
+    this.night = false,
   }) : snakes = Map.unmodifiable(snakes),
        rocks = Map.unmodifiable(rocks);
 
@@ -99,6 +225,31 @@ class BoardState {
   final int height;
   final Map<int, Snake> snakes;
   final Map<int, Rock> rocks;
+  final List<Obstacle> obstacles;
+
+  /// Jungle Night: only the last moved snake and previews are lit.
+  final bool night;
+
+  /// Gems still on the board (win needs 0).
+  int get gemsLeft => [
+    for (final o in obstacles)
+      if (o.type == 'M026') ...o.done.where((d) => !d),
+  ].length;
+
+  /// Mongoose HP, or null when there is no Grumpy Mongoose.
+  int? get mongooseHp {
+    for (final o in obstacles) {
+      if (o.type == 'M049') return o.value;
+    }
+    return null;
+  }
+
+  Obstacle? obstacleAt(Cell c) {
+    for (final o in obstacles) {
+      if (o.cells.contains(c)) return o;
+    }
+    return null;
+  }
 
   bool inBounds(Cell c) => c.x >= 0 && c.y >= 0 && c.x < width && c.y < height;
 
@@ -120,10 +271,10 @@ class BoardState {
   }
 
   BoardState withoutSnake(int id) =>
-      BoardState(width: width, height: height, snakes: {...snakes}..remove(id), rocks: rocks);
+      BoardState(width: width, height: height, snakes: {...snakes}..remove(id), rocks: rocks, obstacles: obstacles, night: night);
 
   BoardState withoutRock(int id) =>
-      BoardState(width: width, height: height, snakes: snakes, rocks: {...rocks}..remove(id));
+      BoardState(width: width, height: height, snakes: snakes, rocks: {...rocks}..remove(id), obstacles: obstacles, night: night);
 }
 
 /// Difficulty tag of a level; decides first-clear coins.
@@ -142,7 +293,12 @@ class Level {
     this.difficulty = 0,
     this.solution = const [],
     this.mechanicTypes = const [],
+    this.raw,
   });
+
+  /// The level JSON, for the full rules engine. Null for generated boards
+  /// (snakes and rocks only), which are rebuilt from [board].
+  final Map<String, dynamic>? raw;
   final int number;
   final LevelTag tag;
   final BoardState board;

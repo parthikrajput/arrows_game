@@ -21,6 +21,9 @@ class HomeScreen extends StatelessWidget {
     required this.onOpenShop,
     required this.onOpenWheel,
     this.onOpenDaily,
+    this.onOpenLeaderboards,
+    this.banner,
+    this.bannerHeight = 0,
   });
 
   final HomeData data;
@@ -34,6 +37,11 @@ class HomeScreen extends StatelessWidget {
 
   /// Daily Puzzle navigation callback.
   final VoidCallback? onOpenDaily;
+  final VoidCallback? onOpenLeaderboards;
+
+  /// Adaptive banner under the nav; height reserved before it loads.
+  final Widget? banner;
+  final double bannerHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +70,19 @@ class HomeScreen extends StatelessWidget {
                                   child: const LineIconView(LineIcon.gear, size: 24, color: AppColors.emerald),
                                 ),
                                 const Spacer(),
+                                if (data.vipActive)
+                                  Container(
+                                    key: AppKeys.homeVipChip,
+                                    height: 30,
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF7E57C2),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Text('VIP', style: AppText.fredoka(14, color: Colors.white)),
+                                  ),
                                 CoinPill(coins: data.coins, onTap: onOpenShop),
                               ],
                             ),
@@ -154,7 +175,17 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _BottomNav(onShop: onOpenShop, onMap: onOpenMap, onSettings: onOpenSettings),
+            _BottomNav(
+              onShop: onOpenShop,
+              onMap: onOpenMap,
+              onSettings: onOpenSettings,
+              onRanks: onOpenLeaderboards,
+            ),
+            if (bannerHeight > 0)
+              ColoredBox(
+                color: AppColors.card,
+                child: SizedBox(height: bannerHeight, child: banner ?? const SizedBox.shrink()),
+              ),
           ],
         ),
       ),
@@ -380,10 +411,11 @@ class _WheelButton extends StatelessWidget {
 }
 
 class _BottomNav extends StatelessWidget {
-  const _BottomNav({required this.onShop, required this.onMap, required this.onSettings});
+  const _BottomNav({required this.onShop, required this.onMap, required this.onSettings, this.onRanks});
   final VoidCallback onShop;
   final VoidCallback onMap;
   final VoidCallback onSettings;
+  final VoidCallback? onRanks;
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +440,14 @@ class _BottomNav extends StatelessWidget {
                 child: LineIconView(icon, color: active ? AppColors.emerald : AppColors.navIdle),
               ),
               const SizedBox(height: 3),
-              Text(label, style: AppText.nunito(11, color: active ? AppColors.emerald : AppColors.navIdle)),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  style: AppText.nunito(11, color: active ? AppColors.emerald : AppColors.navIdle),
+                ),
+              ),
             ],
           ),
         ),
@@ -432,6 +471,7 @@ class _BottomNav extends StatelessWidget {
               children: [
                 item(LineIcon.home, 'Home', null, active: true),
                 item(LineIcon.shop, 'Shop', onShop, key: AppKeys.homeShop),
+                if (onRanks != null) item(LineIcon.ranks, 'Ranks', onRanks, key: AppKeys.homeRanks),
                 item(LineIcon.map, 'Map', onMap),
                 item(LineIcon.settings, 'Settings', onSettings),
               ],

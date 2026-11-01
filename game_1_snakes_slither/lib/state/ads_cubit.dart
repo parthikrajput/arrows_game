@@ -86,6 +86,12 @@ class WinContext {
 /// Interstitial cadence, cooldown, daily cap and VIP. Rewarded ads also go
 /// through here so the cooldown sees every full-screen ad.
 class AdsCubit extends Cubit<AdsState> {
+  /// Height reserved for the anchored adaptive banner (dp).
+  static const bannerReserve = 60.0;
+
+  /// Banners show from Level 11 on (none during the first ten levels).
+  static const bannerFromLevel = 11;
+
   AdsCubit(this._store, this._ads, this._time) : super(_load(_store));
 
   static const _key = 'ads';
@@ -153,6 +159,11 @@ class AdsCubit extends Cubit<AdsState> {
   }
 
   bool get rewardedReady => _ads.rewardedReady;
+
+  AdsService get service => _ads;
+
+  /// Banner on Home / Map / gameplay: from L11, never for VIP.
+  bool bannerFor(int level) => level >= bannerFromLevel && !vipActive;
 
   /// Called by the IAP layer with a validated expiry (null = not subscribed).
   void setVipUntil(DateTime? until) => emit(state.copyWith(vipActiveUntil: () => until));

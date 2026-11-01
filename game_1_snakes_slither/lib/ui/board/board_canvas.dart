@@ -5,12 +5,14 @@
 //    spans x*10 .. x*10+10 exactly like geometry.rectOf),
 //  - onMotionDone(motion.id) called exactly once per motion.
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
 import '../../contracts/view_models.dart';
 import '../../features/gameplay/board_geometry.dart';
 import '../theme/tokens.dart';
+import 'mechanic_art.dart';
 
 class BoardCanvas extends StatefulWidget {
   const BoardCanvas({super.key, required this.data, required this.geometry, required this.onMotionDone});
@@ -48,7 +50,8 @@ class _BoardCanvasState extends State<BoardCanvas> with TickerProviderStateMixin
 
   void _sync() {
     final d = widget.data;
-    final wantIdle = !_reduced && (d.hintSnakeId != null || d.hammerMode);
+    final wantIdle =
+        !_reduced && (d.hintSnakeId != null || d.hintObstacleId != null || d.hammerMode || d.guideSnakeId != null);
     if (wantIdle && !_idle.isAnimating) _idle.repeat();
     if (!wantIdle && _idle.isAnimating) _idle.stop();
 
@@ -61,7 +64,13 @@ class _BoardCanvasState extends State<BoardCanvas> with TickerProviderStateMixin
             MotionKind.exit => AppMotion.exitFor(m.lane.cells.length + m.snake.length),
             MotionKind.bump => AppMotion.bonk,
             MotionKind.locked => AppMotion.locked,
+            MotionKind.slide => AppMotion.exitFor(m.lane.cells.length),
+            MotionKind.action => const Duration(milliseconds: 220),
           };
+    // The lock-reason icon stays up for 600 ms.
+    if (m.kind == MotionKind.locked && m.lockReason != null && !_reduced) {
+      _c.duration = const Duration(milliseconds: 600);
+    }
     _c.forward(from: 0).whenComplete(() {
       if (mounted && _playing == m.id) widget.onMotionDone(m.id);
     });
@@ -89,6 +98,56 @@ class _BoardCanvasState extends State<BoardCanvas> with TickerProviderStateMixin
 
 const _u = 10.0; // board units per cell
 
+/// Pictures of the parts of the board that don't move between Moves. Each
+/// is recorded once and replayed every frame, so an animating frame only
+/// paints what moves (and blurs are never recomputed per frame).
+class _StaticLayers {
+  static String? _bgKey;
+  static ui.Picture? _bg;
+  static Object? _restKey;
+  static ui.Picture? _rest;
+
+  static ui.Picture background(String key, void Function(Canvas) paint) {
+    if (_bgKey == key && _bg != null) return _bg!;
+    _bg?.dispose();
+    _bgKey = key;
+    return _bg = _record(paint);
+  }
+
+  static ui.Picture resting(Object key, void Function(Canvas) paint) {
+    if (_restKey == key && _rest != null) return _rest!;
+    _rest?.dispose();
+    _restKey = key;
+    return _rest = _record(paint);
+  }
+
+  static ui.Picture _record(void Function(Canvas) paint) {
+    final rec = ui.PictureRecorder();
+    paint(Canvas(rec));
+    return rec.endRecording();
+  }
+}
+
+/// Identity of the resting layer: rebuilt when the board, the set of moving
+/// snakes or a display option changes.
+class _RestKey {
+  _RestKey(this.board, this.moving, this.colourBlind, this.cell);
+  final BoardState board;
+  final Set<int> moving;
+  final bool colourBlind;
+  final double cell;
+  @override
+  bool operator ==(Object o) =>
+      o is _RestKey &&
+      identical(o.board, board) &&
+      o.colourBlind == colourBlind &&
+      o.cell == cell &&
+      o.moving.length == moving.length &&
+      o.moving.containsAll(moving);
+  @override
+  int get hashCode => Object.hash(identityHashCode(board), colourBlind, cell, moving.length);
+}
+
 class BoardPainter extends CustomPainter {
   BoardPainter(this.d, this.g, this.t, this.idle);
   final BoardViewData d;
@@ -106,38 +165,155 @@ class BoardPainter extends CustomPainter {
     canvas.scale(k);
     // The frame sits in the 16 dp gutter, so it never pushes cells around.
     final m = math.min(6.0, 15 / k);
-    _frame(canvas, m);
-    _lawn(canvas);
-    _tiles(canvas);
+    canvas.drawPicture(
+      _StaticLayers.background('$cols x $rows @ $m', (c) {
+        _frame(c, m);
+        _lawn(c);
+        _tiles(c);
+      }),
+    );
     if (d.hammerMode) {
       canvas.drawRRect(_lawnRect(), Paint()..color = const Color(0x800F1D0B));
     }
-    _shadows(canvas);
-    for (final r in d.board.rocks.values) {
-      _rock(canvas, r.cell);
-    }
     final motion = d.motion;
+    final pulse = motion?.kind == MotionKind.action ? math.sin(t * math.pi) : 0.0;
+    final moving = motion?.snakeIds.toSet() ?? const <int>{};
+    // Glows (Hint, Hammer, tutorial) and pulses animate every frame, so
+    // those boards are painted live; every other board replays one picture.
+    final live = d.hammerMode || d.hintSnakeId != null || d.hintObstacleId != null || pulse > 0;
+    void resting(Canvas c) {
+      for (final o in d.board.obstacles) {
+        _obstacle(c, o, top: false, pulse: motion?.obstacle?.id == o.id ? pulse : 0);
+      }
+      _shadows(c);
+      for (final r in d.board.rocks.values) {
+        _rock(c, r.cell);
+      }
+      c.save();
+      c.clipRRect(_lawnRect().inflate(.4));
+      // Ground layer first, Canopy (layer 1) on top.
+      for (final layer in [0, 1]) {
+        for (final s in d.board.snakes.values) {
+          if (s.marks.layer != layer || moving.contains(s.id) || s.marks.hidden) continue;
+          _drawSnake(c, _restPose(s), s);
+        }
+      }
+      c.restore();
+    }
+
+    if (live) {
+      resting(canvas);
+    } else {
+      canvas.drawPicture(_StaticLayers.resting(_RestKey(d.board, moving, d.colourBlind, g.cell), resting));
+    }
     canvas.save();
     canvas.clipRRect(_lawnRect().inflate(.4));
-    for (final s in d.board.snakes.values) {
-      if (motion != null && motion.snake.id == s.id) continue;
-      _snake(canvas, _restPose(s), s);
-    }
     if (motion != null) {
-      _snake(canvas, _motionPose(motion), motion.snake);
+      if (motion.snake.id >= 0) _drawSnake(canvas, _motionPose(motion, motion.snake, motion.lane), motion.snake);
+      for (final o in motion.others) {
+        _drawSnake(canvas, _motionPose(motion, o.snake, o.lane), o.snake);
+      }
     }
     canvas.restore();
-    if (motion != null && motion.kind == MotionKind.bump && motion.lane.blocker != null) {
+    for (final o in d.board.obstacles) {
+      _obstacle(canvas, o, top: true, pulse: 0);
+    }
+    if (d.board.night) _night(canvas);
+    if (motion != null && motion.kind == MotionKind.bump) {
       final flash = t < .5 ? t * 2 : (1 - t) * 2;
-      _cross(canvas, _c(motion.lane.blocker!), flash);
+      for (final l in [motion.lane, for (final o in motion.others) o.lane]) {
+        if (l.blocker != null) _cross(canvas, _c(l.blocker!), flash);
+      }
+    }
+    if (motion != null && motion.kind == MotionKind.locked && motion.snake.id >= 0) {
+      final a = t < .15 ? t / .15 : (t > .85 ? (1 - t) / .15 : 1.0);
+      paintLockIcon(canvas, _c(motion.snake.head) + const Offset(0, -6.5), motion.lockReason, a.clamp(0, 1));
     }
     final pv = d.preview;
     if (pv != null) {
       final s = d.board.snakes[pv.snakeId];
       if (s != null) _lane(canvas, s, pv.lane);
     }
+    final guide = d.guideSnakeId == null || motion != null ? null : d.board.snakes[d.guideSnakeId];
+    if (guide != null) _hand(canvas, _c(guide.body[guide.body.length ~/ 2]));
     canvas.restore();
   }
+
+  /// Tutorial hand tapping the guided snake.
+  void _hand(Canvas canvas, Offset at) {
+    final press = (math.sin(idle * 2 * math.pi) + 1) / 2;
+    canvas.drawCircle(at, 3 + press * 3, Paint()..color = Colors.white.withValues(alpha: .55 * (1 - press)));
+    final tip = at + Offset(1.2, 1.2 + press * 1.4);
+    final palm = Paint()..color = const Color(0xFFFFE0C2);
+    final edge = _stroke(const Color(0xFF8D5524), .45);
+    final finger = RRect.fromRectAndRadius(Rect.fromLTWH(tip.dx - 1.1, tip.dy, 2.2, 5.6), const Radius.circular(1.1));
+    final hand = RRect.fromRectAndRadius(Rect.fromLTWH(tip.dx - 1.6, tip.dy + 4, 5.6, 5), const Radius.circular(1.8));
+    canvas.drawRRect(hand, palm);
+    canvas.drawRRect(hand, edge);
+    canvas.drawRRect(finger, palm);
+    canvas.drawRRect(finger, edge);
+  }
+
+  void _obstacle(Canvas canvas, Obstacle o, {required bool top, required double pulse}) {
+    if (pulse > 0) {
+      for (final c in o.cells) {
+        canvas.drawCircle(_c(c), 5 + pulse * 1.5, Paint()..color = Colors.white.withValues(alpha: .5 * pulse));
+      }
+    }
+    paintObstacle(canvas, o, top: top, idle: idle, hammerMode: d.hammerMode, hint: d.hintObstacleId == o.id);
+  }
+
+  /// Jungle Night: dark board with light around the last moved snake and
+  /// the preview lane.
+  void _night(Canvas canvas) {
+    final rr = _lawnRect();
+    final lit = <Offset>[];
+    final s = d.litSnakeId == null ? null : d.board.snakes[d.litSnakeId];
+    if (s != null) lit.addAll(s.body.map(_c));
+    final pv = d.preview;
+    if (pv != null) lit.addAll(pv.lane.cells.map(_c));
+    final m = d.motion;
+    if (m != null && m.snake.id >= 0) lit.addAll(m.snake.body.map(_c));
+    canvas.saveLayer(rr.outerRect.inflate(2), Paint());
+    canvas.drawRRect(rr, Paint()..color = (d.brightNights ? const Color(0x99101A2E) : const Color(0xD9101A2E)));
+    final hole = Paint()
+      ..blendMode = BlendMode.dstOut
+      ..color = const Color(0xCC000000);
+    for (final p in lit) {
+      canvas.drawCircle(p, 9, hole);
+    }
+    canvas.restore();
+  }
+
+  void _drawSnake(Canvas canvas, _Pose pose, Snake s) {
+    final m = s.marks;
+    final ghost = m.ghost;
+    if (ghost) canvas.saveLayer(null, Paint()..color = Colors.white.withValues(alpha: .35));
+    final covered = m.layer == 0 && m.lock == 'M032';
+    if (covered) canvas.saveLayer(null, Paint()..color = Colors.white.withValues(alpha: .6));
+    if (m.wideSide != null) {
+      final side = Offset(m.wideSide!.dx.toDouble(), m.wideSide!.dy.toDouble()) * _u;
+      _snake(canvas, _Pose([for (final p in pose.points) p + side], pose.dir), s, headOn: false);
+    }
+    _snake(canvas, pose, s);
+    if (m.hydra && pose.points.length > 1) {
+      final n = pose.points.length;
+      final back = pose.points[n - 1] - pose.points[n - 2];
+      final dir = back.distance < 1e-6 ? -pose.dir : back / back.distance;
+      final pal = AppColors.snakePalette(s.color);
+      _head(canvas, pose.points.last, dir, pal, _grad(pal), false);
+    }
+    paintSnakeMarks(canvas, s, pose.points, pose.dir, idle: idle);
+    if (covered) canvas.restore();
+    if (ghost) canvas.restore();
+  }
+
+  RadialGradient _grad(SnakePalette pal) => RadialGradient(
+    center: const Alignment(-.28, -.4),
+    radius: .78,
+    colors: [pal.light, pal.body, pal.dark],
+    stops: const [0, .48, 1],
+  );
 
   // ── geometry helpers ──
   Offset _c(Cell c) => Offset(c.x * _u + _u / 2, c.y * _u + _u / 2);
@@ -296,8 +472,9 @@ class BoardPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
     canvas.save();
     canvas.translate(1.1, 2.1);
+    final moving = d.motion?.snakeIds.toSet() ?? const <int>{};
     for (final s in d.board.snakes.values) {
-      if (d.motion?.snake.id == s.id) continue;
+      if (moving.contains(s.id) || s.marks.hidden) continue;
       final pts = s.body.map(_c).toList();
       canvas.drawPath(_poly(pts), stroke);
       canvas.drawCircle(pts.first, 4.7, p);
@@ -389,32 +566,50 @@ class BoardPainter extends CustomPainter {
   /// Points from head to tail plus the head direction.
   _Pose _restPose(Snake s) => _Pose(s.body.map(_c).toList(), Offset(s.dir.dx.toDouble(), s.dir.dy.toDouble()));
 
-  _Pose _motionPose(Motion m) {
-    final s = m.snake;
+  _Pose _motionPose(Motion m, Snake s, LaneTrace lane) {
     final dir = Offset(s.dir.dx.toDouble(), s.dir.dy.toDouble());
     switch (m.kind) {
-      case MotionKind.locked:
-        final wob = math.sin(t * math.pi * 4) * .9 * (1 - t);
+      case MotionKind.locked || MotionKind.action:
+        final wob = m.kind == MotionKind.locked ? math.sin(t * math.pi * 4) * .9 * (1 - t) : 0.0;
         final pose = _restPose(s);
         return _Pose([for (final p in pose.points) p + Offset(wob, 0)], dir);
       case MotionKind.exit:
-        final travel = (m.lane.cells.length + s.length + 1) * _u;
-        return _slide(s, dir, Curves.easeIn.transform(t) * travel);
+        final travel = (lane.cells.length + s.length + 1) * _u;
+        return _slide(s, lane, Curves.easeIn.transform(t) * travel);
+      case MotionKind.slide:
+        return _slide(s, lane, Curves.easeInOut.transform(t) * lane.cells.length * _u, endHere: true);
       case MotionKind.bump:
-        final reach = m.lane.cells.isEmpty ? .25 * _u : m.lane.cells.length * _u + .2 * _u;
+        final reach = lane.cells.isEmpty ? .25 * _u : lane.cells.length * _u + .2 * _u;
         final there = t < .55 ? Curves.easeOut.transform(t / .55) : 1 - Curves.easeIn.transform((t - .55) / .45);
-        return _slide(s, dir, reach * there);
+        return _slide(s, lane, reach * there);
     }
   }
 
-  /// The snake slithers [dist] units along its own body and then straight
-  /// ahead, so the tail follows the bends the head took.
-  _Pose _slide(Snake s, Offset dir, double dist) {
-    final body = s.body.map(_c).toList(); // head first
-    final track = <Offset>[...body.reversed]; // tail → head
-    final ahead = s.length + 40;
-    for (var i = 1; i <= ahead; i++) {
-      track.add(body.first + dir * (i * _u));
+  /// The snake slithers [dist] units along its own body, then along the
+  /// lane (which may bend or jump through burrows), then straight on, so
+  /// the tail follows every bend the head took. A tail-first lane runs the
+  /// track the other way round.
+  _Pose _slide(Snake s, LaneTrace lane, double dist, {bool endHere = false}) {
+    final fwd = s.body.map(_c).toList(); // head first
+    final body = lane.fromTail ? fwd.reversed.toList() : fwd; // leading end first
+    final track = <Offset>[...body.reversed];
+    for (final c in lane.cells) {
+      track.add(_c(c));
+    }
+    final last = track.last;
+    final sd = Offset(s.dir.dx.toDouble(), s.dir.dy.toDouble());
+    final ed = lane.exitDir ?? (lane.fromTail ? null : s.dir);
+    Offset dir;
+    if (ed != null) {
+      dir = Offset(ed.dx.toDouble(), ed.dy.toDouble());
+    } else {
+      final v = track.length > 1 ? track.last - track[track.length - 2] : sd;
+      dir = v.distance < 1e-6 ? sd : v / v.distance;
+    }
+    if (!endHere) {
+      for (var i = 1; i <= s.length + 40; i++) {
+        track.add(last + dir * (i * _u));
+      }
     }
     final cum = <double>[0];
     for (var i = 1; i < track.length; i++) {
@@ -433,11 +628,12 @@ class BoardPainter extends CustomPainter {
     final len = (s.length - 1) * _u;
     final pts = <Offset>[];
     for (var k = 0; k < s.length; k++) {
-      pts.add(at(dist + len - k * _u)); // head first
+      pts.add(at(dist + len - k * _u)); // leading end first
     }
-    final h = pts.length > 1 ? (pts[0] - pts[1]) : dir;
-    final hd = h.distance < 1e-6 ? dir : h / h.distance;
-    return _Pose(pts, hd);
+    final ordered = lane.fromTail ? pts.reversed.toList() : pts; // head first again
+    final h = ordered.length > 1 ? (ordered[0] - ordered[1]) : dir;
+    final hd = h.distance < 1e-6 ? sd : h / h.distance;
+    return _Pose(ordered, hd);
   }
 
   Path _poly(List<Offset> pts) {
@@ -456,7 +652,7 @@ class BoardPainter extends CustomPainter {
     ..strokeCap = round ? StrokeCap.round : StrokeCap.butt
     ..strokeJoin = StrokeJoin.round;
 
-  void _snake(Canvas canvas, _Pose pose, Snake s) {
+  void _snake(Canvas canvas, _Pose pose, Snake s, {bool headOn = true}) {
     final pal = AppColors.snakePalette(s.color);
     final pts = pose.points;
     final head = pts.first;
@@ -523,6 +719,7 @@ class BoardPainter extends CustomPainter {
         _stroke(const Color(0xBFFFFFFF), .9)..maskFilter = const MaskFilter.blur(BlurStyle.normal, .45),
       );
     }
+    if (!headOn) return;
     _head(canvas, head, dir, pal, grad, s.skin == SnakeSkin.caterpillar);
     if (d.hintSnakeId == s.id) _firefly(canvas, head + Offset(3.5, 5.6 - 1.2 * math.sin(idle * 2 * math.pi)));
   }
@@ -617,22 +814,42 @@ class BoardPainter extends CustomPainter {
 
   // ── preview lane (Tongue-Flick Preview) ──
   void _lane(Canvas canvas, Snake s, LaneTrace lane) {
-    final dir = Offset(s.dir.dx.toDouble(), s.dir.dy.toDouble());
-    final h = _c(s.head);
-    final blocked = lane.blocker != null;
-    final col = blocked ? AppColors.previewBlocked : AppColors.previewClear;
-    final start = h + dir * 7.6;
-    Offset end;
-    if (blocked) {
-      end = _c(lane.blocker!) - dir * 3.4;
+    final startCell = lane.fromTail ? s.body.last : s.head;
+    final h = _c(startCell);
+    Offset dir;
+    if (lane.fromTail && s.body.length > 1) {
+      final v = _c(s.body.last) - _c(s.body[s.body.length - 2]);
+      dir = v / v.distance;
     } else {
-      final lastCell = lane.cells.isEmpty ? s.head : lane.cells.last;
-      end = _c(lastCell) + dir * 3;
+      dir = Offset(s.dir.dx.toDouble(), s.dir.dy.toDouble());
     }
-    if ((end - h).distance > (start - h).distance) {
-      final line = Path()
-        ..moveTo(start.dx, start.dy)
-        ..lineTo(end.dx, end.dy);
+    final blocked = lane.blocker != null;
+    final col = lane.unknown
+        ? const Color(0xFF90A4AE)
+        : blocked
+        ? AppColors.previewBlocked
+        : AppColors.previewClear;
+    // Polyline through every lane cell; a burrow jump starts a new piece.
+    final pts = <Offset>[h + dir * 7.6, for (final c in lane.cells) _c(c)];
+    if (blocked) {
+      final bc = _c(lane.blocker!);
+      final from = pts.length > 1 ? pts.last : h;
+      final v = bc - from;
+      pts.add(v.distance < 1e-6 ? bc : bc - v / v.distance * 3.4);
+    } else if (!lane.unknown) {
+      final ed = lane.exitDir;
+      final out = ed == null ? dir : Offset(ed.dx.toDouble(), ed.dy.toDouble());
+      pts.add((pts.length > 1 ? pts.last : h) + out * 3);
+    }
+    if (pts.length > 1) {
+      final line = Path()..moveTo(pts.first.dx, pts.first.dy);
+      for (var i = 1; i < pts.length; i++) {
+        if ((pts[i] - pts[i - 1]).distance > _u * 1.6) {
+          line.moveTo(pts[i].dx, pts[i].dy);
+        } else {
+          line.lineTo(pts[i].dx, pts[i].dy);
+        }
+      }
       canvas.drawPath(_dashed(line, const [.1, 2.3]), _stroke(const Color(0xE6FFFFFF), 2));
       canvas.drawPath(_dashed(line, const [.1, 2.3]), _stroke(col, 1.25));
     }
@@ -648,6 +865,19 @@ class BoardPainter extends CustomPainter {
       _stroke(const Color(0xFFD81B3C), .75),
     );
     if (blocked) _cross(canvas, _c(lane.blocker!), 1);
+    if (lane.unknown) {
+      final end = pts.last;
+      canvas.drawCircle(end, 2.6, Paint()..color = Colors.white);
+      canvas.drawCircle(end, 2.6, _stroke(const Color(0xFF90A4AE), .6));
+      final tp = TextPainter(
+        text: const TextSpan(
+          text: '?',
+          style: TextStyle(fontFamily: 'Fredoka', fontSize: 3.6, color: Color(0xFF607D8B), fontWeight: FontWeight.w700),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      tp.paint(canvas, end - Offset(tp.width / 2, tp.height / 2));
+    }
   }
 
   void _cross(Canvas canvas, Offset c, double a) {

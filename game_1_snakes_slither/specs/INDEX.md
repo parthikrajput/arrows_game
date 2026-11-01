@@ -15,9 +15,9 @@ Group | File Path | Description | Status
 
 | Group | File Path | Description | Status |
 |---|---|---|---|
-| gameplay | specs/gameplay/core-concept-and-rules.md | Core puzzle rules, board/snake models, turn resolution pipeline, and win/fail/stars logic | Approved |
-| gameplay | specs/gameplay/level-progression-0001-0500.md | 500-level progression architecture, tiers, 10-level block patterns, FTUE onboarding, and L500 Finale | Approved |
-| gameplay | specs/gameplay/obstacle-catalog-phase-1.md | Catalog of 49 jungle mechanics (M001–M049) and Phase 1 Finale with collision, hammer, and solver rules | Approved |
+| gameplay | specs/gameplay/core-concept-and-rules.md | Core puzzle rules, board/snake models, turn resolution pipeline, and win/fail/stars logic | Implemented |
+| gameplay | specs/gameplay/level-progression-0001-0500.md | 500-level progression architecture, tiers, 10-level block patterns, FTUE onboarding, and L500 Finale | Implemented |
+| gameplay | specs/gameplay/obstacle-catalog-phase-1.md | Catalog of 49 jungle mechanics (M001–M049) and Phase 1 Finale with collision, hammer, and solver rules | Implemented |
 | economy | specs/economy/boosters-coins-shop.md | Boosters, coins inflow/outflow, Gift Baskets, Golden Slither Rush, Lucky Lily Wheel, Shop, ads, and VIP | Approved |
 | meta | specs/meta/daily-challenge-and-streak.md | Daily Jungle Puzzle, 7 weekday modifiers, silhouettes, 7-day streak ladder, Saver Leaf, and leaderboards | Implemented |
 | ui | specs/ui/ui-ux-screens.md | Design tokens, color-blind palette, responsive layout rules, and wireframes for all 18 screens and dialogs | Approved |
@@ -26,7 +26,7 @@ Group | File Path | Description | Status
 | tech | specs/tech/logging-and-error-tracking.md | AppLogger ring buffer and file sink, Crashlytics, tap tracing, deterministic replay, and problem reporting | Implemented |
 | tech | specs/tech/performance-optimization.md | 60 fps low-tier performance budgets, on-demand Ticker, static layer caching, device tiers, and perf monitor | Approved |
 | tech | specs/tech/splash-and-instant-launch.md | Instant launch pipeline with zero loading screens, native Android/iOS splash, and Jungle Dawn intro | Approved |
-| ui | specs/ui/vfx-and-juice.md | Particle, shake, flash and trail effects with tier limits, per-event effect catalog, and VFX QA checklist | Approved |
+| ui | specs/ui/vfx-and-juice.md | Particle, shake, flash and trail effects with tier limits, per-event effect catalog, and VFX QA checklist | Implemented |
 | gameplay | specs/gameplay/phase-2-scope-and-rules.md | Pinch-zoom and pan, diagonal snakes, 3 layers, push physics, sunbeams, and Remote Config rollout | Draft |
 | gameplay | specs/gameplay/level-progression-0501-1000.md | Levels 501–1000 progression, P2-A/P2-B tiers, zoom onboarding (L501–510), and L1000 Finale | Draft |
 | gameplay | specs/gameplay/obstacle-catalog-phase-2.md | Catalog of 49 mechanics (M051–M099), push blocks, periodic gates, beams, and L1000 boss rules | Draft |

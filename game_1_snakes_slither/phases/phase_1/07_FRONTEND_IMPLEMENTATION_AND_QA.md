@@ -1,6 +1,7 @@
-﻿# 07 — Frontend Implementation & QA
+# 07 — Frontend Implementation & QA
 > Flutter implementation rules (architecture, BLoCs, renderer, input, audio, ads/IAP/consent, persistence, analytics, performance, errors) અને Phase 1 નો QA checklist.
 
+**Status:** Approved (2026-11-01)  
 **Related docs:** [Phase 1 index](./README.md) · [Shared Core Standard §12–§15](../../SHARED_CORE_STANDARD.md) · [01 Rules](./01_GAME_CONCEPT_AND_RULES.md) · [03 Obstacle Catalog](./03_OBSTACLE_CATALOG_PHASE_1.md) · [04 Boosters & Shop](./04_BOOSTERS_COINS_SHOP.md) · [05 Daily & Streak](./05_DAILY_CHALLENGE_AND_STREAK.md) · [06 Screens](./06_UI_UX_SCREENS.md) · [Scaling to 10,000](../../SCALING_TO_10000_LEVELS.md)
 
 ---

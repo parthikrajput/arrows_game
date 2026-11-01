@@ -11,7 +11,9 @@ import 'package:snakes_slither/data/save_store.dart';
 import 'package:snakes_slither/features/gameplay/game_bloc.dart';
 import 'package:snakes_slither/services/ads_service.dart';
 import 'package:snakes_slither/services/audio_service.dart';
+import 'package:snakes_slither/state/compliance_cubit.dart';
 import 'package:snakes_slither/state/progress_cubit.dart';
+import 'package:snakes_slither/state/tutorial_cubit.dart';
 import 'package:snakes_slither/state/wallet_cubit.dart';
 import 'package:snakes_slither/ui/board/board_canvas.dart';
 
@@ -20,7 +22,7 @@ import 'helpers.dart';
 // These tests only use contract keys and real state, never on-screen text,
 // so they keep passing whatever the UI looks like.
 
-class InstantAds implements AdsService {
+class InstantAds extends AdsService {
   InstantAds({this.reward = true});
   bool reward;
   int interstitials = 0;
@@ -57,6 +59,8 @@ void main() {
   late SaveStore store;
   setUp(() async {
     store = await SaveStore.at(Directory.systemTemp.createTempSync('flow').path);
+    // Most flows start after the first-launch age question.
+    await store.write('compliance', {'ageGateDone': true, 'underAge': false});
   });
 
   Future<void> boot(WidgetTester t) async {
@@ -158,11 +162,127 @@ void main() {
   });
 
   testWidgets('Home → Shop → buy 1 Hint → back home', (t) async {
+    // Hint unlocks at L3.
+    final p = ProgressCubit(store);
+    for (var n = 1; n <= 3; n++) {
+      p.levelWon(n, 3);
+    }
+    await p.close();
     await boot(t);
     await go(t, AppKeys.homeShop);
     expect(find.byKey(AppKeys.shopScreen), findsOneWidget);
     await go(t, AppKeys.shopTile('hint', 1));
     final w = read<WalletCubit>(t, AppKeys.shopScreen).state;
     expect((w.coins, w.count(Booster.hint)), (140, 1));
+  });
+
+  testWidgets('L1 tutorial: only the glowing snake reacts, the tip finishes on the win', (t) async {
+    await boot(t);
+    await go(t, AppKeys.homePlay);
+    expect(find.byKey(AppKeys.tutorialTip), findsOneWidget);
+    final bloc = read<GameBloc>(t, AppKeys.gameplayScreen);
+    final guide = bloc.state.solutionNextSnake!;
+    final other = bloc.state.attempt.board.snakes.keys.firstWhere((k) => k != guide);
+    bloc.add(SnakeTapped(other));
+    await t.pumpAndSettle();
+    expect(bloc.state.attempt.moves, 0, reason: 'not the glowing snake');
+    for (var i = 0; i < 2; i++) {
+      bloc.add(SnakeTapped(bloc.state.solutionNextSnake!));
+      await t.pumpAndSettle();
+    }
+    expect(find.byKey(AppKeys.completePopup), findsOneWidget);
+    expect(read<TutorialCubit>(t, AppKeys.gameplayScreen).state.has('1_tap_to_slither'), isTrue);
+  });
+
+  testWidgets('L11 shows the Garden Rock intro card once', (t) async {
+    final p = ProgressCubit(store);
+    for (var n = 1; n <= 10; n++) {
+      p.levelWon(n, 3);
+    }
+    await p.close();
+    await boot(t);
+    GoRouter.of(t.element(find.byKey(AppKeys.homeScreen))).go('/play/11');
+    await t.pumpAndSettle();
+    expect(find.byKey(AppKeys.introCard), findsOneWidget);
+    await go(t, AppKeys.introGotIt);
+    expect(find.byKey(AppKeys.introCard), findsNothing);
+    expect(read<TutorialCubit>(t, AppKeys.gameplayScreen).state.has('M001'), isTrue);
+  });
+
+  testWidgets('L3 hint tip points at the Firefly and ends when it is used', (t) async {
+    final p = ProgressCubit(store);
+    p.levelWon(1, 3);
+    p.levelWon(2, 3);
+    await p.close();
+    GameBloc.useIsolateForHint = false;
+    await boot(t);
+    GoRouter.of(t.element(find.byKey(AppKeys.homeScreen))).go('/play/3');
+    await t.pumpAndSettle();
+    expect(find.byKey(AppKeys.tutorialTip), findsOneWidget);
+    final bloc = read<GameBloc>(t, AppKeys.gameplayScreen);
+    bloc.add(const BoosterPressed(Booster.hint));
+    await t.pumpAndSettle();
+    expect(bloc.state.hintSnakeId, isNotNull);
+    expect(find.byKey(AppKeys.tutorialTip), findsNothing);
+  });
+
+  testWidgets('L25 win → Next → Golden Slither Rush → skip → Level 26', (t) async {
+    final p = ProgressCubit(store);
+    for (var n = 1; n <= 24; n++) {
+      p.levelWon(n, 3);
+    }
+    await p.close();
+    await boot(t);
+    GoRouter.of(t.element(find.byKey(AppKeys.homeScreen))).go('/play/25');
+    await t.pumpAndSettle();
+    final bloc = read<GameBloc>(t, AppKeys.gameplayScreen);
+    for (final id in bloc.state.level.solution) {
+      final a = bloc.state.attempt;
+      final s = a.play.sim.snakeIndex(id);
+      bloc.add(s >= 0 ? SnakeTapped(s) : ObstacleTapped(a.play.sim.mechIndex(id)));
+      await t.pumpAndSettle();
+    }
+    expect(find.byKey(AppKeys.completePopup), findsOneWidget);
+    await go(t, AppKeys.next);
+    expect(find.byKey(AppKeys.rushIntroDialog), findsOneWidget);
+    // The round's clock runs every frame, so the screen never settles.
+    await t.tap(find.byKey(AppKeys.rushIntroStart));
+    await t.pump();
+    await t.pump(const Duration(seconds: 4));
+    await t.tap(find.byKey(AppKeys.rushSkipButton));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 500));
+    expect(find.byKey(AppKeys.rushResultsDialog), findsOneWidget);
+    await go(t, AppKeys.rushResultsContinue);
+    expect(read<GameBloc>(t, AppKeys.gameplayScreen).state.level.number, 26);
+  });
+
+  testWidgets('first launch: neutral age gate, nothing pre-selected, then Home', (t) async {
+    // Real disk I/O must run outside the test's fake clock.
+    await t.runAsync(() => store.write('compliance', {'ageGateDone': false}));
+    await boot(t);
+    expect(find.byKey(AppKeys.ageGateScreen), findsOneWidget);
+    expect(find.byKey(AppKeys.homeScreen), findsNothing);
+    await t.tap(find.byKey(AppKeys.ageGateContinue));
+    await t.pumpAndSettle();
+    expect(find.byKey(AppKeys.ageGateScreen), findsOneWidget, reason: 'no year picked yet');
+    await t.drag(find.byKey(AppKeys.ageGateWheel), const Offset(0, -260));
+    await t.pumpAndSettle();
+    await go(t, AppKeys.ageGateContinue);
+    expect(find.byKey(AppKeys.homeScreen), findsOneWidget);
+    expect(read<ComplianceCubit>(t, AppKeys.homeScreen).state.ageGateDone, isTrue);
+  });
+
+  testWidgets('Leaderboards show local stats from Home › Ranks', (t) async {
+    final p = ProgressCubit(store);
+    p.levelWon(1, 3);
+    p.levelWon(2, 2);
+    await p.close();
+    await boot(t);
+    await go(t, AppKeys.homeRanks);
+    expect(find.byKey(AppKeys.leaderboardsScreen), findsOneWidget);
+    expect(find.text('2'), findsWidgets);
+    await go(t, AppKeys.leaderboardTab('stars'));
+    expect(find.text('5'), findsOneWidget);
   });
 }

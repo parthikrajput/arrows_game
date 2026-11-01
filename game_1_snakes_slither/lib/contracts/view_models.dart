@@ -6,7 +6,19 @@ import 'package:equatable/equatable.dart';
 import 'package:puzzle_core/puzzle_core.dart';
 
 export 'package:puzzle_core/puzzle_core.dart'
-    show Booster, BoardState, Cell, Dir, LaneTrace, Rock, Snake, SnakeColor, SnakeSkin;
+    show
+        Booster,
+        BoardState,
+        Cell,
+        Dir,
+        LaneTrace,
+        Obstacle,
+        Rock,
+        Snake,
+        SnakeColor,
+        SnakeLane,
+        SnakeMarks,
+        SnakeSkin;
 
 class HomeData extends Equatable {
   const HomeData({
@@ -68,6 +80,7 @@ class LevelNodeData extends Equatable {
     required this.state,
     required this.stars,
     required this.isHard,
+    this.isIntro = false,
   });
   final int number;
   final NodeState state;
@@ -75,8 +88,11 @@ class LevelNodeData extends Equatable {
   /// Best stars 0..3 (0 when not cleared).
   final int stars;
   final bool isHard;
+
+  /// Introduces a new mechanic: "NEW!" badge.
+  final bool isIntro;
   @override
-  List<Object?> get props => [number, state, stars, isHard];
+  List<Object?> get props => [number, state, stars, isHard, isIntro];
 }
 
 class HudData extends Equatable {
@@ -88,6 +104,11 @@ class HudData extends Equatable {
     required this.shieldCharges,
     required this.moves,
     required this.coins,
+    this.gemsLeft,
+    this.mongooseHp,
+    this.showHearts = true,
+    this.highlightHearts = false,
+    this.highlightMoves = false,
   });
   final int level;
   final bool isHard;
@@ -98,8 +119,34 @@ class HudData extends Equatable {
   final int shieldCharges;
   final int moves;
   final int coins;
+
+  /// Jungle Gems still to collect; null when the level has none.
+  final int? gemsLeft;
+
+  /// Grumpy Mongoose HP; null when the level has no Mongoose.
+  final int? mongooseHp;
+
+  /// Hidden in the very first level (tap tutorial).
+  final bool showHearts;
+
+  /// A tutorial points at the hearts / the move counter.
+  final bool highlightHearts;
+  final bool highlightMoves;
   @override
-  List<Object?> get props => [level, isHard, hearts, maxHearts, shieldCharges, moves, coins];
+  List<Object?> get props => [
+    level,
+    isHard,
+    hearts,
+    maxHearts,
+    shieldCharges,
+    moves,
+    coins,
+    gemsLeft,
+    mongooseHp,
+    showHearts,
+    highlightHearts,
+    highlightMoves,
+  ];
 }
 
 class BoosterButtonData extends Equatable {
@@ -112,8 +159,12 @@ class BoosterButtonData extends Equatable {
     required this.cap,
     required this.enabled,
     required this.active,
+    this.highlight = false,
   });
   final Booster booster;
+
+  /// A tutorial points at this button: pulse a ring around it.
+  final bool highlight;
 
   /// Inventory. 0 => tapping opens the mini shop.
   final int count;
@@ -130,25 +181,50 @@ class BoosterButtonData extends Equatable {
 
   bool get capReached => used >= cap;
   @override
-  List<Object?> get props => [booster, count, locked, unlockLevel, used, cap, enabled, active];
+  List<Object?> get props => [booster, count, locked, unlockLevel, used, cap, enabled, active, highlight];
 }
 
-enum MotionKind { exit, bump, locked }
+/// exit / bump / locked as before; slide = snake moves to a new cell and
+/// stays (Sticky Swamp Mud); action = no snake moves (lever, lilypad,
+/// switch, stump, wake-up): pulse [obstacle] or [snake] briefly.
+enum MotionKind { exit, bump, locked, slide, action }
 
 /// One animation the board must play, then report back with [id].
 class Motion extends Equatable {
-  const Motion({required this.id, required this.kind, required this.snake, required this.lane});
+  const Motion({
+    required this.id,
+    required this.kind,
+    required this.snake,
+    required this.lane,
+    this.others = const [],
+    this.obstacle,
+    this.lockReason,
+  });
 
   /// Unique per motion; pass back in onMotionDone.
   final int id;
   final MotionKind kind;
 
-  /// The snake as it was before the move.
+  /// The snake as it was before the move. For an obstacle tap this is a
+  /// placeholder (id -1) and [obstacle] is set.
   final Snake snake;
 
-  /// Exit: cells travelled before leaving the edge. Bump: cells before the
-  /// blocker (0 => nudge 0.25 cell) and `lane.blocker` to flash.
+  /// Exit: cells travelled before leaving (may bend or jump), then
+  /// `lane.exitDir`. Bump: cells before the blocker (0 => nudge 0.25 cell)
+  /// and `lane.blocker` to flash. `lane.fromTail`: the tail leads.
   final LaneTrace lane;
+
+  /// Other snakes moving in the same Move (Twins, Pond Twins, Parade).
+  final List<SnakeLane> others;
+
+  /// Obstacle tapped (action motions).
+  final Obstacle? obstacle;
+
+  /// Mechanic type behind a locked tap, for the 600 ms lock icon.
+  final String? lockReason;
+
+  /// Every snake this motion animates.
+  Iterable<int> get snakeIds => [if (snake.id >= 0) snake.id, for (final o in others) o.snake.id];
   @override
   List<Object?> get props => [id, kind, snake.id];
 }
@@ -172,25 +248,50 @@ class BoardViewData extends Equatable {
     required this.hammerMode,
     required this.colourBlind,
     required this.reducedMotion,
+    this.hintObstacleId,
+    this.litSnakeId,
+    this.brightNights = false,
+    this.lowQuality = false,
+    this.guideSnakeId,
   });
   final BoardState board;
   final Motion? motion;
 
   /// Glow this snake (Glow Firefly Hint) until it changes to null.
   final int? hintSnakeId;
+
+  /// Glow this obstacle instead when the next step is a lever, lilypad…
+  final int? hintObstacleId;
   final PreviewData? preview;
   final bool hammerMode;
   final bool colourBlind;
   final bool reducedMotion;
+
+  /// Jungle Night: the snake that moved last stays lit.
+  final int? litSnakeId;
+
+  /// Settings "Brighter nights": the night overlay is lighter.
+  final bool brightNights;
+
+  /// Low device tier or Battery Saver: no shake, fewer particles.
+  final bool lowQuality;
+
+  /// FTUE: draw the tutorial hand on this snake.
+  final int? guideSnakeId;
   @override
   List<Object?> get props => [
     board,
     motion,
     hintSnakeId,
+    hintObstacleId,
     preview,
     hammerMode,
     colourBlind,
     reducedMotion,
+    litSnakeId,
+    brightNights,
+    lowQuality,
+    guideSnakeId,
   ];
 }
 
@@ -225,9 +326,13 @@ class LevelCompleteData extends Equatable {
     required this.doubled,
     required this.hasNext,
     this.gift,
+    this.rushNext = false,
   });
   final int level;
   final int stars;
+
+  /// A Golden Slither Rush follows this win (after the Gift Basket, if any).
+  final bool rushNext;
 
   /// Jungle Gift Basket / Treasure Chest earned by this win (already granted).
   /// Shown after Next, before the next level.
@@ -244,6 +349,18 @@ class LevelCompleteData extends Equatable {
   final bool doubled;
   final bool hasNext;
   int get totalCoins => clearCoins * (doubled ? 2 : 1) + starBonus;
+
+  LevelCompleteData copyWith({bool? canDouble, bool? doubled}) => LevelCompleteData(
+    level: level,
+    stars: stars,
+    clearCoins: clearCoins,
+    starBonus: starBonus,
+    canDouble: canDouble ?? this.canDouble,
+    doubled: doubled ?? this.doubled,
+    hasNext: hasNext,
+    gift: gift,
+    rushNext: rushNext,
+  );
   @override
   List<Object?> get props => [
     level,
@@ -254,6 +371,7 @@ class LevelCompleteData extends Equatable {
     doubled,
     hasNext,
     gift,
+    rushNext,
   ];
 }
 
@@ -281,17 +399,88 @@ class SettingsData extends Equatable {
     required this.haptics,
     required this.colourBlind,
     required this.reducedMotion,
+    this.brightNights = false,
+    this.batterySaver = false,
+    this.shareDiagnostics = false,
+    this.language = 'en',
   });
   final bool sound;
   final bool music;
   final bool haptics;
   final bool colourBlind;
   final bool reducedMotion;
+
+  /// Jungle Night boards use a lighter overlay.
+  final bool brightNights;
+
+  /// Forces the Low quality profile (no shake, fewer particles).
+  final bool batterySaver;
+
+  /// Lets "Report a problem" attach the log; off by default.
+  final bool shareDiagnostics;
+
+  /// 'en', 'gu' or 'hi'.
+  final String language;
+
+  bool valueOf(SettingKey k) => switch (k) {
+    SettingKey.sound => sound,
+    SettingKey.music => music,
+    SettingKey.haptics => haptics,
+    SettingKey.colourBlind => colourBlind,
+    SettingKey.reducedMotion => reducedMotion,
+    SettingKey.brightNights => brightNights,
+    SettingKey.batterySaver => batterySaver,
+    SettingKey.shareDiagnostics => shareDiagnostics,
+  };
+
+  SettingsData toggled(SettingKey k) => SettingsData(
+    sound: k == SettingKey.sound ? !sound : sound,
+    music: k == SettingKey.music ? !music : music,
+    haptics: k == SettingKey.haptics ? !haptics : haptics,
+    colourBlind: k == SettingKey.colourBlind ? !colourBlind : colourBlind,
+    reducedMotion: k == SettingKey.reducedMotion ? !reducedMotion : reducedMotion,
+    brightNights: k == SettingKey.brightNights ? !brightNights : brightNights,
+    batterySaver: k == SettingKey.batterySaver ? !batterySaver : batterySaver,
+    shareDiagnostics: k == SettingKey.shareDiagnostics ? !shareDiagnostics : shareDiagnostics,
+    language: language,
+  );
+
+  SettingsData withLanguage(String code) => SettingsData(
+    sound: sound,
+    music: music,
+    haptics: haptics,
+    colourBlind: colourBlind,
+    reducedMotion: reducedMotion,
+    brightNights: brightNights,
+    batterySaver: batterySaver,
+    shareDiagnostics: shareDiagnostics,
+    language: code,
+  );
+
   @override
-  List<Object?> get props => [sound, music, haptics, colourBlind, reducedMotion];
+  List<Object?> get props => [
+    sound,
+    music,
+    haptics,
+    colourBlind,
+    reducedMotion,
+    brightNights,
+    batterySaver,
+    shareDiagnostics,
+    language,
+  ];
 }
 
-enum SettingKey { sound, music, haptics, colourBlind, reducedMotion }
+enum SettingKey {
+  sound,
+  music,
+  haptics,
+  colourBlind,
+  reducedMotion,
+  brightNights,
+  batterySaver,
+  shareDiagnostics,
+}
 
 class GiftBasketData extends Equatable {
   const GiftBasketData({
@@ -343,8 +532,28 @@ class ShopData extends Equatable {
     required this.busy,
     required this.vipActive,
     required this.storeAvailable,
+    this.coinPacks = const [],
+    this.starter,
+    this.vipPrice,
+    this.purchaseBusy,
+    this.message,
   });
   final int coins;
+
+  /// Coins tab: S, M (Popular), L, XL (Best Value).
+  final List<CoinPackData> coinPacks;
+
+  /// Offers tab: shown only during its 48 h window.
+  final StarterOfferData? starter;
+
+  /// Localised VIP price, null when the store has no VIP product.
+  final String? vipPrice;
+
+  /// Product id being bought (buttons disabled).
+  final String? purchaseBusy;
+
+  /// One-off note ("Purchases restored").
+  final String? message;
 
   /// Boosters tab: Hint ×1, ×3, Shield ×1, ×3, Hammer ×1, ×3.
   final List<ShopTileData> tiles;
@@ -368,7 +577,43 @@ class ShopData extends Equatable {
     busy,
     vipActive,
     storeAvailable,
+    coinPacks,
+    starter,
+    vipPrice,
+    purchaseBusy,
+    message,
   ];
+}
+
+class CoinPackData extends Equatable {
+  const CoinPackData({required this.productId, required this.coins, required this.price, this.badge});
+  final String productId;
+  final int coins;
+  final String price;
+
+  /// "Popular" / "Best Value".
+  final String? badge;
+  @override
+  List<Object?> get props => [productId, coins, price, badge];
+}
+
+class StarterOfferData extends Equatable {
+  const StarterOfferData({
+    required this.productId,
+    required this.price,
+    required this.coins,
+    required this.boosters,
+    required this.timeLeft,
+  });
+  final String productId;
+  final String price;
+  final int coins;
+  final Map<Booster, int> boosters;
+
+  /// "47:58:12".
+  final String timeLeft;
+  @override
+  List<Object?> get props => [productId, price, coins, boosters, timeLeft];
 }
 
 class WheelSegmentData extends Equatable {
@@ -544,4 +789,99 @@ class StreakSaverData extends Equatable {
     canAffordCoins,
     adAvailable,
   ];
+}
+
+// ------------------------------------------------------------- Tutorials
+/// A Grandpa Tortoise tip during the FTUE or a booster unlock.
+class TutorialTipData extends Equatable {
+  const TutorialTipData({
+    required this.id,
+    required this.level,
+    required this.title,
+    required this.body,
+    this.showGotIt = true,
+  });
+
+  /// Step id, e.g. "1_tap_to_slither".
+  final String id;
+  final int level;
+  final String title;
+  final String body;
+
+  /// False while the player must do the step itself (tap the glowing snake).
+  final bool showGotIt;
+  @override
+  List<Object?> get props => [id, level, title, body, showGotIt];
+}
+
+/// Mechanic intro card shown before the level that introduces it.
+class MechanicIntroData extends Equatable {
+  const MechanicIntroData({
+    required this.type,
+    required this.level,
+    required this.name,
+    required this.rule,
+    this.heartNote,
+  });
+  final String type;
+  final int level;
+  final String name;
+  final String rule;
+  final String? heartNote;
+  @override
+  List<Object?> get props => [type, level, name, rule, heartNote];
+}
+
+// ------------------------------------------------------------- Golden Slither Rush
+class RushData extends Equatable {
+  const RushData({
+    required this.afterLevel,
+    required this.total,
+    required this.cleared,
+    required this.coins,
+    required this.msLeft,
+    required this.seconds,
+    required this.countdown,
+    required this.playing,
+    required this.perSnake,
+    required this.fullClearBonus,
+  });
+  final int afterLevel;
+  final int total;
+  final int cleared;
+  final int coins;
+  final int msLeft;
+  final int seconds;
+
+  /// 3, 2, 1 before the clock starts; 0 once playing.
+  final int countdown;
+  final bool playing;
+  final int perSnake;
+  final int fullClearBonus;
+  @override
+  List<Object?> get props => [afterLevel, total, cleared, coins, msLeft, seconds, countdown, playing];
+}
+
+class RushResultData extends Equatable {
+  const RushResultData({
+    required this.cleared,
+    required this.total,
+    required this.snakeCoins,
+    required this.bonus,
+    required this.msLeft,
+    required this.nextLevel,
+  });
+  final int cleared;
+  final int total;
+  final int snakeCoins;
+
+  /// +100 for a full clear, else 0.
+  final int bonus;
+  final int msLeft;
+
+  /// Level the Continue button opens; null after the Phase Finale.
+  final int? nextLevel;
+  int get totalCoins => snakeCoins + bonus;
+  @override
+  List<Object?> get props => [cleared, total, snakeCoins, bonus, msLeft, nextLevel];
 }
