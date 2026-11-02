@@ -24,6 +24,9 @@ class AppKeys {
   static const mapScreen = Key('map.screen');
   static const mapJumpToCurrent = Key('map.jump');
   static Key mapNode(int level) => Key('map.node.$level');
+  static const mapBotsToggle = Key('map.bots');
+  static const mapBotPlay = Key('map.botPlay');
+  static const botChip = Key('game.botChip');
   // Gameplay
   static const gameplayScreen = Key('game.screen');
   static const pauseButton = Key('game.pause');

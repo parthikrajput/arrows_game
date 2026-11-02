@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:puzzle_core/puzzle_core.dart';
 
+import '../../contracts/app_keys.dart';
 import '../../contracts/view_models.dart';
 import '../../data/level_repository.dart';
 import '../../data/save_store.dart';
@@ -25,6 +26,7 @@ import '../../ui/theme/tokens.dart';
 import '../../state/tutorial_cubit.dart';
 import '../../ui/popups/tutorial_popups.dart';
 import 'board_input.dart';
+import 'bot_player.dart';
 import 'game_bloc.dart';
 import 'tutorials.dart';
 
@@ -45,11 +47,13 @@ class GameplayRoute extends StatelessWidget {
     required this.levelNumber,
     this.customLevel,
     this.isDaily = false,
+    this.botMode = false,
   });
 
   final int levelNumber;
   final Level? customLevel;
   final bool isDaily;
+  final bool botMode;
 
   @override
   Widget build(BuildContext context) {
@@ -83,23 +87,26 @@ class GameplayRoute extends StatelessWidget {
         progress: c.read<ProgressCubit>(),
         ads: c.read<AdsCubit>(),
         hasNextLevel: isDaily ? false : repo.exists(levelNumber + 1),
-        guidedTaps: !isDaily && Tutorials.guidedTaps(level.number, c.read<TutorialCubit>().state),
-        onTrack: isDaily ? null : c.read<Analytics>().log,
+        guidedTaps: !isDaily && !botMode && Tutorials.guidedTaps(level.number, c.read<TutorialCubit>().state),
+        onTrack: isDaily || botMode ? null : c.read<Analytics>().log,
+        savesProgress: !botMode,
       ),
       child: _GameplayView(
         isDaily: isDaily,
         introType: isDaily ? null : repo.introducesMechanic(level.number),
+        botMode: botMode,
       ),
     );
   }
 }
 
 class _GameplayView extends StatefulWidget {
-  const _GameplayView({this.isDaily = false, this.introType});
+  const _GameplayView({this.isDaily = false, this.introType, this.botMode = false});
   final bool isDaily;
 
   /// Mechanic this level introduces (its "NEW!" card shows first).
   final String? introType;
+  final bool botMode;
 
   @override
   State<_GameplayView> createState() => _GameplayViewState();
@@ -111,12 +118,77 @@ class _GameplayViewState extends State<_GameplayView> {
   );
 
   final _frames = FrameMonitor();
+  late bool _botAutoPlay = widget.botMode;
+  bool _botScheduled = false;
+
+  /// Moves made when the bot last tapped; the same count on its next turn
+  /// means that tap was refused.
+  int _botTappedAt = -1;
+
+  /// Why the bot stopped on its own, shown on its chip.
+  String? _botStuck;
+
+  /// Pause between bot taps, so each slide can be watched.
+  static const botDelay = Duration(milliseconds: 320);
 
   @override
   void initState() {
     super.initState();
     _life; // start listening
     _frames.start();
+    if (_botAutoPlay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final bloc = context.read<GameBloc>();
+          _checkBotStep(bloc.state, bloc);
+        }
+      });
+    }
+  }
+
+  /// After a bot win the next level starts with the bot still on.
+  Future<void> _botNextLevel(LevelCompleteData r) async {
+    final router = GoRouter.of(context);
+    await Future<void>.delayed(const Duration(milliseconds: 1200));
+    if (!mounted || !_botAutoPlay) return;
+    router.go(r.hasNext ? '/play/${r.level + 1}?bot=true' : '/map');
+  }
+
+  void _stopBot(String why) => setState(() {
+    _botAutoPlay = false;
+    _botStuck = why;
+  });
+
+  void _checkBotStep(GameState s, GameBloc bloc) {
+    if (!_botAutoPlay || _botScheduled) return;
+    if (s.status != GameStatus.playing || s.miniShopFor != null) return;
+    _botScheduled = true;
+    Future.delayed(botDelay, () async {
+      if (!mounted) return;
+      final asked = bloc.state;
+      final next = await botMove(asked);
+      _botScheduled = false;
+      if (!mounted || !_botAutoPlay) return;
+      final now = bloc.state;
+      if (now.status != GameStatus.playing) return;
+      final made = now.attempt.history.length;
+      // The player moved while the bot was thinking: think again.
+      if (made != asked.attempt.history.length) return _checkBotStep(now, bloc);
+      if (made == _botTappedAt) return _stopBot('move ${made + 1} was refused');
+      _botTappedAt = made;
+      // A refused tap changes nothing the listener sees, so look again.
+      Future.delayed(botDelay * 3, () {
+        if (mounted) _checkBotStep(bloc.state, bloc);
+      });
+      switch (next) {
+        case (snake: final int id, obstacle: _):
+          bloc.add(SnakeTapped(id));
+        case (snake: _, obstacle: final int id):
+          bloc.add(ObstacleTapped(id));
+        default:
+          _stopBot('no way out from here');
+      }
+    });
   }
 
   @override
@@ -196,6 +268,7 @@ class _GameplayViewState extends State<_GameplayView> {
     }
     _winRecorded = false;
     _showGift = false;
+    _botTappedAt = -1;
     _frames.start();
     bloc.add(const Restarted());
   }
@@ -213,11 +286,14 @@ class _GameplayViewState extends State<_GameplayView> {
       listenWhen: (a, b) => a.cueSeq != b.cueSeq || a.status != b.status,
       listener: (context, s) {
         final tc = context.read<TutorialCubit>();
-        if (!widget.isDaily) Tutorials.doneBy(s).forEach(tc.markSeen);
+        if (!widget.isDaily && !widget.botMode) Tutorials.doneBy(s).forEach(tc.markSeen);
         if (s.status == GameStatus.won || s.status == GameStatus.failed) {
           context.read<PerfSettings>().levelFinished(_frames.stop());
         }
-        if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
+        if (s.status == GameStatus.won && s.result != null && !_winRecorded && widget.botMode) {
+          _winRecorded = true;
+          if (_botAutoPlay) _botNextLevel(s.result!);
+        } else if (s.status == GameStatus.won && s.result != null && !_winRecorded) {
           _winRecorded = true;
           // Every win refreshes the backup copy of the save.
           context.read<SaveStore>().backup();
@@ -227,6 +303,12 @@ class _GameplayViewState extends State<_GameplayView> {
             context.read<AdsCubit>().recordWin(_winContext(s.result!));
           }
         }
+        if (_botAutoPlay && s.status == GameStatus.playing) {
+          _checkBotStep(s, bloc);
+        }
+        if (_botAutoPlay && (s.status == GameStatus.secondChance || s.status == GameStatus.failed)) {
+          _stopBot('out of hearts');
+        }
         _onCue(context, s);
       },
       builder: (context, s) {
@@ -234,8 +316,10 @@ class _GameplayViewState extends State<_GameplayView> {
         final a = s.attempt;
         final popup = _popup(context, s, wallet, settings, progress, ads);
         final playing = s.status == GameStatus.playing || s.status == GameStatus.animating;
-        final tip = widget.isDaily || popup != null || !playing ? null : Tutorials.tipFor(s, tutorial);
-        final intro = widget.isDaily ? null : Tutorials.introFor(lv, widget.introType, tutorial);
+        final tip = widget.isDaily || widget.botMode || popup != null || !playing
+            ? null
+            : Tutorials.tipFor(s, tutorial);
+        final intro = widget.isDaily || widget.botMode ? null : Tutorials.introFor(lv, widget.introType, tutorial);
         final focus = tip?.focus ?? TipFocus.none;
         return PopScope(
           canPop: false,
@@ -275,10 +359,7 @@ class _GameplayViewState extends State<_GameplayView> {
                       unlockLevel: Economy.unlockLevel[b]!,
                       used: a.usesOf(b),
                       cap: AttemptRules.boosterCap[b]!,
-                      enabled:
-                          s.acceptsBoosters &&
-                          !a.capReached(b) &&
-                          !(b == Booster.shield && a.shieldActive),
+                      enabled: s.acceptsBoosters && !a.capReached(b) && !(b == Booster.shield && a.shieldActive),
                       active:
                           (b == Booster.shield && a.shieldActive) ||
                           (b == Booster.hammer && s.status == GameStatus.hammerTarget),
@@ -297,17 +378,63 @@ class _GameplayViewState extends State<_GameplayView> {
                 banner: !widget.isDaily && ads.bannerFor(lv) ? ads.service.banner() : null,
                 bannerHeight: !widget.isDaily && ads.bannerFor(lv) ? AdsCubit.bannerReserve : 0,
               ),
-              if (tip != null)
-                TutorialTip(
-                  data: tip.data,
-                  onGotIt: () => context.read<TutorialCubit>().markSeen(tip.data.id),
+              if (widget.botMode)
+                Positioned(
+                  key: AppKeys.botChip,
+                  top: MediaQuery.paddingOf(context).top + 54,
+                  right: 16,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _botAutoPlay = !_botAutoPlay;
+                          _botStuck = null;
+                          _botTappedAt = -1;
+                        });
+                        if (_botAutoPlay && s.status == GameStatus.won) _botNextLevel(s.result!);
+                        if (_botAutoPlay) _checkBotStep(s, bloc);
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _botAutoPlay ? const Color(0xFF00838F) : const Color(0xCC263238),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: _botAutoPlay ? const Color(0xFF80DEEA) : Colors.white24,
+                            width: 1.5,
+                          ),
+                          boxShadow: const [BoxShadow(color: Color(0x33000000), blurRadius: 4, offset: Offset(0, 2))],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              _botAutoPlay ? Icons.pause_circle_filled_rounded : Icons.play_circle_filled_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              _botAutoPlay
+                                  ? '🤖 Step ${s.attempt.history.length}/${s.level.solution.length}'
+                                  : _botStuck != null
+                                  ? '🤖 Stopped: $_botStuck'
+                                  : '🤖 Resume Bot',
+                              style: AppText.nunito(11, weight: 800, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
+              if (tip != null)
+                TutorialTip(data: tip.data, onGotIt: () => context.read<TutorialCubit>().markSeen(tip.data.id)),
               if (intro != null && popup == null) ...[
                 const ModalBarrier(color: AppColors.scrim, dismissible: false),
-                MechanicIntroCard(
-                  data: intro,
-                  onGotIt: () => context.read<TutorialCubit>().markSeen(intro.type),
-                ),
+                MechanicIntroCard(data: intro, onGotIt: () => context.read<TutorialCubit>().markSeen(intro.type)),
               ],
               if (popup != null) ...[
                 BackdropFilter(
@@ -392,10 +519,7 @@ class _GameplayViewState extends State<_GameplayView> {
           final now = time.clock.now();
           final dailyState = context.read<DailyCubit>().state;
           final streakState = context.read<StreakCubit>().state;
-          const months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-          ];
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
           final stamped = '${now.day} ${months[now.month - 1]}';
           final reward = streakState.todayReward;
           final r = s.result!;
@@ -434,8 +558,7 @@ class _GameplayViewState extends State<_GameplayView> {
           adBusy: s.adBusy,
           onDouble: () => bloc.add(const DoubleCoinsRequested()),
           // Win sequence: Gift Basket (if any) ⇒ interstitial check ⇒ next level.
-          onNext: () =>
-              r.gift != null ? setState(() => _showGift = true) : _afterRewards(context, r),
+          onNext: () => r.gift != null ? setState(() => _showGift = true) : _afterRewards(context, r),
           onMap: () => context.go('/map'),
         );
       default:

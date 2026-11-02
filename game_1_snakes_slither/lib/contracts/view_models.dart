@@ -81,6 +81,9 @@ class LevelNodeData extends Equatable {
     required this.stars,
     required this.isHard,
     this.isIntro = false,
+    this.parMoves = 0,
+    this.difficulty = 0.0,
+    this.mechanics = const [],
   });
   final int number;
   final NodeState state;
@@ -91,8 +94,18 @@ class LevelNodeData extends Equatable {
 
   /// Introduces a new mechanic: "NEW!" badge.
   final bool isIntro;
+
+  /// Steps to solve the level.
+  final int parMoves;
+
+  /// Level difficulty rating.
+  final double difficulty;
+
+  /// Obstacle types present in this level.
+  final List<String> mechanics;
+
   @override
-  List<Object?> get props => [number, state, stars, isHard, isIntro];
+  List<Object?> get props => [number, state, stars, isHard, isIntro, parMoves, difficulty, mechanics];
 }
 
 class HudData extends Equatable {

@@ -9,6 +9,15 @@ import '../theme/tokens.dart';
 import '../widgets/art.dart';
 import '../widgets/common.dart';
 
+const biomes = [
+  (name: "Pip's Backyard", from: 1, to: 10, icon: '🏡'),
+  (name: 'Garden Meadow', from: 11, to: 100, icon: '🌿'),
+  (name: 'Bamboo Grove', from: 101, to: 200, icon: '🎋'),
+  (name: 'Mango Orchard', from: 201, to: 300, icon: '🥭'),
+  (name: 'Misty Swamp', from: 301, to: 400, icon: '🌫️'),
+  (name: 'Moonlit Jungle', from: 401, to: 500, icon: '🌙'),
+];
+
 String biomeFor(int level) => switch (level) {
   <= 10 => "Pip's Backyard",
   <= 100 => 'Garden Meadow',
@@ -21,14 +30,25 @@ String biomeFor(int level) => switch (level) {
 const _rowH = 96.0;
 
 class LevelMapScreen extends StatefulWidget {
-  const LevelMapScreen({super.key, required this.nodes, required this.onLevelTap, required this.onBack});
+  const LevelMapScreen({
+    super.key,
+    required this.nodes,
+    required this.onLevelTap,
+    required this.onBack,
+    this.onBotPlay,
+    this.initialBotsMode = false,
+  });
 
   /// Level 1 first.
   final List<LevelNodeData> nodes;
 
-  /// Only called for unlocked nodes.
+  /// Play on an unlocked node.
   final void Function(int level) onLevelTap;
   final VoidCallback onBack;
+
+  /// Starts the auto-player on any node; null hides Bots mode.
+  final void Function(int level)? onBotPlay;
+  final bool initialBotsMode;
 
   @override
   State<LevelMapScreen> createState() => _LevelMapScreenState();
@@ -37,6 +57,7 @@ class LevelMapScreen extends StatefulWidget {
 class _LevelMapScreenState extends State<LevelMapScreen> {
   late final ScrollController _scroll;
   int? _selected;
+  late bool _botsMode = widget.initialBotsMode;
 
   int get _currentIndex {
     final i = widget.nodes.indexWhere((n) => n.state == NodeState.current);
@@ -53,6 +74,61 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
   void dispose() {
     _scroll.dispose();
     super.dispose();
+  }
+
+  void _showJumpDialog() {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.rocket_launch_rounded, color: AppColors.emerald),
+            const SizedBox(width: 8),
+            Text('Jump to Level', style: AppText.fredoka(20)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Enter level 1–${widget.nodes.length}',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final n in [1, 50, 100, 200, 300, 400, 500])
+                  if (n <= widget.nodes.length) ActionChip(label: Text('L$n'), onPressed: () => controller.text = '$n'),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () {
+              final val = int.tryParse(controller.text);
+              if (val != null && val >= 1 && val <= widget.nodes.length) {
+                Navigator.pop(ctx);
+                final targetIndex = val - 1;
+                _scroll.jumpTo(math.max(0, (targetIndex - 2) * _rowH));
+                setState(() => _selected = targetIndex);
+              }
+            },
+            child: const Text('Go'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -78,7 +154,7 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
               child: ListView.builder(
                 controller: _scroll,
                 reverse: true,
-                padding: const EdgeInsets.only(top: 140, bottom: 230),
+                padding: const EdgeInsets.only(top: 175, bottom: 230),
                 itemCount: nodes.length,
                 itemExtent: _rowH,
                 itemBuilder: (_, i) => _MapRow(
@@ -86,7 +162,10 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                   node: nodes[i],
                   last: i == nodes.length - 1,
                   selected: focus?.number == nodes[i].number,
-                  onTap: nodes[i].state == NodeState.locked ? null : () => setState(() => _selected = i),
+                  botsMode: _botsMode,
+                  onTap: (nodes[i].state == NodeState.locked && !_botsMode)
+                      ? null
+                      : () => setState(() => _selected = i),
                 ),
               ),
             ),
@@ -95,14 +174,14 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
             left: 0,
             right: 0,
             top: 0,
-            height: 140,
+            height: 180,
             child: IgnorePointer(
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x8C042816), Color(0x00042816)],
+                    colors: [Color(0x9E042816), Color(0x00042816)],
                   ),
                 ),
               ),
@@ -110,48 +189,127 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
           ),
           SafeArea(
             child: CenteredColumn(
-              child: SizedBox(
-                height: 52,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      RoundButton(
-                        size: 40,
-                        label: 'Back',
-                        onTap: widget.onBack,
-                        child: const LineIconView(LineIcon.back, size: 18),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          focus == null ? 'Level Map' : biomeFor(focus.number),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppText.fredoka(22, color: Colors.white).copyWith(
-                            shadows: const [Shadow(color: Color(0x59000000), offset: Offset(0, 2), blurRadius: 6)],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 52,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          RoundButton(
+                            size: 40,
+                            label: 'Back',
+                            onTap: widget.onBack,
+                            child: const LineIconView(LineIcon.back, size: 18),
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              focus == null ? 'Level Map' : biomeFor(focus.number),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppText.fredoka(20, color: Colors.white).copyWith(
+                                shadows: const [Shadow(color: Color(0x59000000), offset: Offset(0, 2), blurRadius: 6)],
+                              ),
+                            ),
+                          ),
+                          RoundButton(
+                            size: 36,
+                            label: 'Search level',
+                            onTap: _showJumpDialog,
+                            child: const Icon(Icons.search_rounded, size: 18, color: Colors.white),
+                          ),
+                          const SizedBox(width: 6),
+                          if (widget.onBotPlay != null)
+                            GestureDetector(
+                              key: AppKeys.mapBotsToggle,
+                              onTap: () => setState(() => _botsMode = !_botsMode),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                height: 36,
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: _botsMode ? const Color(0xFF00838F) : const Color(0x8C04341E),
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: Border.all(
+                                    color: _botsMode ? const Color(0xFF80DEEA) : const Color(0x2EFFFFFF),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      _botsMode ? '🤖 Bots ON' : '🤖 Bots',
+                                      style: AppText.nunito(12, weight: 800, color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          if (widget.onBotPlay != null) const SizedBox(width: 6),
+                          Container(
+                            height: 36,
+                            padding: const EdgeInsets.only(left: 7, right: 10),
+                            decoration: BoxDecoration(
+                              color: const Color(0x8C04341E),
+                              borderRadius: BorderRadius.circular(18),
+                              border: Border.all(color: const Color(0x2EFFFFFF)),
+                            ),
+                            child: Row(
+                              children: [
+                                const ArtIcon(Art.star, size: 20),
+                                const SizedBox(width: 6),
+                                Text('$stars', style: AppText.fredoka(16, color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        height: 36,
-                        padding: const EdgeInsets.only(left: 7, right: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0x8C04341E),
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(color: const Color(0x2EFFFFFF)),
-                        ),
-                        child: Row(
-                          children: [
-                            const ArtIcon(Art.star, size: 20),
-                            const SizedBox(width: 6),
-                            Text('$stars', style: AppText.fredoka(16, color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    height: 34,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: biomes.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 6),
+                      itemBuilder: (ctx, i) {
+                        final b = biomes[i];
+                        final isCurrent = focus != null && focus.number >= b.from && focus.number <= b.to;
+                        return GestureDetector(
+                          onTap: () {
+                            final targetIndex = b.from - 1;
+                            _scroll.jumpTo(math.max(0, (targetIndex - 2) * _rowH));
+                            setState(() => _selected = targetIndex);
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: isCurrent ? AppColors.emerald : const Color(0xB304341E),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: isCurrent ? Colors.white : const Color(0x29FFFFFF), width: 1.2),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${b.icon} ${b.name}',
+                                  style: AppText.nunito(11, weight: 700, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -183,7 +341,12 @@ class _LevelMapScreenState extends State<LevelMapScreen> {
                 child: CenteredColumn(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: _LevelCard(node: focus, onPlay: () => widget.onLevelTap(focus.number)),
+                    child: _LevelCard(
+                      node: focus,
+                      botsMode: _botsMode,
+                      onPlay: focus.state == NodeState.locked ? null : () => widget.onLevelTap(focus.number),
+                      onBotPlay: widget.onBotPlay != null ? () => widget.onBotPlay!(focus.number) : null,
+                    ),
                   ),
                 ),
               ),
@@ -204,12 +367,14 @@ class _MapRow extends StatelessWidget {
     required this.last,
     required this.selected,
     required this.onTap,
+    this.botsMode = false,
   });
   final int index;
   final LevelNodeData node;
   final bool last;
   final bool selected;
   final VoidCallback? onTap;
+  final bool botsMode;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -225,7 +390,9 @@ class _MapRow extends StatelessWidget {
       return Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned.fill(child: CustomPaint(painter: _PathPainter(index, last, node.state != NodeState.locked))),
+          Positioned.fill(
+            child: CustomPaint(painter: _PathPainter(index, last, botsMode || node.state != NodeState.locked)),
+          ),
           Positioned(
             left: cx - 40,
             top: _rowH / 2 - 40,
@@ -236,11 +403,11 @@ class _MapRow extends StatelessWidget {
               onTap: onTap,
               semanticLabel:
                   'Level ${node.number}${node.isHard ? ', hard' : ''}, ${switch (node.state) {
-                    NodeState.locked => 'locked',
+                    NodeState.locked => botsMode ? 'bots mode' : 'locked',
                     NodeState.current => 'current',
                     NodeState.cleared => '${node.stars} stars',
                   }}',
-              child: CustomPaint(painter: _NodePainter(node, r, selected)),
+              child: CustomPaint(painter: _NodePainter(node, r, selected, botsMode: botsMode)),
             ),
           ),
           if (current)
@@ -322,10 +489,11 @@ class _PathPainter extends CustomPainter {
 }
 
 class _NodePainter extends CustomPainter {
-  _NodePainter(this.n, this.r, this.selected);
+  _NodePainter(this.n, this.r, this.selected, {this.botsMode = false});
   final LevelNodeData n;
   final double r;
   final bool selected;
+  final bool botsMode;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -341,11 +509,18 @@ class _NodePainter extends CustomPainter {
         const [Color(0xFF4FD08A), AppColors.emerald, AppColors.forest],
         Colors.white,
       ),
-      NodeState.locked => (
-        const Color(0xFF6E746C),
-        const [Color(0xFFF4F2EA), Color(0xFFC9C8BE), Color(0xFF9DA197)],
-        const Color(0xFF4E554E),
-      ),
+      NodeState.locked =>
+        botsMode
+            ? (
+                const Color(0xFF00838F),
+                const [Color(0xFFE0F7FA), Color(0xFF80DEEA), Color(0xFF00ACC1)],
+                const Color(0xFF006064),
+              )
+            : (
+                const Color(0xFF6E746C),
+                const [Color(0xFFF4F2EA), Color(0xFFC9C8BE), Color(0xFF9DA197)],
+                const Color(0xFF4E554E),
+              ),
     };
     if (selected && n.state != NodeState.current) {
       canvas.drawCircle(c, r + 8, Paint()..color = const Color(0x73A8D94F));
@@ -447,7 +622,7 @@ class _NodePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_NodePainter o) => o.n != n || o.selected != selected;
+  bool shouldRepaint(_NodePainter o) => o.n != n || o.selected != selected || o.botsMode != botsMode;
 }
 
 class _Pin extends StatelessWidget {
@@ -481,13 +656,18 @@ class _PinPainter extends CustomPainter {
 }
 
 class _LevelCard extends StatelessWidget {
-  const _LevelCard({required this.node, required this.onPlay});
+  const _LevelCard({required this.node, required this.onPlay, this.onBotPlay, this.botsMode = false});
   final LevelNodeData node;
-  final VoidCallback onPlay;
+
+  /// Null on a locked node (only the bot can open it).
+  final VoidCallback? onPlay;
+  final VoidCallback? onBotPlay;
+  final bool botsMode;
 
   @override
   Widget build(BuildContext context) {
     final best = node.state == NodeState.cleared ? 'best ${node.stars} of 3 stars' : 'new level';
+    final movesDesc = node.parMoves > 0 ? '${node.parMoves} moves par' : 'no timer';
     return CreamCard(
       radius: 24,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
@@ -501,7 +681,25 @@ class _LevelCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Level ${node.number}', style: AppText.fredoka(24, weight: 700)),
+                    Row(
+                      children: [
+                        Text('Level ${node.number}', style: AppText.fredoka(24, weight: 700)),
+                        if (botsMode) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF00838F),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '🤖 BOTS MODE',
+                              style: AppText.nunito(10, weight: 800, color: Colors.white, spacing: .5),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                     const SizedBox(height: 2),
                     Text(
                       '${biomeFor(node.number)} · $best',
@@ -521,9 +719,65 @@ class _LevelCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text('3 hearts · no timer · tap snakes out', style: AppText.nunito(13, color: AppColors.muted)),
+          Row(
+            children: [
+              Expanded(
+                child: Text('3 hearts · $movesDesc · tap snakes out', style: AppText.nunito(13, color: AppColors.muted)),
+              ),
+              if (node.difficulty > 0) ...[
+                const SizedBox(width: 8),
+                Text(
+                  'D ${node.difficulty.toStringAsFixed(1)}',
+                  style: AppText.nunito(12, weight: 700, color: AppColors.muted),
+                ),
+              ],
+            ],
+          ),
+          if (node.mechanics.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: [
+                for (final m in node.mechanics)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0x1F2E7D32),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: const Color(0x332E7D32)),
+                    ),
+                    child: Text(m, style: AppText.nunito(11, weight: 700, color: const Color(0xFF1B5E20))),
+                  ),
+              ],
+            ),
+          ],
           const SizedBox(height: 14),
-          GameButton(label: node.state == NodeState.cleared ? 'Replay' : 'Play', onTap: onPlay, fontSize: 22),
+          if (botsMode && onBotPlay != null)
+            Row(
+              children: [
+                if (onPlay != null) ...[
+                  Expanded(
+                    child: GameButton(
+                      label: node.state == NodeState.cleared ? 'Replay' : 'Play',
+                      onTap: onPlay!,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+                Expanded(
+                  child: GameButton(
+                    key: AppKeys.mapBotPlay,
+                    label: '🤖 Bot Auto-Play',
+                    onTap: onBotPlay!,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            )
+          else if (onPlay != null)
+            GameButton(label: node.state == NodeState.cleared ? 'Replay' : 'Play', onTap: onPlay!, fontSize: 22),
         ],
       ),
     );

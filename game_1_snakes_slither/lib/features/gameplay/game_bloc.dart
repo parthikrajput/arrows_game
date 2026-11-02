@@ -262,11 +262,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required bool hasNextLevel,
     this.onTrack,
     this.guidedTaps = false,
+    this.savesProgress = true,
   }) : _hasNext = hasNextLevel,
        super(
          GameState(level: level, attempt: Attempt.forLevel(level), status: GameStatus.playing),
        ) {
-    _wallet.grantTutorialBoosters(level.number);
+    if (savesProgress) _wallet.grantTutorialBoosters(level.number);
     on<SnakeTapped>(_onSnakeTapped);
     on<ObstacleTapped>(_onObstacleTapped);
     on<AnimationCompleted>(_onAnimationCompleted);
@@ -305,6 +306,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   /// Analytics hook (event name + parameters).
   final void Function(String name, Map<String, Object> params)? onTrack;
+
+  /// False for bot runs: a win then leaves progress and coins untouched, so
+  /// a bot clearing a locked level can't unlock the map or pay out.
+  final bool savesProgress;
   int _motionSeq = 0;
   int _hintSeq = 0;
 
@@ -444,7 +449,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _win(Emitter<GameState> emit) {
     final lv = state.level;
     final stars = state.attempt.stars;
-    final rec = _progress.levelWon(lv.number, stars);
+    final rec = savesProgress
+        ? _progress.levelWon(lv.number, stars)
+        : const ClearRecord(firstClear: false, firstThreeStar: false);
     final clear = rec.firstClear ? Economy.clearCoins(lv.tag) : 0;
     final bonus = rec.firstThreeStar ? Economy.threeStarBonus : 0;
     _wallet.earn(clear + bonus);

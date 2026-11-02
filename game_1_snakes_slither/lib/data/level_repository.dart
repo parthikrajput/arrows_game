@@ -69,6 +69,33 @@ class LevelRepository {
     return LevelTag.values.byName(_raws[number - 1]['tag'] as String);
   }
 
+  /// Par moves (solution length) of a level.
+  int parMovesOf(int number) {
+    if (!exists(number)) return 0;
+    final hit = _cache[number];
+    if (hit != null) return hit.parMoves;
+    return _raws[number - 1]['par_moves'] as int? ?? 0;
+  }
+
+  /// Difficulty score of a level.
+  double difficultyOf(int number) {
+    if (!exists(number)) return 0.0;
+    final hit = _cache[number];
+    if (hit != null) return hit.difficulty;
+    return (_raws[number - 1]['difficulty'] as num?)?.toDouble() ?? 0.0;
+  }
+
+  /// Mechanic codes used in a level (e.g. M001, M002).
+  List<String> mechanicsOf(int number) {
+    if (!exists(number)) return const [];
+    final hit = _cache[number];
+    if (hit != null) return hit.mechanicTypes;
+    return [
+      for (final m in (_raws[number - 1]['mechanics'] as List? ?? const []))
+        (m as Map)['type'] as String,
+    ];
+  }
+
   /// Mechanic type a level introduces (first level using it), for the
   /// "NEW!" badge and the intro card.
   String? introducesMechanic(int number) => _intros[number];

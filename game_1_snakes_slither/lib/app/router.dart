@@ -92,7 +92,10 @@ GoRouter buildRouter() => GoRouter(
     ),
     GoRoute(
       path: '/play/:n',
-      builder: (c, st) => GameplayRoute(levelNumber: int.tryParse(st.pathParameters['n']!) ?? 0),
+      builder: (c, st) => GameplayRoute(
+        levelNumber: int.tryParse(st.pathParameters['n']!) ?? 0,
+        botMode: !kReleaseMode && st.uri.queryParameters['bot'] == 'true',
+      ),
     ),
   ],
 );
@@ -176,11 +179,16 @@ class _MapRoute extends StatelessWidget {
             stars: p.starsFor(n),
             isHard: repo.tagOf(n).name == 'hard',
             isIntro: repo.introducesMechanic(n) != null,
+            parMoves: repo.parMovesOf(n),
+            difficulty: repo.difficultyOf(n),
+            mechanics: repo.mechanicsOf(n),
           ),
       ],
       onLevelTap: (n) {
         if (p.isUnlocked(n)) context.go('/play/$n');
       },
+      // A test tool: release builds don't offer it.
+      onBotPlay: kReleaseMode ? null : (n) => context.go('/play/$n?bot=true'),
       onBack: () => context.go('/'),
     );
   }
