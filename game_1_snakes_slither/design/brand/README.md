@@ -8,6 +8,7 @@ Related docs: [UI canvas](../ui_canvas/README.md) · [Old app icon](../app_icon/
 
 | File | What it is |
 |---|---|
+| `snake_slither_logo_premium.png` | Premium crest logo (2026-11): Pip coiled in a gold-rimmed emerald medallion with laurels, gold bevelled "SNAKE" (Cinzel Decorative) and an emerald ribbon "SLITHER" (Cinzel). Transparent PNG, 2004 × 2271. App copy: `assets/images/logo.webp`. Source: `source/logo_premium.html` (fonts from `npm i @fontsource/cinzel-decorative @fontsource/cinzel`, render with Playwright at 2×). |
 | `snake_slither_logo.png` | 3D game logo: mascot on leaves over a wooden sign, gold "SNAKE" and cream "SLITHER". Transparent PNG. |
 | `snake_slither_icon_1024.png` | App icon, 1024 × 1024, no text, full bleed. The stores apply their own masks. |
 | `renders/home_platform.png` | Mascot on the green and gold platform (Home). |

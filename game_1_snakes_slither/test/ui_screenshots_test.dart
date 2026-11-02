@@ -12,6 +12,7 @@ import 'package:snakes_slither/contracts/view_models.dart';
 import 'package:snakes_slither/data/level_repository.dart';
 import 'package:snakes_slither/features/gameplay/board_geometry.dart';
 import 'package:snakes_slither/ui/board/board_canvas.dart';
+import 'package:snakes_slither/ui/intro/jungle_dawn.dart';
 import 'package:snakes_slither/ui/popups/popups.dart';
 import 'package:snakes_slither/ui/screens/gameplay_screen.dart';
 import 'package:snakes_slither/ui/screens/home_screen.dart';
@@ -301,6 +302,50 @@ void main() {
       });
     });
   }
+
+  testWidgets('screenshot intro frames', skip: _out == null, (t) async {
+    t.view.physicalSize = Size(_w * 2, 844 * 2);
+    t.view.devicePixelRatio = 2;
+    addTearDown(t.view.reset);
+    final key = GlobalKey();
+    await t.pumpWidget(
+      RepaintBoundary(
+        key: key,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: buildAppTheme(),
+          builder: (c, child) =>
+              JungleDawnIntro(mode: IntroMode.full, playKey: const Key('none'), guardJank: false, child: child!),
+          home: shots['home'],
+        ),
+      ),
+    );
+    await t.runAsync(() async {
+      final ctx = key.currentContext!;
+      await precacheImage(const AssetImage(kIntroLogo), ctx);
+      for (final el in find.byType(Image).evaluate()) {
+        await precacheImage((el.widget as Image).image, el);
+      }
+    });
+    var at = 0;
+    // UI_SHOTS_INTRO_STEP=40 renders every 40 ms (enough for a video).
+    final step = int.tryParse(Platform.environment['UI_SHOTS_INTRO_STEP'] ?? '');
+    final times = step == null
+        ? [60, 200, 360, 520, 700, 860, 1000, 1150]
+        : [for (var ms = step; ms <= 1200; ms += step) ms];
+    for (final ms in times) {
+      await t.pump(Duration(milliseconds: ms - at));
+      at = ms;
+      await t.runAsync(() async {
+        final boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+        final img = await boundary.toImage(pixelRatio: step == null ? 1 : 2);
+        final png = await img.toByteData(format: ui.ImageByteFormat.png);
+        Directory('$_out/intro').createSync(recursive: true);
+        File('$_out/intro/${ms.toString().padLeft(4, '0')}.png').writeAsBytesSync(png!.buffer.asUint8List());
+      });
+    }
+    await t.pump(const Duration(seconds: 1));
+  });
 }
 
 void _nop() {}
