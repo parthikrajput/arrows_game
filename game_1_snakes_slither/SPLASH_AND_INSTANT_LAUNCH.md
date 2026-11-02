@@ -608,21 +608,24 @@ Mark: Pip coiled into a ring, head resting on the coil, leaf hat. Rest pose = ey
 | 300–600 ms | Leaf hat | Tilt 0° ⇒ −8° ⇒ 0° |
 
 ### 7.3 Full intro (1,200 ms)
+The premium crest logo (`design/brand/snake_slither_logo_premium.png`, app copy `assets/images/logo.webp`) is the hero of the intro: it lands on the dark canopy, shines, then lifts away as dawn reveals Home.
+
 | Track | ms | What happens | From → To | Curve |
 |---|---|---|---|---|
-| `uncoil` | 0–380 | Pip's coiled body unrolls into an S-curve; the head travels along a pre-built path to Pip's perch beside the logo. Body = points sampled along the path (`PathMetric`) | Coil at centre, 192 dp → Home perch, Home size | easeInOutCubic |
-| `canopyFront` | 120–700 | Front foliage splits and slides off-screen left/right | 0 → ±110% width | easeInOutCubic |
-| `canopyMid` | 160–760 | Mid foliage slides out slower (parallax) | 0 → ±70% width, alpha 1 → 0 | easeInOutCubic |
-| `dawn` | 200–900 | Background colour | `splashCanopy` → `bgSage` | easeInOutCubic |
-| `rays` | 350–1,000 | 3 light rays from the top-right sweep across | alpha 0 → 0.35 → 0, rotation −6° → +4° | linear |
-| `play` | 380–600 | Play button pops in at its final spot | scale 0.4 → 1.0, alpha 0 → 1 | easeOutBack |
-| `leafBurst` | 600–900 | Leaf particles burst from Play; haptic at 600 | 12/24/40 particles by tier, life 300 ms | easeOutCubic |
-| `wordmark` | 420–820 | "SNAKES SLITHER" letters, 30 ms stagger | y +24 dp → 0, scale 0.6 → 1.0, alpha 0 → 1 (first 40%) | easeOutBack |
-| `subtitle` | 700–1,000 | Localised tagline | alpha 0 → 1, y +8 dp → 0 | easeOutCubic |
-| `settle` | 900–1,200 | Pip blinks once; 4 dew sparkles on leaves (Mid/High) | — | — |
+| `logoIn` | 0–420 | Crest logo lands at 40% height, gold halo behind it pulses | scale 0.72 → 1.0, alpha 0 → 1 (0–160) | easeOutBack |
+| `fireflies` | 0–1,200 | 8–30 glowing fireflies drift up and twinkle (count by tier) | alpha 0 → 1 (0–250), fade with `dawn` | linear |
+| `shine` | 200–660 | Gold light band sweeps across the logo | diagonal band −40% → 140% | linear |
+| `sparkles` | 260–820 | 4-point gold sparkles burst out around the crest (by tier) | radius +40–130 dp, alpha 0 → 1 → 0 | easeOutCubic |
+| `rays` | 300–1,050 | 4 additive sun rays from the top-right | alpha 0 → 0.35 → 0, rotation −6° → +10° | linear |
+| `tagline` | 340–560 | Localised tagline under the crest | alpha 0 → 1, y +10 dp → 0 | linear |
+| `canopyFront` | 380–950 | Front leaf clusters (left and right edges, ~26% width) slide off-screen | 0 → ±115% width | easeInOutCubic |
+| `canopyBack` | 440–1,010 | Back leaves slide out slower (parallax) | 0 → ±70% width | easeInOutCubic |
+| `dawn` | 480–1,100 | Night canopy fades to the live Home | `splashCanopy` → Home | easeInOutCubic |
+| `leafBurst` | 650–950 | Green and gold leaves burst from the Play button | 12/24/40 particles by tier | easeOutCubic |
+| `logoOut` | 660–920 | Crest lifts away | y 0 → −48 dp, scale 1.0 → 1.12, alpha 1 → 0 | easeInCubic |
 
 ### 7.4 Short intro (450 ms)
-`uncoil` 0–300 · `canopyFront`+`canopyMid` 0–350 · `dawn` 0–400 · `play` 100–300 · `wordmark` 150–450 (single fade + rise) · no rays, particles or settle.
+Same tracks squeezed into 450 ms (`logoIn`, `shine`, `tagline`, `canopyFront`/`canopyBack`, `dawn`, `logoOut`) · no fireflies, rays, sparkles or leaf burst.
 
 ### 7.5 First run
 Same full intro; at 380–600 the **Age Gate card** rises from the bottom (y +100% → 0, easeOutCubic) instead of Play popping. Pip ends on the card's top edge.
